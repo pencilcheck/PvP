@@ -4,7 +4,8 @@ angular.module('planetRusApp', [
   'ngCookies',
   'ngResource',
   'ngSanitize',
-  'ngRoute'
+  'ngRoute',
+  'ng-firebase'
 ])
   .config(function ($routeProvider) {
     $routeProvider
