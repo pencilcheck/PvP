@@ -21,6 +21,10 @@ angular.module('planetRusApp', [
         templateUrl: 'views/lobby.html',
         controller: 'LobbyCtrl'
       })
+      .when('/game', {
+        templateUrl: 'views/game.html',
+        controller: 'GameCtrl'
+      })
       .otherwise({
         redirectTo: '/'
       });
