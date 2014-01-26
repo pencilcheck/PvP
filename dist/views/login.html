@@ -2,7 +2,7 @@
     font-weight: bold;
   }
 
-  .greeting {
+  .login {
       margin-left: 20%;
       margin-top: 30%;
       border: 1px solid #ccc;
@@ -14,6 +14,6 @@
     padding: 5px;
     position: relative;
     top: -50px;
-  }</style><button class="btn btn-large btn-primary" ng-click="openLogin()">Sign in with Facebook</button><div class="greeting" ng-if="loggedIn"><!-- <div class="rawUser">
-    {{auth}}
-  </div> --><div class="message"><span class="profilePic"><img ng-src="{{profilePic}}"></span>{{greeting}}</div><div class="loadGame"><button class="btn btn-success loadBtn" ng-click="loadGame()">Lets Rock and roll</button></div></div>
+  }</style><div class="login"><button ng-if="!loggedIn" class="btn btn-large btn-primary" ng-click="openLogin()">Sign in with Facebook</button><div class="greeting" ng-if="loggedIn"><!-- <div class="rawUser">
+      {{auth}}
+    </div> --><div class="message"><span class="profilePic"><img ng-src="{{profilePic}}"></span> &nbsp;&nbsp;&nbsp; {{greeting}}</div><div class="loadGame"><button class="btn btn-success loadBtn" ng-click="loadGame()">Lets Rock and roll</button></div></div></div>
