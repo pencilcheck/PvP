@@ -12,7 +12,14 @@
       margin-top: 30%;
       border: 1px solid #ccc;
       padding: 10px;
-}
+  }
+
+  .loadGame {
+    float: right;
+    padding: 5px;
+    position: relative;
+    top: -50px;
+  }
 </style>
 
 <button class="btn btn-large btn-primary" ng-click="openLogin()"> Sign in with Facebook </button>
@@ -24,5 +31,9 @@
     <span class="profilePic">
       <img ng-src="{{profilePic}}">
     </span>{{greeting}}
+  </div>
+
+  <div class="loadGame">
+    <button class="btn btn-success loadBtn" ng-click="loadGame()">Lets Rock and roll</button>
   </div>
 </div>

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('planetRusApp')
-  .controller('LoginCtrl', function ($scope, $rootScope) {
+  .controller('LoginCtrl', function ($scope, $rootScope, $location) {
     $scope.awesomeThings = [
       'HTML5 Boilerplate',
       'AngularJS',
@@ -39,6 +39,11 @@ angular.module('planetRusApp')
       $scope.profilePic = "http://graph.facebook.com/" + $scope.user.link.split('https://www.facebook.com/')[1].trim() + "/picture";
       $scope.$apply()
     }
+
+    $scope.loadGame = function(){
+      console.log($location.path("lobby"))
+    }
+
 
 
 
