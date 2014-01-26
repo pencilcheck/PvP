@@ -18,9 +18,9 @@ angular.module('planetRusApp')
         } else if (user) {
           // user authenticated with Firebase
           console.log('User ID: ' + user.id + ', Provider: ' + user.provider);
-          $rootScope.user = user
-          $rootScope.$apply()
-          $scope.greetUser()
+          $rootScope.user = user;
+          $rootScope.$apply();
+          $scope.greetUser();
         } else {
           // user is logged out
         }
@@ -29,22 +29,19 @@ angular.module('planetRusApp')
         rememberMe: true,
         scope: 'email,user_likes'
       });
-    }
+    };
 
     $scope.greetUser = function(){
-      $scope.user = $rootScope.user
+      $scope.user = $rootScope.user;
       $scope.loggedIn = true;
       $scope.greeting = "Hi " + $scope.user.displayName;
-      $scope.userName = $scope.user.link
+      $scope.userName = $scope.user.link;
       $scope.profilePic = "http://graph.facebook.com/" + $scope.user.link.split('https://www.facebook.com/')[1].trim() + "/picture";
-      $scope.$apply()
-    }
+      $scope.$apply();
+    };
 
     $scope.loadGame = function(){
-      console.log($location.path("lobby"))
-    }
-
-
-
+      console.log($location.path("lobby"));
+    };
 
   });
