@@ -55,12 +55,14 @@ $(function(){
 <body>
 
 	<div id="maincanvas">
-	
+
+		
+
 		<div class="stars"></div>
 	    <div class="twinkling"></div>
 	    
 		<div id="pushright">
-		<h1>Choose 3 out of 4 moves to use for the battle </h1>
+		<span id="maintext">Choose 3 out of 4 moves to use for the battle </span>
 		<br>
 		<a class="normalTip" title="Volcano"><img src="images/buttons/volcanobutton.png" id="mainbutton">	</a>	
 		<a class="normalTip" title="Lightning"><img src="images/buttons/lightningbutton.png" id="mainbutton"> </a>
@@ -106,6 +108,7 @@ $(function(){
 		</div>
 
 		<div id="planetscanvas">
+
 			<img src="images/planets/player1.png" id="player1planet">
 			<a class="normalTip" title="Your Life Points"><img src="images/misc/life.png" id="player1life">
 			<div id="player1score">x 10</div></a>
@@ -168,8 +171,53 @@ $(function(){
 		<br>
 		E.g.-- after two hits, you should be at: -webkit-filter: invert(20%); Notice the 20% !
 		</h1>
+
+		<canvas id="q" width="170" height="400">Sorry Browser Won't Support</canvas>
 	</div>
 	</div>
+
+
+<script>
+$(document).ready(function(){
+
+var width = q.width=800;
+var height = q.height;
+var yPositions = Array(300).join(0).split('');
+var ctx=q.getContext('2d');
  
+var draw = function () {
+  ctx.fillStyle='rgba(0,0,0,.05)';
+  ctx.fillRect(0,0,width,height);
+  ctx.fillStyle='#0F0';
+  ctx.font = '10pt Georgia';
+  yPositions.map(function(y, index){
+    text = String.fromCharCode(1e2+Math.random()*33);
+    x = (index * 10)+10;
+    q.getContext('2d').fillText(text, x, y);
+    if(y > 100 + Math.random()*1e4)
+    {
+      yPositions[index]=0;
+    }
+    else
+    {
+      yPositions[index] = y + 10;
+    }
+  });
+};
+RunMatrix();
+function RunMatrix()
+{
+if(typeof Game_Interval != "undefined") clearInterval(Game_Interval);
+        Game_Interval = setInterval(draw, 33);
+}
+function StopMatrix()
+{
+clearInterval(Game_Interval);
+}
+ 
+})
+</script>
+ 
+
 </body>
 </html>

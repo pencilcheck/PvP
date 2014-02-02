@@ -26,6 +26,21 @@
 
 }
 
+#maintext
+{
+    display: inline;
+    position: relative;
+    font: 20px Helvetica, Sans-Serif;
+    color: rgba(255,0,0,0.5); 
+
+}
+
+#q {
+    position: absolute;
+    z-index: 100;
+    left: -10px;
+}
+
 
 #maincanvas {
     /* margin-left: 150px; */
