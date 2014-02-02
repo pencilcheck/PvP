@@ -1,0 +1,110 @@
+<!doctype html>
+
+  <head>
+    <link rel="stylesheet" href="styles/maingame.css">  
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="scripts/tooltip.js"></script>
+    <script type="text/javascript">
+    // initiate the plugin after DOM has loaded
+$(function(){
+	// basic usage
+	$('a.normalTip').aToolTip();
+	
+	// fixed tooltip
+	$('a.fixedTip').aToolTip({
+		fixed: true
+	});
+	
+	// on click tooltip with custom content
+	$('a.clickTip').aToolTip({
+		clickIt: true,
+		tipContent: 'Hello I am aToolTip with content from param'
+	});	
+	
+	// on click tooltip that has callback functions
+	$('a.callBackTip').aToolTip({
+		clickIt: true,
+		onShow: function(){alert('I fired OnShow')},
+		onHide: function(){alert('I fired OnHide')}
+	});	
+	
+	// List of all parameters and their default values:
+	$('a').aToolTip({
+		// no need to change/override
+		closeTipBtn: 'aToolTipCloseBtn',
+		toolTipId: 'aToolTip',
+		// ok to override
+		fixed: false,					// Set true to activate fixed position
+		clickIt: false,					// set to true for click activated tooltip
+		inSpeed: 200,					// Speed tooltip fades in
+		outSpeed: 100,					// Speed tooltip fades out
+		tipContent: '',					// Pass in content or it will use objects 'title' attribute
+		toolTipClass: 'defaultTheme',	// Set class name for custom theme/styles
+		xOffset: 5,						// x position
+		yOffset: 5,						// y position
+		onShow: null,					// callback function that fires after atooltip has shown
+		onHide: null					// callback function that fires after atooltip has faded out  	
+	});
+	
+});
+
+    </script>
+  </head>
+
+<body>
+	<div id="maincanvas">
+		<h1>Choose 3 out of 4 moves to use for the battle </h1>
+		<br>
+		<a class="normalTip" title="Volcano"><img src="images/buttons/volcanobutton.png" id="mainbutton">	</a>	
+		<a class="normalTip" title="Lightning"><img src="images/buttons/lightningbutton.png" id="mainbutton"> </a>
+		<a class="normalTip" title="Water"><img src="images/buttons/waterbutton.png" id="mainbutton"> </a>
+		<a class="normalTip" title="Magnetic Field"><img src="images/buttons/magneticfieldbutton.png" id="mainbutton"> </a>
+		<button>SUBMIT MOVE SELECTION</button>
+
+		
+
+		<br><br>
+		<h2>(examples of selection AFTER they are clicked:)</h2>
+		<img src="images/buttons/volcanobutton.png" id="mainbuttonclicked">		
+		<img src="images/buttons/lightningbutton.png" id="mainbuttonclicked">
+		<img src="images/buttons/waterbutton.png" id="mainbuttonclicked">
+		<img src="images/buttons/magneticfieldbutton.png" id="mainbuttonclicked">
+		
+		<hr>
+		<hr>
+		<h2>(main round screen)</h2>
+		<br>
+		<div class="buttonscanvas">
+			<div class="player1buttons">
+				<a class="normalTip" title="Volcano"><img src="images/buttons/volcanobutton.png" id="mainbutton"></a>	
+				<a class="normalTip" title="Lightning"><img src="images/buttons/lightningbutton.png" id="mainbutton"></a>
+				<a class="normalTip" title="Water"><img src="images/buttons/waterbutton.png" id="mainbutton"></a>
+				<a class="normalTip" title="I'm Feeling Lucky"><img src="images/buttons/rollthedicebutton.png" id="mainbutton"></a>
+				<button>SUBMIT ATTACK</button>
+			</div>
+			<div class="player2buttons">
+				<img src="images/buttons/questionmarkbutton.png" id="nonclickable">		
+				<img src="images/buttons/questionmarkbutton.png" id="nonclickable">
+				<img src="images/buttons/questionmarkbutton.png" id="nonclickable">
+				<img src="images/buttons/rollthedicebutton.png" id="nonclickable">
+			</div>
+		</div>
+
+		<div id="planetscanvas">
+			<img src="images/planets/player1.png" id="player1planet">
+			<img src="images/misc/life.png" id="player1life">
+			<div id="player1score">x 10</div>
+			<img src="images/planets/player2.png" id="player2planet">
+			<img src="images/misc/life.png" id="player2life">
+			<div id="player2score">x 10</div>
+		</div>
+		<h1>As a planet gets "hit", it becomes more inverted in color. Change CSS to player planet to:<br>
+			-webkit-filter: invert(100%); upon death<br>
+		<br>
+		E.g.-- after two hits, you should be at: -webkit-filter: invert(20%); Notice the 20% !
+		</h1>
+
+	</div>
+ 
+</body>
+</html>
