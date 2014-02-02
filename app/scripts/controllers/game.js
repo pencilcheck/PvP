@@ -1,22 +1,27 @@
 'use strict';
 
 angular.module('planetRusApp')
-  .controller('GameCtrl', function ($scope, $firebase, $routeParams) {
+  .controller('GameCtrl', function ($scope, $firebase, $routeParams, UserSession) {
 
-    var gameId = $routeParams.gameId,
-        gameRef = new Firebase('https://pvp.firebaseio.com/games/' + gameId),
-        movesRef = new Firebase('https://pvp.firebaseio.com/moves');
+    $scope.setup = function(user) {
+      var gameId = $routeParams.gameId,
+          gameRef = new Firebase('https://pvp.firebaseio.com/games/' + gameId),
+          movesRef = new Firebase('https://pvp.firebaseio.com/moves');
 
-    $scope.moves = $firebase(movesRef);
+      $scope.moves = $firebase(movesRef);
 
-    $scope.game = $firebase(gameRef);
+      $scope.game = $firebase(gameRef);
 
-    $scope.viewUrl = 'views/game/selectMoves.html';
+      $scope.viewUrl = 'views/game/selectMoves.html';
 
 
-    // Selecting moves
-    $scope.selectedMoves = $scope.game.$child('moves').$child($scope.user.uid);
+      // Selecting moves
+      $scope.selectedMoves = $scope.game.$child('moves').$child(user.uid);
 
+      return user;
+    };
+
+    UserSession.signIn().then($scope.setup);
 
     $scope.playerA = {
       lastMove: '',

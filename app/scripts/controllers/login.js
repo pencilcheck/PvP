@@ -4,7 +4,9 @@ angular.module('planetRusApp')
   .controller('LoginCtrl', function ($scope, $rootScope, $location, UserSession) {
     $scope.loggedIn = false;
 
-    UserSession.signIn().then(greetUser);
+    $scope.openLogin = function() {
+      UserSession.signIn().then($scope.greetUser);
+    }
 
     $scope.greetUser = function(user) {
       $scope.user = user;
