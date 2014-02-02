@@ -28,10 +28,16 @@
 
 #maintext
 {
-    display: inline;
-    position: relative;
-    font: 20px Helvetica, Sans-Serif;
-    color: rgba(255,0,0,0.5); 
+    color: #FFFFFF;
+        font-family: "Adobe Caslon Pro", "Hoefler Text", Georgia, Garamond, Times, serif;
+    letter-spacing:0.1em;
+    text-align:center;
+    margin: 40px auto;
+    text-transform: lowercase;
+    line-height: 145%;
+    font-size: 22pt;
+    font-variant: small-caps;
+        } 
 
 }
 
