@@ -1,3 +1,6 @@
+<ng-include src="viewUrl"></ng-include>
+
+<hr>
 <h2>{{result}}</h2>
 <h2>{{explanation}}</h2>
 <p>
@@ -23,4 +26,4 @@
   </ul>
 </p>
 
-<button ng-click="fight()">FIGHT!</button>
+<button ng-keypress="fight($event)" ng-click="fight()">FIGHT!</button>

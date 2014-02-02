@@ -7,22 +7,23 @@ angular.module('planetRusApp', [
   'ngRoute',
   'firebase'
 ])
-  .config(function ($routeProvider) {
+  .config(function($routeProvider, $locationProvider) {
+    $locationProvider.html5Mode(true);
     $routeProvider
       .when('/', {
-        templateUrl: 'views/main.html',
+        templateUrl: '/views/main.html',
         controller: 'MainCtrl'
       })
       .when('/login', {
-        templateUrl: 'views/login.html',
+        templateUrl: '/views/login.html',
         controller: 'LoginCtrl'
       })
       .when('/lobby', {
-        templateUrl: 'views/lobby.html',
+        templateUrl: '/views/lobby.html',
         controller: 'LobbyCtrl'
       })
       .when('/game/:gameId', {
-        templateUrl: 'views/game.html',
+        templateUrl: '/views/game.html',
         controller: 'GameCtrl'
       })
       .otherwise({
