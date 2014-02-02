@@ -1,12 +1,14 @@
 'use strict';
 
 angular.module('planetRusApp')
-  .controller('GameCtrl', function ($scope, $firebase, $routeParams, UserSession) {
+  .controller('GameCtrl', function ($scope, $firebase, $routeParams, firebaseUrl, UserSession) {
+
+    UserSession.signIn().then($scope.setup);
 
     $scope.setup = function(user) {
       var gameId = $routeParams.gameId,
-          gameRef = new Firebase('https://pvp.firebaseio.com/games/' + gameId),
-          movesRef = new Firebase('https://pvp.firebaseio.com/moves');
+          gameRef = new Firebase(firebaseUrl + 'games/' + gameId),
+          movesRef = new Firebase(firebaseUrl + 'moves');
 
       $scope.moves = $firebase(movesRef);
 
@@ -21,7 +23,6 @@ angular.module('planetRusApp')
       return user;
     };
 
-    UserSession.signIn().then($scope.setup);
 
     $scope.playerA = {
       lastMove: '',

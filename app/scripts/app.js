@@ -7,6 +7,7 @@ angular.module('planetRusApp', [
   'ngRoute',
   'firebase'
 ])
+  .value('firebaseUrl', 'https://pvp.firebaseio.com/')
   .config(function($routeProvider, $locationProvider) {
     $routeProvider
       .when('/', {
@@ -24,6 +25,10 @@ angular.module('planetRusApp', [
       .when('/game/:gameId', {
         templateUrl: '/views/game.html',
         controller: 'GameCtrl'
+      })
+      .when('/moves', {
+        templateUrl: 'views/moves.html',
+        controller: 'MovesCtrl'
       })
       .otherwise({
         redirectTo: '/'
