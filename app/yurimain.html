@@ -2,6 +2,7 @@
 
   <head>
     <link rel="stylesheet" href="styles/maingame.css">  
+    <link href="styles/style3.css" rel="stylesheet" type="text/css" />
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script src="scripts/tooltip.js"></script>
     <script type="text/javascript">
@@ -52,7 +53,13 @@ $(function(){
   </head>
 
 <body>
+
 	<div id="maincanvas">
+	
+		<div class="stars"></div>
+	    <div class="twinkling"></div>
+	    <div class="clouds"></div>
+		<div id="pushright">
 		<h1>Choose 3 out of 4 moves to use for the battle </h1>
 		<br>
 		<a class="normalTip" title="Volcano"><img src="images/buttons/volcanobutton.png" id="mainbutton">	</a>	
@@ -79,7 +86,7 @@ $(function(){
 		<a class="normalTip" title="Cooldown. Must wait 3 turns"><img src="images/buttons/rollthedicebutton.png" id="cannotuse"></a>
 		
 		<hr>
-		<hr>
+		<hr><br><br><br><br><br><br><br>
 		<h2>(main round screen)</h2>
 		<br>
 		<div class="buttonscanvas">
@@ -106,7 +113,7 @@ $(function(){
 			<a class="normalTip" title="Your Opponent's Life Points"><img src="images/misc/life.png" id="player2life">
 			<div id="player2score">x 10</div></a>
 		</div>
-
+		<br><br><br><br><br><br>
 		<div id="comparisontable">
 			<table class="flat-table flat-table-3">
 				<thead>
@@ -161,7 +168,7 @@ $(function(){
 		<br>
 		E.g.-- after two hits, you should be at: -webkit-filter: invert(20%); Notice the 20% !
 		</h1>
-
+	</div>
 	</div>
  
 </body>

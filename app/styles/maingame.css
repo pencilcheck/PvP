@@ -28,8 +28,8 @@
 
 
 #maincanvas {
-    margin-left: 150px;
-    position: absolute;
+    /* margin-left: 150px; */
+    position: relative;
 }
 
 #player1planet {
@@ -70,6 +70,10 @@ left: 457px;
     top: -27px;
     left: 122px;
     color: red;
+}
+
+#pushright {
+margin-left: 180px;
 }
 
 #planetscanvas {
