@@ -21,7 +21,7 @@ angular.module('planetRusApp', [
         templateUrl: 'views/lobby.html',
         controller: 'LobbyCtrl'
       })
-      .when('/game', {
+      .when('/game/:gameId', {
         templateUrl: 'views/game.html',
         controller: 'GameCtrl'
       })
