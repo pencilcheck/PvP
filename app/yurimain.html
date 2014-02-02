@@ -69,6 +69,14 @@ $(function(){
 		<img src="images/buttons/lightningbutton.png" id="mainbuttonclicked">
 		<img src="images/buttons/waterbutton.png" id="mainbuttonclicked">
 		<img src="images/buttons/magneticfieldbutton.png" id="mainbuttonclicked">
+
+		<br><br>
+		<h2>(after 2 selections in a row (or for ? after 1 time) it will ask for cooldown)</h2>
+		<a class="normalTip" title="Cooldown. Must wait a turn"><img src="images/buttons/volcanobutton.png" id="cannotuse">	</a>	
+		<a class="normalTip" title="Cooldown. Must wait a turn"><img src="images/buttons/lightningbutton.png" id="cannotuse"></a>
+		<a class="normalTip" title="Cooldown. Must wait a turn"><img src="images/buttons/waterbutton.png" id="cannotuse"></a>
+		<a class="normalTip" title="Cooldown. Must wait a turn"><img src="images/buttons/magneticfieldbutton.png" id="cannotuse"></a>
+		<a class="normalTip" title="Cooldown. Must wait 3 turns"><img src="images/buttons/rollthedicebutton.png" id="cannotuse"></a>
 		
 		<hr>
 		<hr>
@@ -83,21 +91,71 @@ $(function(){
 				<button class="push_button red">SUBMIT ATTACK</button>
 			</div>
 			<div class="player2buttons">
-				<img src="images/buttons/questionmarkbutton.png" id="nonclickable">		
-				<img src="images/buttons/questionmarkbutton.png" id="nonclickable">
-				<img src="images/buttons/questionmarkbutton.png" id="nonclickable">
-				<img src="images/buttons/rollthedicebutton.png" id="nonclickable">
+				<a class="normalTip" title="Your opponent's attack"><img src="images/buttons/questionmarkbutton.png" id="nonclickable">		
+				<a class="normalTip" title="Your opponent's attack"><img src="images/buttons/questionmarkbutton.png" id="nonclickable"></a>
+				<a class="normalTip" title="Your opponent's attack"><img src="images/buttons/questionmarkbutton.png" id="nonclickable"></a>
+				<a class="normalTip" title="Your opponent's attack"><img src="images/buttons/rollthedicebutton.png" id="nonclickable"></a>
 			</div>
 		</div>
 
 		<div id="planetscanvas">
 			<img src="images/planets/player1.png" id="player1planet">
-			<img src="images/misc/life.png" id="player1life">
-			<div id="player1score">x 10</div>
+			<a class="normalTip" title="Your Life Points"><img src="images/misc/life.png" id="player1life">
+			<div id="player1score">x 10</div></a>
 			<img src="images/planets/player2.png" id="player2planet">
-			<img src="images/misc/life.png" id="player2life">
-			<div id="player2score">x 10</div>
+			<a class="normalTip" title="Your Opponent's Life Points"><img src="images/misc/life.png" id="player2life">
+			<div id="player2score">x 10</div></a>
 		</div>
+
+		<div id="comparisontable">
+			<table class="flat-table flat-table-3">
+				<thead>
+					<th></th>
+					<th>Volcano</th>
+					<th>Lightning</th>
+					<th>Water</th>
+					<th>Magnetic Field</th>
+				</thead>
+				<tbody>
+					<tr>
+						
+						<th>Volcano</th>
+						<td><font color="red">-2 damage</font> <br>to both</td>
+						<td>testing</td>
+						<td>Seattle</td>
+						<td><font color="red">33% chance</font> <br>reflect, cancel or fail</td>
+					</tr>
+					<tr>
+						<th>Lightning</th>
+						<td>Eddy</td>
+						<td>Johnston</td>
+						<td>Palo Alto</td>
+						<td><font color="red">33% chance</font> <br>reflect, cancel or fail</td>
+					</tr>
+					<tr>
+						<th>Water</th>
+						<td>Eddy</td>
+						<td>Johnston</td>
+						<td>Palo Alto</td>
+						<td><font color="red">33% chance</font> <br>reflect, cancel or fail</td>
+					</tr>
+					<tr>
+						<th>Magnetic Field</th>
+						<td><font color="red">33% chance</font> <br>reflect, cancel or fail</td>
+						<td><font color="red">33% chance</font> <br>reflect, cancel or fail</td>
+						<td><font color="red">33% chance</font> <br>reflect, cancel or fail</td>
+						<td>Nothing</td>
+					</tr>
+				</tbody>
+			</table>
+				
+		</div>
+
+		<br>
+		<button class="push_button red">ASK FOR REMATCH</button>
+		<br>
+
+
 		<h1>As a planet gets "hit", it becomes more inverted in color. Change CSS to player planet to:<br>
 			-webkit-filter: invert(100%); upon death<br>
 		<br>
