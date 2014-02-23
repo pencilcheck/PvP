@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('planetRusApp')
+angular.module('PvP')
   .controller('LoginCtrl', function ($scope, $rootScope, $location, UserSession) {
     $scope.loggedIn = false;
 

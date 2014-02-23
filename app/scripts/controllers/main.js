@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('planetRusApp')
+angular.module('PvP')
   .controller('MainCtrl', function ($scope, $firebase) {
     $scope.games = $firebase(new Firebase('https://pvp.firebaseio.com/games'));
     $scope.awesomeThings = [

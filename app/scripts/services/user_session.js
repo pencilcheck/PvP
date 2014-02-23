@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('planetRusApp')
+angular.module('PvP')
   .service('UserSession', function UserSession(Facebook, $timeout, $cookies, $q) {
     // AngularJS will instantiate a singleton by calling "new" on this function
     var deferred;
@@ -17,6 +17,7 @@ angular.module('planetRusApp')
     };
 
     var _resolveOrPrompt = function() {
+      console.log('_resolveOrPrompt', $cookies.user);
       if($cookies.user)
         _completeAuth();
       else

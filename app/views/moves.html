@@ -12,13 +12,15 @@
       <input ng-model="move.name" />
     </span>
     <span>  
-      Damage relative to ...
       <ul>
-        <li ng-repeat="damage in move.damageTo">
-          {{damage.name}} with amount:
-          <input ng-model="damage.amount" />
+        <li ng-repeat="(key, damage) in move.damageTo">
+          To {{key}} with amount:
+          <input ng-model="damage" />
         </li>
       </ul>
     </span>
   </li>
 </ul>
+
+
+<button ng-click="clear()">Clear All Moves</button>

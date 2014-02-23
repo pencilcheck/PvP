@@ -12,7 +12,8 @@
     "angular-route": "1.2.6",
     "firebase": "~1.0.2",
     "todc-bootstrap": "*",
-    "firebase-simple-login": "~1.2.3"
+    "firebase-simple-login": "~1.2.3",
+    "javascript-state-machine": "~2.2.0"
   },
   "devDependencies": {
     "angular-mocks": "1.2.6",

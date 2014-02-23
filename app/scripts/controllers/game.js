@@ -1,27 +1,157 @@
 'use strict';
 
-angular.module('planetRusApp')
+angular.module('PvP')
   .controller('GameCtrl', function ($scope, $firebase, $routeParams, firebaseUrl, UserSession) {
 
-    UserSession.signIn().then($scope.setup);
+    $scope.render = function(event, from, to) {
+      console.log('render', from, to);
+      if(to == 'selectMoves') {
+        $scope.viewUrl = 'views/game/selectMoves.html';
+      }
 
+      if(to == 'waitingOnOthers') {
+      }
+
+      if(to == 'startingGame') {
+        $scope.viewUrl = 'views/game/fightScene.html';
+      }
+
+      if(to == 'selectingAttack') {
+      }
+
+      if(to == 'endingRound') {
+      }
+
+      if(to == 'selectingAttack') {
+      }
+
+      if(to == 'showingResult') {
+      }
+
+      if(to == 'showingScoreBoard') {
+        $scope.viewUrl = 'views/game/scoreBoard.html';
+      }
+    }
+
+
+    $scope.fsm = StateMachine.create({
+      initial: 'selectMoves',
+      events: [
+        { name: 'selectMovesFirst', from: 'selectMoves', to: 'waitingOnOthers' },
+        { name: 'receiveSelectMoves', from: 'waitingOnOthers', to: 'startingGame' },
+        { name: 'selectMovesSecond', from: 'selectMoves', to: 'startingGame' },
+
+        { name: 'prepareGame', from: 'startingGame', to: 'selectingAttack' },
+        { name: 'attackFirst', from: 'selectingAttack', to: 'waitingOnOthers' },
+        { name: 'receiveAttack', from: 'waitingOnOthers', to: 'endingRound' },
+        { name: 'attackSecond', from: 'selectingAttack', to: 'endingRound' },
+
+        { name: 'prepareRound', from: 'endingRound', to: 'selectingAttack' },
+        { name: 'endingGame', from: 'endingRound', to: 'showingResult' },
+        { name: 'endGame', from: 'showingResult', to: 'showingScoreBoard' }
+      ],
+      callbacks: {
+        onafterevent: function(event, from, to) {
+          $scope.safeApply(function() {
+            $scope.render(event, from, to);
+          });
+        },
+        onenterwaitingOnOthers: function(event, from, to) {
+          $scope.safeApply(function() {
+            $scope.waitingOnOther = true;
+          });
+        },
+        onleavewaitingOnOthers: function(event, from, to) {
+          $scope.safeApply(function() {
+            $scope.waitingOnOther = false;
+          });
+        }
+      }
+    });
+
+    $scope.isSelected = function(moveKey) {
+      if ($scope.selectedMoves) {
+        var keys = $scope.selectedMoves.$getIndex();
+        keys.forEach(function(key, i) {
+          if(key == moveKey)
+            return true;
+        });
+      }
+      return false;
+    };
+
+    // In selectMoves state
+    $scope.selectMove = function(key) {
+      $scope.selectedMoves.$add(key);
+    };
+
+    $scope.removeMove = function(key) {
+      $scope.selectedMoves.$remove(key);
+    };
+
+    $scope.setupOpponentMoves = function () {
+      if ($scope.users) {
+        $scope.users.forEach(function (key, user) {
+            if (key != $scope.user.uid) {
+              console.log($scope.game.moves);
+              console.log($scope.game.users);
+              $scope.opponent = $scope.users[key];
+              $scope.opponentSelectedMoves = $scope.game.moves[key];
+            }
+        });
+      }
+    }
+
+    // General setup
     $scope.setup = function(user) {
       var gameId = $routeParams.gameId,
-          gameRef = new Firebase(firebaseUrl + 'games/' + gameId),
-          movesRef = new Firebase(firebaseUrl + 'moves');
+          gameRef = $firebase(new Firebase(firebaseUrl + 'games/' + gameId)),
+          gameMovesRef = gameRef.$child('moves'),
+          usersRef = gameRef.$child('users'),
+          movesRef = $firebase(new Firebase(firebaseUrl + 'moves')),
+          statusRef = gameRef.$child('status');
 
-      $scope.moves = $firebase(movesRef);
+      $scope.user = user;
+      statusRef.$add({user: $scope.user.uid, status: 'joined', time: new Date()});
+      movesRef.$bind($scope, 'moves');
+      gameRef.$bind($scope, 'game').then(function () {
+        usersRef.$bind($scope, 'users').then(function () {
+          console.log($scope.users);
+          if (!$scope.users) $scope.users = [{}];
+          var u = {};
+          u[$scope.user.uid] = $scope.user;
+          $scope.users.push(u);
 
-      $scope.game = $firebase(gameRef);
+          gameMovesRef.$child($scope.user.uid).$bind($scope, 'selectedMoves').then(function () {
+            $scope.setupOpponentMoves();
+          });
+        });
+      });
 
-      $scope.viewUrl = 'views/game/selectMoves.html';
+
+      //$scope.status.$on('change', function () {
+        //console.log('update because status change');
+        //$scope.updateOpponentMoves();
+      //})
+
+      //$scope.moves.$on('change', function () {
+        //console.log('update because moves change');
+        //$scope.updateOpponentMoves();
+      //});
+      return user;
+    };
 
 
-      // Selecting moves
-      $scope.selectedMoves = $scope.game.$child('moves').$child(user.uid);
+    $scope.initScene = function(user) {
+      console.log('initScene', user);
+
+      $scope.render(null, null, 'selectMoves');
 
       return user;
     };
+
+    UserSession.signIn().then($scope.setup).then($scope.initScene);
+
 
 
     $scope.playerA = {
