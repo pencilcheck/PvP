@@ -1,9 +1,9 @@
 'use strict';
 
 angular.module('PvP')
-  .controller('MovesCtrl', function ($scope, $firebase, firebaseUrl, UserSession) {
+  .controller('MovesCtrl', function ($scope, $firebase, firebaseUrl, UserSession, Moves) {
 
-    $scope.moves = $firebase(new Firebase(firebaseUrl + 'moves'));
+    $scope.moves = Moves.m;
 
     $scope.clear = function() {
       $scope.moves.$set({});

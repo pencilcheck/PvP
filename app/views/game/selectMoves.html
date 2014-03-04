@@ -2,34 +2,27 @@
   <div class="col-md-6">
     <h1>Moves</h1>
     <ul>
-      <li ng-repeat="(key, move) in moves" ng-click="selectMove(key)" ng-disabled="isSelected(key)">
+      <li ng-repeat="move in moves" ng-click="selectMove(move)" ng-disabled="isSelected(move)">
         <b>{{move.name}}</b>
       </li>
     </ul>
 
     <h1>Selected moves</h1>
     <ul>
-      <li ng-repeat="(key, move) in selectedMoves">
-        <a ng-click="removeMove(key)"><b>{{key}}</b></a>
+      <li ng-repeat="(name, move) in player.selectedMoves">
+        <a ng-click="deselectMove(move)"><b>{{name}}</b></a>
       </li>
     </ul>
+    <button class="btn btn-success" ng-click="doneSelectingMoves()">Done</button>
   </div>
 
   <div class="col-md-6">
-    <h1>Moves</h1>
+    <h1>Opponent:</h1>
     <ul>
-      <li ng-repeat="(key, move) in moves" ng-click="selectMove(key)" ng-disabled="isSelected(key)">
-        <b>{{move.name}}</b>
-      </li>
-    </ul>
-
-    <h1>Opponent selected moves</h1>
-    <ul>
-      <li ng-repeat="(key, move) in opponentSelectedMoves">
-        <b>{{key}}</b>
+      <li ng-repeat="(name, move) in opponent.selectedMoves">
+        <b>{{name}}</b>
       </li>
     </ul>
     </div>
   </div>
 </div>
-{{opponentSelectedMoves}}
