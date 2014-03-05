@@ -7,7 +7,19 @@ angular.module('PvP', [
   'ngRoute',
   'firebase'
 ])
-  .run(function($rootScope) {
+  .run(function ($rootScope, $location, UserSession) {
+    $rootScope.$on('$locationChangeStart', function (event, currLocation, prevLocation) {
+      console.log(currLocation, prevLocation);
+      if (!UserSession.signedIn && currLocation.indexOf('login') < 0) {
+        event.preventDefault();
+        UserSession.signIn().then(function () {
+          $location.path(currLocation);
+        }, function () {
+          $location.path('/login');
+        });
+      }
+    });
+  }).run(function($rootScope) {
     $rootScope.safeApply = function(fn) {
       var phase = this.$root.$$phase;
       if(phase == '$apply' || phase == '$digest') {
@@ -36,7 +48,12 @@ angular.module('PvP', [
       })
       .when('/game/:gameId', {
         templateUrl: '/views/game.html',
-        controller: 'GameCtrl'
+        controller: 'GameCtrl',
+        resolve: {
+          gameConfig: function (Game, $routeParams) {
+            return Game($routeParams.gameId, localStorage.user.uid);
+          }
+        }
       })
       .when('/moves', {
         templateUrl: 'views/moves.html',

@@ -25,6 +25,7 @@ angular.module('PvP')
 
       join: function (id, user) {
         game = games[id];
+        if (!game.players) game.players = {};
         game.players[user.uid] = {
           uid: user.uid,
           selectedMoves: {},

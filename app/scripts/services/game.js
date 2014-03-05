@@ -175,7 +175,7 @@ angular.module('PvP')
             opponent: meta.players[opponentId],
             status: function () {
               return determineStatus(meta.state, playerId);
-            }
+            },
             log: log
           };
 

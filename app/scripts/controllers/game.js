@@ -1,13 +1,13 @@
 'use strict';
 
 angular.module('PvP')
-  .controller('GameCtrl', function ($scope, $routeParams, Game) {
-    $scope.status = Game.status();
-    $scope.moves = Game.moves;
-    $scope.player = Game.player;
-    $scope.opponent = Game.opponent;
-    $scope.game = Game.meta;
-    $scope.log = Game.log;
+  .controller('GameCtrl', function ($scope, $routeParams, gameConfig) {
+    $scope.status = gameConfig.status();
+    $scope.moves = gameConfig.moves;
+    $scope.player = gameConfig.player;
+    $scope.opponent = gameConfig.opponent;
+    $scope.game = gameConfig.meta;
+    $scope.log = gameConfig.log;
 
     $scope.$watch('status', function (newVal) {
       switch (newVal) {
@@ -68,6 +68,7 @@ angular.module('PvP')
               detail: 'both'
             };
           }
+        }
         $scope.meta.$save('state');
         $('button').attr('disabled', 'disabled');
       });

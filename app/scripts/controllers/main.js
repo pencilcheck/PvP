@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('PvP')
-  .controller('MainCtrl', function ($scope, Moves, $firebase, UserSession) {
+  .controller('MainCtrl', function ($scope, $location, Games, Moves, $firebase, UserSession) {
 
     if (!Moves.all()) {
       Moves.m.$add({
@@ -24,16 +24,21 @@ angular.module('PvP')
     $scope.games = $firebase(new Firebase('https://pvp.firebaseio.com/games'));
 
     $scope.add = function() {
-      $scope.games.$add({
-        title: 'test',
-        description: 'Best game ever',
-        rounds: []
-      }).then(function (ref) {
-        var id = ref.name();
-        UserSession.signIn().then(function (user) {
+      function addGame(user) {
+        console.log('addGame');
+        $scope.games.$add({
+          title: 'test',
+          description: 'Best game ever',
+          rounds: []
+        }).then(function (ref) {
+          var id = ref.name();
           Games.join(id, user);
           $location.path('/game/' + id);
         });
+      }
+
+      UserSession.signIn().then(addGame, function () {
+        console.log('failed?');
       });
     };
   });

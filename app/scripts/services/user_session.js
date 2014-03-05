@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('PvP')
-  .service('UserSession', function UserSession(Facebook, $timeout, $cookies, $q) {
+  .service('UserSession', function (Facebook, $timeout, $q) {
     // AngularJS will instantiate a singleton by calling "new" on this function
     var deferred;
 
@@ -10,18 +10,23 @@ angular.module('PvP')
       return user;
     };
 
+    var _failAuth = function () {
+      deferred.reject();
+    }
+
     var completeSignIn = function(user) {
-      $cookies.user = user;
+      localStorage.user = user;
+      console.log('completeSignIn', user, localStorage.user);
       _completeAuth(user);
       return user;
     };
 
     var _resolveOrPrompt = function() {
-      console.log('_resolveOrPrompt', $cookies.user);
-      if($cookies.user)
-        _completeAuth();
+      console.log('_resolveOrPrompt', localStorage.user);
+      if(localStorage.user)
+        _completeAuth(localStorage.user);
       else
-        Facebook.openLogin().then(completeSignIn);
+        Facebook.openLogin().then(completeSignIn, _failAuth);
     };
 
     var signIn = function() {
@@ -32,6 +37,7 @@ angular.module('PvP')
 
     return {
       signIn: signIn,
+      signedIn: !!localStorage.user,
       completeSignIn: completeSignIn,
       _resolveOrPrompt: _resolveOrPrompt,
       _completeAuth: _completeAuth
