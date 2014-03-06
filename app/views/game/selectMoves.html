@@ -9,7 +9,7 @@
 
     <h1>Selected moves</h1>
     <ul>
-      <li ng-repeat="(name, move) in player.selectedMoves">
+      <li ng-repeat="(name, move) in currentPlayer().selectedMoves">
         <a ng-click="deselectMove(move)"><b>{{name}}</b></a>
       </li>
     </ul>
@@ -19,7 +19,7 @@
   <div class="col-md-6">
     <h1>Opponent:</h1>
     <ul>
-      <li ng-repeat="(name, move) in opponent.selectedMoves">
+      <li ng-repeat="(name, move) in opponentPlayer().selectedMoves">
         <b>{{name}}</b>
       </li>
     </ul>

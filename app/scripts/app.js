@@ -9,8 +9,7 @@ angular.module('PvP', [
 ])
   .run(function ($rootScope, $location, UserSession) {
     $rootScope.$on('$locationChangeStart', function (event, currLocation, prevLocation) {
-      console.log(currLocation, prevLocation);
-      if (!UserSession.signedIn && currLocation.indexOf('login') < 0) {
+      if (!UserSession.signedIn() && currLocation.indexOf('login') < 0) {
         event.preventDefault();
         UserSession.signIn().then(function () {
           $location.path(currLocation);
@@ -50,8 +49,8 @@ angular.module('PvP', [
         templateUrl: '/views/game.html',
         controller: 'GameCtrl',
         resolve: {
-          gameConfig: function (Game, $routeParams) {
-            return Game($routeParams.gameId, localStorage.user.uid);
+          gameConfig: function (Game, UserSession, $route) {
+            return Game($route.current.params.gameId, UserSession.currentUser().uid);
           }
         }
       })

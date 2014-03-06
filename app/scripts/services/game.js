@@ -1,7 +1,7 @@
 'user strict';
 
 angular.module('PvP')
-  .factory('Game', function ($rootScope, $q, Games, Moves, Channel, $firebase) {
+  .factory('Game', function ($rootScope, $q, Games, Moves, Channel, $firebase, firebaseUrl) {
     var meta = Games.get(),
         log = [];
 
@@ -167,28 +167,44 @@ angular.module('PvP')
     };
 
     return function (gameId, userId) {
-      var meta = Games.get(gameId),
-          o = {
-            moves: Moves.all(),
-            meta: meta,
-            player: meta.players[playerId],
-            opponent: meta.players[opponentId],
-            status: function () {
-              return determineStatus(meta.state, playerId);
-            },
-            log: log
-          };
+      var dfd = $q.defer();
+      Games.get(gameId).then(function (game) {
+        var o = {
+          moves: Moves.all(),
+          meta: game,
+          players: game.players,
+          currentPlayer: function () {
+            return game.players[userId];
+          },
+          opponentPlayer: function () {
+            var opponent = {};
+            game.players.forEach(function (player) {
+              if (player.uid != $routeParams.userId)
+                opponent = player;
+            });
+            return opponent;
+          },
+          status: function () {
+            return determineStatus(game.state, userId);
+          },
+          state: game.state,
+          log: log
+        };
 
-      o.watch('meta', function (id, oldVal, newVal) {
-        // Update to server
-        Games.g.$save(gameId);
+        o.watch('meta', function (id, oldVal, newVal) {
+          // Update to server
+          Games.g.$save(gameId);
+        });
+
+        o.watch('player', function (id, oldVal, newVal) {
+          // Update to server
+          Games.g.$save(gameId);
+        });
+
+        angular.extend(dfd.promise, o);
+        dfd.resolve(o);
       });
 
-      o.watch('player', function (id, oldVal, newVal) {
-        // Update to server
-        Games.g.$save(gameId);
-      });
-
-      return o;
+      return dfd.promise;
     };
   });

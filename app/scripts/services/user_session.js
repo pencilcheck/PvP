@@ -1,5 +1,13 @@
 'use strict';
 
+function saveToStorage(name, value) {
+  localStorage.setItem(name, JSON.stringify(value));
+}
+
+function getFromStorage(name) {
+  return JSON.parse(localStorage.getItem(name));
+}
+
 angular.module('PvP')
   .service('UserSession', function (Facebook, $timeout, $q) {
     // AngularJS will instantiate a singleton by calling "new" on this function
@@ -15,16 +23,14 @@ angular.module('PvP')
     }
 
     var completeSignIn = function(user) {
-      localStorage.user = user;
-      console.log('completeSignIn', user, localStorage.user);
+      saveToStorage('user', user);
       _completeAuth(user);
       return user;
     };
 
     var _resolveOrPrompt = function() {
-      console.log('_resolveOrPrompt', localStorage.user);
-      if(localStorage.user)
-        _completeAuth(localStorage.user);
+      if(getFromStorage('user'))
+        _completeAuth(getFromStorage('user'));
       else
         Facebook.openLogin().then(completeSignIn, _failAuth);
     };
@@ -37,7 +43,12 @@ angular.module('PvP')
 
     return {
       signIn: signIn,
-      signedIn: !!localStorage.user,
+      signedIn: function () {
+        return !!getFromStorage('user');
+      },
+      currentUser: function () {
+        return getFromStorage('user');
+      },
       completeSignIn: completeSignIn,
       _resolveOrPrompt: _resolveOrPrompt,
       _completeAuth: _completeAuth
