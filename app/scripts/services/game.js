@@ -168,7 +168,9 @@ angular.module('PvP')
 
     return function (gameId, userId) {
       var dfd = $q.defer();
-      Games.get(gameId).then(function (game) {
+      var game = Games.get(gameId);
+
+      game.$on('loaded', function () {
         var o = {
           moves: Moves.all(),
           meta: game,

@@ -22,7 +22,6 @@ angular.module('PvP')
             });
           } else {
             // user is logged out
-            deferred.reject(error);
           }
         });
 
