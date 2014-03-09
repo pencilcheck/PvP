@@ -57,16 +57,18 @@ margin-left: 120px;
     left: -10px;
 }
 
+#buttoncanvas {
+    float: left;
+}
 
 #maincanvas {
-    margin-left: 150px;
-    margin-top: 65px; 
+    /*margin-left: 150px;*/
+    /*margin-top: 150px; */
     position: relative;
 }
 
 #player1planet {
     width: 250px;
-    margin-right: 350px;
 }
 #player2planet {
     width: 200px;
@@ -84,10 +86,22 @@ margin-left: 120px;
 }
 
 #player1life {
-position: relative;
-width: 45px;
-top: 1px;
-left: -520px;
+    position: relative;
+    width: 45px;
+    top: 100px;
+    left: -173px;
+}
+
+#player1heart {
+    position: relative;
+    width: 45px;
+}
+
+#player1score {
+    position: relative;
+    left: 0px;
+    top: 10px;
+    color: red;
 }
 
 #player2life {
@@ -97,20 +111,14 @@ top: -267px;
 left: 457px;
 }
 
-#player1score {
-    position: relative;
-    top: -27px;
-    left: 122px;
-    color: red;
-}
-
 #pushright {
 margin-left: 180px;
 }
 
 #planetscanvas {
-    margin-top: -95px;
-    margin-bottom: -160px;
+    float: left;
+    /*margin-top: -95px;*/
+    /*margin-bottom: -160px;*/
 }
 
 #player2score {

@@ -7,19 +7,23 @@ angular.module('PvP')
       console.log(moves.$getIndex());
       if (moves.$getIndex().length == 0) {
         Moves.add({
-          name: 'volcano'
+          name: 'volcano',
+          src: 'images/buttons/volcanobutton.png'
         });
 
         Moves.add({
-          name: 'lightning'
+          name: 'lightning',
+          src: 'images/buttons/lightningbutton.png'
         });
 
         Moves.add({
-          name: 'water'
+          name: 'water',
+          src: 'images/buttons/waterbutton.png'
         });
 
         Moves.add({
-          name: 'shield'
+          name: 'shield',
+          src: 'images/buttons/rollthedicebutton.png'
         });
       }
     });

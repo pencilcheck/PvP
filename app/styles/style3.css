@@ -18,12 +18,12 @@ header {
     position:relative;
     z-index:5;
 }
-h2{
-    color:white;
-}
-h1{
-    color:white;
-}
+/*h2{*/
+    /*color:white;*/
+/*}*/
+/*h1{*/
+    /*color:white;*/
+/*}*/
 header h2{
     font-size: 22px;
     margin: 0 auto;

@@ -178,8 +178,7 @@ angular.module('PvP')
           status: function () {
             return determineStatus(game.state, userId);
           },
-          state: game.state,
-          log: log
+          state: game.state
         };
 
         o.watch('game', function (id, oldVal, newVal) {
@@ -187,7 +186,7 @@ angular.module('PvP')
           Games.g.$save(gameId);
         });
 
-        o.watch('player', function (id, oldVal, newVal) {
+        o.watch('players', function (id, oldVal, newVal) {
           // Update to server
           Games.g.$save(gameId);
         });

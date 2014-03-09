@@ -19,12 +19,11 @@ angular.module('PvP')
         break;
       case 'waiting_move':
         $scope.viewUrl = 'views/game/fightScene.html';
-        break;
-      case 'waiting_other_pick':
-        $scope.viewUrl = 'views/game/fightScene.html';
+        $scope.dialog = 'What should ' + $scope.currentPlayer().name + ' do?';
         break;
       case 'waiting_other_move':
         $scope.viewUrl = 'views/game/fightScene.html';
+        $scope.dialog = 'Waiting on your opponent ' + $scope.currentPlayer().name;
         break;
       case 'not_seen_animation':
         $scope.viewUrl = 'views/game/fightScene.html';
@@ -33,7 +32,6 @@ angular.module('PvP')
         $scope.viewUrl = 'views/game/endGame.html';
         break;
       default:
-        return 'Cowabunga!';
         break;
       }
     });
@@ -57,7 +55,6 @@ angular.module('PvP')
     };
 
     $scope.doneSelectingMoves = function () {
-      $scope.log.push($scope.currentPlayer().displayName + ' has picked moves');
       $scope.game.$save('players').then(function () {
         // FIXME: update game.state from firebase before checking
         if ($scope.game.state.name == 'waiting_pick') {
@@ -79,4 +76,9 @@ angular.module('PvP')
     };
 
     // Fight Scene Stage
+    $scope.fight = function (move) {
+    };
+
+    $scope.feelingLucky = function () {
+    };
   });

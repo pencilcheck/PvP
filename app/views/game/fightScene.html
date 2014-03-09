@@ -1,26 +1,78 @@
-<h2>{{result}}</h2>
-<h2>{{explanation}}</h2>
-<p>
-  Player {{playerA.name}} ({{playerA.health}}):
-  <input ng-model="playerA.lastMove" />
+<link rel="stylesheet" href="styles/maingame.css">  
+<link href="styles/style3.css" rel="stylesheet" type="text/css" />
+<script src="scripts/tooltip.js"></script>
+<script src="scripts/imagechange.js"></script>
+<div id="comparisontable">
+  <div id="testing123">
+    <p id="maintext2"><u><b>Moves Table (click and hold)</b></u></p>
+    <span>
+      <table class="flat-table flat-table-3" id="maintext2">
+        <thead>
+          <th></th>
+          <th>Volcano</th>
+          <th>Lightning</th>
+          <th>Water</th>
+          <th>Magnetic Field</th>
+        </thead>
+        <tbody>
+          <tr>
 
-  <p>Used moves:</p>
-  <ul>
-    <li ng-repeat="move in playerA.moveHistory track by $index">
-      {{move}}
-    </li>
-  </ul>
-</p>
-<p>
-  Player {{playerB.name}} ({{playerB.health}}):
-  <input ng-model="playerB.lastMove" />
+            <th>Volcano</th>
+            <td><font color="red">-2 damage</font> <br>to both</td>
+            <td><font color="red">-2 damage</font> Volcano <br> <font color="red">-1 damage</font> Lightning</td>
+            <td><font color="red">-1 damage</font> Volcano <br> <font color="red">-2 damage</font> Water</td>
+            <td><font color="red">33% chance</font> <br>reflect, cancel or fail</td>
+          </tr>
+          <tr>
+            <th>Lightning</th>
+            <td><font color="red">-1 damage</font> Lightning <br><font color="red">-2 damage</font> Volcano</td>
+            <td>50% chance <font color="red">-3 damage</font> to either <br><font color="red">-2 damage</font> to both</td>
+            <td><font color="red">-2 damage</font> Lightning<br><font color="red">-1 damage</font> Water</td>
+            <td><font color="red">33% chance</font> <br>reflect, cancel or fail</td>
+          </tr>
+          <tr>
+            <th>Water</th>
+            <td><font color="red">-2 damage</font> Water <br><font color="red">-1 damage</font> Volcano</td>
+            <td><font color="red">-1 damage</font> Water <br>  <font color="red">-2 damage</font> Lightning</td>
+            <td><font color="red">-1 damage</font> to both <br></td>
+            <td><font color="red">33% chance</font> <br>reflect, cancel or fail</td>
+          </tr>
+          <tr>
+            <th>Magnetic Field</th>
+            <td><font color="red">33% chance</font> <br>reflect, cancel or fail</td>
+            <td><font color="red">33% chance</font> <br>reflect, cancel or fail</td>
+            <td><font color="red">33% chance</font> <br>reflect, cancel or fail</td>
+            <td>Nothing</td>
+          </tr>
+        </tbody>
+      </table>
 
-  <p>Used moves:</p>
-  <ul>
-    <li ng-repeat="move in playerB.moveHistory track by $index">
-      {{move}}
-    </li>
-  </ul>
-</p>
+    </div>
+  </span>
+</div>
 
-<button ng-keypress="fight($event)" ng-click="fight()">FIGHT!</button>
+<h1 id="maintext">Round {{rounds.length}}</h1>
+<h2 class="well">{{dialog}}</h2>
+
+<div id="maincanvas">
+  <div id="buttonscanvas">
+    <div class="player1buttons">
+      <a ng-repeat="(key, move) in currentPlayer().selectedMoves"
+         class="normalTip" tooltip="{{move.name}}"
+         ng-click="fight(move)">
+       <img id="mainbutton" ng-src="{{move.src}}">
+      </a>	
+      <a class="normalTip" ng-click="feelingLucky()" tooltip="I'm Feeling Lucky">
+        <img id="mainbutton" src="images/buttons/rollthedicebutton.png">
+      </a>
+    </div>
+
+  </div>
+  <div id="planetscanvas">
+    <img src="images/planets/player1.png" id="player1planet">
+    <a id="player1life" class="normalTip" tooltip="Your Life Points">
+      <img id="player1heart" src="images/misc/life.png">
+      <span id="player1score">x {{currentPlayer().score}}</span>
+    </a>
+  </div>
+</div>
