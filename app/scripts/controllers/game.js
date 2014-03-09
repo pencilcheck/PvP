@@ -5,7 +5,7 @@ angular.module('PvP')
     $scope.status = gameConfig.status();
     $scope.moves = gameConfig.moves;
     $scope.players = gameConfig.players;
-    $scope.game = gameConfig.meta;
+    $scope.game = gameConfig.game;
     $scope.log = gameConfig.log;
     $scope.state = gameConfig.state;
 
@@ -42,16 +42,13 @@ angular.module('PvP')
       return gameConfig.currentPlayer();
     };
 
-    $scope.opponentPlayer = function () {
-      return gameConfig.opponentPlayer();
-    };
-
     // Select Moves Stage
     $scope.isSelected = function(move) {
-      return $scope.selectedMoves[move];
+      return $scope.currentPlayer().selectedMoves && $scope.currentPlayer().selectedMoves[move];
     };
 
     $scope.selectMove = function(move) {
+      $scope.currentPlayer().selectedMoves = $scope.currentPlayer().selectedMoves || {};
       $scope.currentPlayer().selectedMoves[move.name] = move;
     };
 
@@ -61,23 +58,22 @@ angular.module('PvP')
 
     $scope.doneSelectingMoves = function () {
       $scope.log.push($scope.currentPlayer().displayName + ' has picked moves');
-      $scope.meta.$save('log');
-      $scope.meta.$save('player').then(function () {
-        // FIXME: update meta.state from firebase before checking
-        if ($scope.meta.state.name == 'waiting_pick') {
-          if ($scope.meta.state.detail == 'both') {
-            $scope.meta.state = {
+      $scope.game.$save('players').then(function () {
+        // FIXME: update game.state from firebase before checking
+        if ($scope.game.state.name == 'waiting_pick') {
+          if ($scope.game.state.detail == 'both') {
+            $scope.game.state = {
               name: 'waiting_pick',
-              detail: $scope.player.uid
+              detail: $scope.currentPlayer().uid
             };
-          } else if ($scope.meta.state.detail != $scope.player.uid) {
-            $scope.meta.state = {
+          } else if ($scope.game.state.detail != $scope.currentPlayer().uid) {
+            $scope.game.state = {
               name: 'waiting_move',
               detail: 'both'
             };
           }
         }
-        $scope.meta.$save('state');
+        $scope.game.$save('state');
         $('button').attr('disabled', 'disabled');
       });
     };

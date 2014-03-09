@@ -1,44 +1,46 @@
 'use strict';
 
 angular.module('PvP')
-  .controller('MainCtrl', function ($scope, $location, Games, Moves, $firebase, UserSession) {
+  .controller('MainCtrl', function ($scope, $location, $filter, Games, Moves, $firebase, UserSession) {
 
-    if (!Moves.all()) {
-      Moves.m.$add({
-        name: 'volcano'
-      });
+    Moves.all().$then(function (moves) {
+      console.log(moves.$getIndex());
+      if (moves.$getIndex().length == 0) {
+        Moves.add({
+          name: 'volcano'
+        });
 
-      Moves.m.$add({
-        name: 'lightning'
-      });
+        Moves.add({
+          name: 'lightning'
+        });
 
-      Moves.m.$add({
-        name: 'water'
-      });
+        Moves.add({
+          name: 'water'
+        });
 
-      Moves.m.$add({
-        name: 'shield'
-      });
-    }
-
-    $scope.games = $firebase(new Firebase('https://pvp.firebaseio.com/games'));
+        Moves.add({
+          name: 'shield'
+        });
+      }
+    });
+    $scope.games = Games.all();
 
     $scope.add = function() {
-      function addGame(user) {
-        console.log('addGame');
+      UserSession.signIn().then(function addGame(user) {
         $scope.games.$add({
           title: 'test',
           description: 'Best game ever',
-          rounds: []
+          rounds: [],
+          state: {
+            name: 'waiting_join',
+            detail: user.uid
+          }
         }).then(function (ref) {
           var id = ref.name();
-          Games.join(id, user);
-          $location.path('/game/' + id);
+          Games.join(id, user).then(function () {
+            $location.path('/game/' + id);
+          });
         });
-      }
-
-      UserSession.signIn().then(addGame, function () {
-        console.log('failed?');
       });
     };
   });

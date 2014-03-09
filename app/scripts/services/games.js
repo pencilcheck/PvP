@@ -1,7 +1,7 @@
 'user strict';
 
 angular.module('PvP')
-  .factory('Games', function ($rootScope, $q, Channel, firebaseUrl, $firebase) {
+  .factory('Games', function ($rootScope, $q, Channel, firebaseUrl, $firebase, convertFirebase) {
     var gamesRef = $firebase(new Firebase(firebaseUrl + 'games'));
 
     return {
@@ -11,33 +11,30 @@ angular.module('PvP')
       },
 
       get: function (id) {
-        return id ? gamesRef.$child(id) : {};
+        return id ? convertFirebase(gamesRef.$child(id)) : {};
       },
 
       join: function (id, user) {
-        var game = gamesRef.$child(id);
-        if (!game.players)
-          game.players = {};
-        game.players[user.uid] = {
-          uid: user.uid,
-          selectedMoves: {},
-          health: 10,
-          name: user.firstname
-        };
+        return convertFirebase(gamesRef.$child(id)).$then(function (game) {
+          game.players = game.players || {};
+          game.players[user.uid] = {
+            uid: user.uid,
+            selectedMoves: {},
+            health: 10,
+            name: user.displayName
+          };
+          game.$save('players');
 
-        if (!game.state) {
-          game.state = {
-            name: 'waiting_join',
-            detail: ''
+          game.state = game.state || {};
+          if (game.state && game.state.name == 'waiting_join' && game.state.detail && game.state.detail != user.uid) {
+            game.state = {
+              name: 'waiting_pick',
+              detail: 'both'
+            }
           }
-        } else if (game.state.name == 'waiting_join' && game.state.detail != user.uid) {
-          game.state = {
-            name: 'waiting_pick',
-            detail: 'both'
-          }
-        }
-
-        return gamesRef.$save(id);
+          game.$save('state');
+          return game;
+        });
       }
     };
   });

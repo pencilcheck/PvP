@@ -3,7 +3,7 @@
 angular.module('PvP')
   .controller('MovesCtrl', function ($scope, $firebase, firebaseUrl, UserSession, Moves) {
 
-    $scope.moves = Moves.m;
+    $scope.moves = Moves.all();
 
     $scope.clear = function() {
       $scope.moves.$set({});

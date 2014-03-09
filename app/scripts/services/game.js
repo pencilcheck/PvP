@@ -1,7 +1,7 @@
 'user strict';
 
 angular.module('PvP')
-  .factory('Game', function ($rootScope, $q, Games, Moves, Channel, $firebase, firebaseUrl) {
+  .factory('Game', function ($rootScope, $routeParams, $q, Games, Moves, Channel, $firebase, firebaseUrl) {
     var meta = Games.get(),
         log = [];
 
@@ -167,24 +167,13 @@ angular.module('PvP')
     };
 
     return function (gameId, userId) {
-      var dfd = $q.defer();
-      var game = Games.get(gameId);
-
-      game.$on('loaded', function () {
+      return Games.get(gameId).$then(function (game) {
         var o = {
           moves: Moves.all(),
-          meta: game,
+          game: game,
           players: game.players,
           currentPlayer: function () {
             return game.players[userId];
-          },
-          opponentPlayer: function () {
-            var opponent = {};
-            game.players.forEach(function (player) {
-              if (player.uid != $routeParams.userId)
-                opponent = player;
-            });
-            return opponent;
           },
           status: function () {
             return determineStatus(game.state, userId);
@@ -193,7 +182,7 @@ angular.module('PvP')
           log: log
         };
 
-        o.watch('meta', function (id, oldVal, newVal) {
+        o.watch('game', function (id, oldVal, newVal) {
           // Update to server
           Games.g.$save(gameId);
         });
@@ -203,10 +192,7 @@ angular.module('PvP')
           Games.g.$save(gameId);
         });
 
-        angular.extend(dfd.promise, o);
-        dfd.resolve(o);
+        return o;
       });
-
-      return dfd.promise;
     };
   });
