@@ -47,10 +47,14 @@ angular.module('PvP')
           templateUrl: 'animationModal.html',
           controller: function ($scope, $modalInstance) {
             $scope.skip = function () {
+              gameConfig.currentPlayer().notSeenAnimation = null;
+              gameConfig.game.$save('players');
               $modalInstance.close();
             };
 
             $scope.play = function () {
+              gameConfig.currentPlayer().notSeenAnimation = null;
+              gameConfig.game.$save('players');
               $modalInstance.close();
             };
           }
