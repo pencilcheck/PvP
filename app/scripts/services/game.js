@@ -1,7 +1,7 @@
 'user strict';
 
 angular.module('PvP')
-  .factory('Game', function ($rootScope, $routeParams, $q, Games, Moves, Channel, $firebase, firebaseUrl) {
+  .factory('Game', function ($rootScope, $routeParams, $q, Games, Moves, Channel, $firebase, firebaseUrl, convertFirebase) {
     var meta = Games.get(),
         log = [];
 
@@ -38,138 +38,14 @@ angular.module('PvP')
       }
     };
 
-    var fight = function() {
-      if ($scope.playerA.lastMove && $scope.playerB.lastMove) {
-        $scope.playerA.moveHistory.push($scope.playerA.lastMove);
-        $scope.playerB.moveHistory.push($scope.playerB.lastMove);
-
-        var damageM = $scope.damage($scope.playerA.lastMove, $scope.playerB.lastMove);
-        $scope.playerA.health -= damageM[0];
-        $scope.playerB.health -= damageM[1];
-
-        $scope.result = 'Player '+$scope.playerA.name+' used '+$scope.playerA.lastMove+', Player '+$scope.playerB.name+' used '+$scope.playerB.lastMove+'!';
-      } else {
-        alert('Each player has to select a move');
-      }
-    };
-
-    var damage = function(moveA, moveB) {
-      if ( moveA == 'volcano' ) {
-        if ( moveB == 'volcano' ) {
-          $scope.explanation = 'Both player are damaged by fire';
-          return [ 2, 2 ];
-        } else if ( moveB == 'water' ) {
-          $scope.explanation = 'The attack both cancelled each other';
-          return [ 0, 0 ];
-        } else if ( moveB == 'light' ) {
-          $scope.explanation = '';
-          return [ 1, 2 ];
-        } else if ( moveB == 'magnetic' ) {
-          var chance = Math.floor(Math.random()*3);
-          if ( chance == 0 ) {
-            $scope.explanation = 'Magnetic field reflected the attack';
-            return [ 2, 0 ];
-          } else if ( chance == 1 ) {
-            $scope.explanation = 'Magnetic field cancelled the attack';
-            return [ 0, 0 ];
-          } else if ( chance == 2 ) {
-            $scope.explanation = 'Magnetic field failed';
-            return [ 0, 2 ];
-          }
-        }
-      } else if ( moveA == 'water' ) {
-        if ( moveB == 'volcano' ) {
-          $scope.explanation = 'Water vaporates the heat';
-          return [ 1, 2 ];
-        } else if ( moveB == 'water' ) {
-          $scope.explanation = '';
-          return [ 1, 1 ];
-        } else if ( moveB == 'light' ) {
-          $scope.explanation = '';
-          return [ 2, 1 ];
-        } else if ( moveB == 'magnetic' ) {
-          var chance = Math.floor(Math.random()*3);
-          if ( chance == 0 ) {
-            $scope.explanation = 'Magnetic field reflected the attack';
-            return [ 2, 0 ];
-          } else if ( chance == 1 ) {
-            $scope.explanation = 'Magnetic field cancelled the attack';
-            return [ 0, 0 ];
-          } else if ( chance == 2 ) {
-            $scope.explanation = 'Magnetic field failed';
-            return [ 0, 2 ];
-          }
-        }
-      } else if ( moveA == 'light' ) {
-        if ( moveB == 'volcano' )
-          return [ 2, 1 ];
-        else if ( moveB == 'water' )
-          return [ 1, 2 ];
-        else if ( moveB == 'light' ) {
-          var chance = Math.floor(Math.random()*2);
-          if ( chance == 0 ) {
-            side = Math.floor(Math.random()*2);
-            if ( side == 0 )
-              return [ 3, 0 ];
-            else if ( side == 1 )
-              return [ 0, 3 ];
-          } else if ( chance == 1 )
-            return [ 2, 2 ];
-        } else if ( moveB == 'magnetic' ) {
-          var chance = Math.floor(Math.random()*3);
-          if ( chance == 0 ) {
-            $scope.explanation = 'Magnetic field reflected the attack';
-            return [ 2, 0 ];
-          } else if ( chance == 1 ) {
-            $scope.explanation = 'Magnetic field cancelled the attack';
-            return [ 0, 0 ];
-          } else if ( chance == 2 ) {
-            $scope.explanation = 'Magnetic field failed';
-            return [ 0, 2 ];
-          }
-        }
-      } else if ( moveA == 'magnetic' ) {
-        if ( moveB == 'volcano' ) {
-          var chance = Math.floor(Math.random()*3);
-          if ( chance == 0 ) {
-            $scope.explanation = 'Magnetic field reflected the attack';
-            return [ 0, 2 ];
-          } else if ( chance == 1 ) {
-            $scope.explanation = 'Magnetic field cancelled the attack';
-            return [ 0, 0 ];
-          } else if ( chance == 2 ) {
-            $scope.explanation = 'Magnetic field failed';
-            return [ 2, 0 ];
-          }
-        } else if ( moveB == 'water' ) {
-          var chance = Math.floor(Math.random()*3);
-          if ( chance == 0 )
-            return [ 0, 2 ];
-          else if ( chance == 1 )
-            return [ 0, 0 ];
-          else if ( chance == 2 )
-            return [ 2, 0 ];
-        } else if ( moveB == 'light' ) {
-          var chance = Math.floor(Math.random()*3);
-          if ( chance == 0 )
-            return [ 0, 2 ];
-          else if ( chance == 1 )
-            return [ 0, 0 ];
-          else if ( chance == 2 )
-            return [ 2, 0 ];
-        } else if ( moveB == 'magnetic' ) {
-          $scope.explanation = 'Has no effect on each other...';
-          return [ 0, 0 ];
-        }
-      }
-
-      return [ 0, 0 ];
-    };
-
     return function (gameId, userId) {
       return Games.get(gameId).$then(function (game) {
         var o = {
-          moves: Moves.all(),
+          onChange: function (attr, cb) {
+            game.$child(attr).$on('change', function () {
+              cb(game[attr]);
+            });
+          },
           game: game,
           players: game.players,
           currentPlayer: function () {
@@ -178,8 +54,53 @@ angular.module('PvP')
           status: function () {
             return determineStatus(game.state, userId);
           },
-          state: game.state
+          state: game.state,
+          rounds: game.$child('rounds'),
+          commitAttack: function (move) {
+            convertFirebase(game.$child('rounds')).$then(function (rounds) {
+              var lastIndex = rounds.$getIndex()[rounds.$getIndex().length-1];
+              var lastRound = rounds[lastIndex];
+              if (lastRound && Object.keys(lastRound).length < Object.keys(game.players).length) {
+                lastRound[userId] = move;
+                rounds.$save(lastIndex);
+
+                if (Object.keys(lastRound).length == Object.keys(game.players).length) {
+                  game.state = {
+                    name: "waiting_move"
+                  };
+                  game.$save('state');
+
+                  // Fight
+                  var opponentId = null;
+                  Object.keys(game.players).forEach(function (id) {
+                    if (userId != id) {
+                      opponentId = id;
+                    }
+                  });
+                  var result = Moves.damageMatrix(lastRound[userId].name, lastRound[opponentId].name);
+                  game.players[userId].health -= result[0];
+                  game.players[opponentId].health -= result[1];
+
+                  Object.keys(game.players).forEach(function (userId) {
+                    game.players[userId].notSeenAnimation = lastIndex;
+                  });
+                  game.$save('players');
+                }
+              } else {
+                var data = {};
+                data[userId] = move;
+                rounds.$add(data)
+
+                game.state = {
+                  name: "waiting_other_move",
+                  detail: userId
+                };
+                game.$save('state');
+              }
+            });
+          }
         };
+
 
         o.watch('game', function (id, oldVal, newVal) {
           // Update to server

@@ -31,10 +31,10 @@ header h2{
     width: 80%;
     text-align: center;
 }
-header a, a:visited {
-    text-decoration:none;
-    color:#fcfcfc;
-}
+/*header a, a:visited {*/
+    /*text-decoration:none;*/
+    /*color:#fcfcfc;*/
+/*}*/
 
 @keyframes move-twink-back {
     from {background-position:0 0;}

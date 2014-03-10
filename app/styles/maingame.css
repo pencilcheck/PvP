@@ -85,6 +85,16 @@ margin-left: 120px;
     
 }
 
+button, button:hover, button:active {
+    outline: none;
+    border: 0;
+    background-color: transparent;
+}
+
+a#player1life:hover {
+    text-decoration: none;
+}
+
 #player1life {
     position: relative;
     width: 45px;

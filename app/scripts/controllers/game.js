@@ -1,40 +1,66 @@
 'use strict';
 
 angular.module('PvP')
-  .controller('GameCtrl', function ($scope, $routeParams, gameConfig) {
+  .controller('GameCtrl', function ($scope, $routeParams, $modal, gameConfig, Moves) {
     $scope.status = gameConfig.status();
-    $scope.moves = gameConfig.moves;
+    $scope.moves = Moves.all();
     $scope.players = gameConfig.players;
     $scope.game = gameConfig.game;
+    $scope.rounds = gameConfig.rounds;
     $scope.log = gameConfig.log;
     $scope.state = gameConfig.state;
 
-    $scope.$watch('state', function (newVal) {
-      switch (newVal.name) {
-      case 'waiting_join':
-        $scope.viewUrl = 'views/game/preGame.html';
-        break;
-      case 'waiting_pick':
-        $scope.viewUrl = 'views/game/selectMoves.html';
-        break;
-      case 'waiting_move':
-        $scope.viewUrl = 'views/game/fightScene.html';
-        $scope.dialog = 'What should ' + $scope.currentPlayer().name + ' do?';
-        break;
-      case 'waiting_other_move':
-        $scope.viewUrl = 'views/game/fightScene.html';
-        $scope.dialog = 'Waiting on your opponent ' + $scope.currentPlayer().name;
-        break;
-      case 'not_seen_animation':
-        $scope.viewUrl = 'views/game/fightScene.html';
-        break;
-      case 'game_ended':
-        $scope.viewUrl = 'views/game/endGame.html';
-        break;
-      default:
-        break;
+    function switchState(newVal) {
+      if (newVal) {
+        switch (newVal.name) {
+        case 'waiting_join':
+          $scope.viewUrl = 'views/game/preGame.html';
+          break;
+        case 'waiting_pick':
+          $scope.viewUrl = 'views/game/selectMoves.html';
+          break;
+        case 'waiting_move':
+          $scope.viewUrl = 'views/game/fightScene.html';
+          $scope.dialog = 'What should ' + $scope.currentPlayer().name + ' do?';
+          break;
+        case 'waiting_other_move':
+          $scope.viewUrl = 'views/game/fightScene.html';
+          $scope.dialog = 'Waiting on your opponent';
+          break;
+        case 'game_ended':
+          $scope.viewUrl = 'views/game/endGame.html';
+          break;
+        default:
+          break;
+        }
       }
-    });
+    }
+
+    gameConfig.onChange('state', switchState);
+    $scope.$watch('state', switchState);
+
+    $scope.$watch('currentPlayer().notSeenAnimation', function (newVal) {
+      if (newVal) {
+        $modal.open({
+          backdrop: 'static',
+          keyboard: false,
+          templateUrl: 'animationModal.html',
+          controller: function ($scope, $modalInstance) {
+            $scope.skip = function () {
+              $modalInstance.close();
+            };
+
+            $scope.play = function () {
+              $modalInstance.close();
+            };
+          }
+        });
+      }
+    }, true);
+
+    //$scope.$watch('rounds.$getIndex().length', function () {
+      //$scope.dialog = 'What should ' + $scope.currentPlayer().name + ' do?';
+    //});
 
     $scope.currentPlayer = function () {
       return gameConfig.currentPlayer();
@@ -76,7 +102,25 @@ angular.module('PvP')
     };
 
     // Fight Scene Stage
+    $scope.currentRound = function () {
+      var count = 0;
+      $scope.rounds.$getIndex().forEach(function (index) {
+        if ($scope.rounds[index] && $scope.players && Object.keys($scope.rounds[index]).length == Object.keys($scope.players).length) {
+          count += 1;
+        }
+      });
+      return count;
+    }
+
+    $scope.replayAnimation = function () {
+    };
+
+    $scope.skipAnimation = function () {
+    };
+
     $scope.fight = function (move) {
+      gameConfig.commitAttack(move);
+      $scope.dialog = $scope.currentPlayer().name + " selected " + move.name;
     };
 
     $scope.feelingLucky = function () {

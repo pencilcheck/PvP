@@ -5,6 +5,7 @@ angular.module('PvP', [
   'ngResource',
   'ngSanitize',
   'ngRoute',
+  'ui.bootstrap',
   'firebase'
 ])
   .run(function ($rootScope, $location, UserSession) {

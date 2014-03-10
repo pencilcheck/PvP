@@ -23,7 +23,7 @@ angular.module('PvP')
 
         Moves.add({
           name: 'shield',
-          src: 'images/buttons/rollthedicebutton.png'
+          src: 'images/buttons/magneticfieldbutton.png'
         });
       }
     });
