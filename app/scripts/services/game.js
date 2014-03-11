@@ -5,39 +5,6 @@ angular.module('PvP')
     var meta = Games.get(),
         log = [];
 
-    var determineStatus = function (state, userId) {
-      switch (state.name) {
-      case 'waiting_join':
-        return 'Waiting for opponent to join...';
-        break;
-      case 'waiting_pick':
-        if (state.detail == userId)
-          return 'Waiting on other to pick moves...';
-        else if (state.detail == 'both')
-          return 'Pick your moves...';
-        else
-          return 'Waiting on you to pick moves...';
-        break;
-      case 'waiting_move':
-        if (state.detail == userId)
-          return 'Waiting on other to pick an attack...';
-        else
-          return 'Waiting on you to pick an attack...';
-        break;
-      case 'not_seen_animation':
-        if (state.detail == userId) {
-        } else {
-        }
-        break;
-      case 'game_ended':
-        return 'Game ended';
-        break;
-      default:
-        return 'Cowabunga!';
-        break;
-      }
-    };
-
     return function (gameId, userId) {
       return Games.get(gameId).$then(function (game) {
         var o = {
@@ -51,20 +18,44 @@ angular.module('PvP')
           currentPlayer: function () {
             return game.players[userId];
           },
-          status: function () {
-            return determineStatus(game.state, userId);
-          },
           state: game.state,
           rounds: game.$child('rounds'),
+          commitMove: function (move) {
+            //$scope.game.$save('players').then(function () {
+            convertFirebase(game.$child('players').$child(userId)).$then(function (player) {
+              var moves = player.selectedMoves || {};
+              moves[move.name] = move;
+              player.selectedMoves = moves;
+              player.$save();
+              return player;
+            });
+          },
+          doneCommitMoves: function () {
+            // FIXME: update game.state from firebase before checking
+            if (game.state.name == 'waiting_pick') {
+              if (game.state.detail == 'both') {
+                game.state = {
+                  name: 'waiting_pick',
+                  detail: userId
+                };
+              } else if (game.state.detail != userId) {
+                game.state = {
+                  name: 'waiting_move',
+                  detail: 'both'
+                };
+              }
+            }
+            game.$save('state');
+          },
           commitAttack: function (move) {
             convertFirebase(game.$child('rounds')).$then(function (rounds) {
               var lastIndex = rounds.$getIndex()[rounds.$getIndex().length-1];
               var lastRound = rounds[lastIndex];
-              if (lastRound && Object.keys(lastRound).length < Object.keys(game.players).length) {
-                lastRound[userId] = move;
+              if (lastRound && lastRound.move && Object.keys(lastRound.move).length < Object.keys(game.players).length) {
+                lastRound.move[userId] = move;
                 rounds.$save(lastIndex);
 
-                if (Object.keys(lastRound).length == Object.keys(game.players).length) {
+                if (Object.keys(lastRound.move).length == Object.keys(game.players).length) {
                   game.state = {
                     name: "waiting_move"
                   };
@@ -77,7 +68,7 @@ angular.module('PvP')
                       opponentId = id;
                     }
                   });
-                  var result = Moves.damageMatrix(lastRound[userId].name, lastRound[opponentId].name);
+                  var result = Moves.damageMatrix(lastRound.move[userId].name, lastRound.move[opponentId].name);
                   game.players[userId].health -= result[0];
                   game.players[opponentId].health -= result[1];
 
@@ -85,10 +76,19 @@ angular.module('PvP')
                     game.players[userId].notSeenAnimation = lastIndex;
                   });
                   game.$save('players');
+
+                  var text = Moves.textualizeAttack(game.players[userId].name, game.players[opponentId].name, lastRound.move[userId].name, lastRound.move[opponentId].name, result[0], result[1]);
+                  console.log(game.players[userId].name, game.players[opponentId].name, lastRound.move[userId].name, lastRound.move[opponentId].name, result[0], result[1]);
+                  lastRound.log = text;
+                  rounds.$save(lastIndex);
                 }
               } else {
-                var data = {};
-                data[userId] = move;
+                var data = {
+                  move: {
+                  },
+                  log: ""
+                };
+                data.move[userId] = move;
                 rounds.$add(data)
 
                 game.state = {

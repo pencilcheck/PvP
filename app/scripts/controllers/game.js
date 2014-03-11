@@ -1,17 +1,15 @@
 'use strict';
 
 angular.module('PvP')
-  .controller('GameCtrl', function ($scope, $routeParams, $modal, gameConfig, Moves) {
-    $scope.status = gameConfig.status();
+  .controller('GameCtrl', function ($scope, $routeParams, $modal, gameConfig, Moves, convertFirebase) {
     $scope.moves = Moves.all();
     $scope.players = gameConfig.players;
     $scope.game = gameConfig.game;
     $scope.rounds = gameConfig.rounds;
-    $scope.log = gameConfig.log;
     $scope.state = gameConfig.state;
 
-    function switchState(newVal) {
-      if (newVal) {
+    function switchState(newVal, oldVal) {
+      if (newVal != oldVal) {
         switch (newVal.name) {
         case 'waiting_join':
           $scope.viewUrl = 'views/game/preGame.html';
@@ -25,7 +23,9 @@ angular.module('PvP')
           break;
         case 'waiting_other_move':
           $scope.viewUrl = 'views/game/fightScene.html';
-          $scope.dialog = 'Waiting on your opponent';
+          if (newVal.detail == $scope.currentPlayer().uid) {
+            $scope.dialog = 'Waiting on your opponent';
+          }
           break;
         case 'game_ended':
           $scope.viewUrl = 'views/game/endGame.html';
@@ -76,8 +76,7 @@ angular.module('PvP')
     };
 
     $scope.selectMove = function(move) {
-      $scope.currentPlayer().selectedMoves = $scope.currentPlayer().selectedMoves || {};
-      $scope.currentPlayer().selectedMoves[move.name] = move;
+      gameConfig.commitMove(move);
     };
 
     $scope.deselectMove = function(move) {
@@ -85,24 +84,8 @@ angular.module('PvP')
     };
 
     $scope.doneSelectingMoves = function () {
-      $scope.game.$save('players').then(function () {
-        // FIXME: update game.state from firebase before checking
-        if ($scope.game.state.name == 'waiting_pick') {
-          if ($scope.game.state.detail == 'both') {
-            $scope.game.state = {
-              name: 'waiting_pick',
-              detail: $scope.currentPlayer().uid
-            };
-          } else if ($scope.game.state.detail != $scope.currentPlayer().uid) {
-            $scope.game.state = {
-              name: 'waiting_move',
-              detail: 'both'
-            };
-          }
-        }
-        $scope.game.$save('state');
-        $('button').attr('disabled', 'disabled');
-      });
+      gameConfig.doneCommitMoves();
+      $('button').attr('disabled', 'disabled');
     };
 
     // Fight Scene Stage

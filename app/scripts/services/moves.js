@@ -4,51 +4,43 @@ angular.module('PvP')
   .factory('Moves', function (firebaseUrl, $firebase, convertFirebase) {
     var moves = convertFirebase($firebase(new Firebase(firebaseUrl + 'moves')));
 
-    var damageMatrix = function(moveA, moveB) {
+    function textualizeAttack(playerA, playerB, moveA, moveB, damageA, damageB) {
+      return playerA + ' has taken ' + damageA + ' from ' + moveB + '; ' + playerB + ' has taken ' + damageB + ' from ' + moveA + '.';
+    };
+
+    function damageMatrix(moveA, moveB) {
       console.log(moveA, moveB);
       if ( moveA == 'volcano' ) {
         if ( moveB == 'volcano' ) {
-          //$scope.explanation = 'Both player are damaged by fire';
           return [ 2, 2 ];
         } else if ( moveB == 'water' ) {
-          //$scope.explanation = 'The attack both cancelled each other';
-          return [ 0, 0 ];
+          return [ 2, 1 ];
         } else if ( moveB == 'lightning' ) {
-          //$scope.explanation = '';
           return [ 1, 2 ];
         } else if ( moveB == 'shield' ) {
           var chance = Math.floor(Math.random()*3);
           if ( chance == 0 ) {
-            //$scope.explanation = 'shield field reflected the attack';
             return [ 2, 0 ];
           } else if ( chance == 1 ) {
-            //$scope.explanation = 'shield field cancelled the attack';
             return [ 0, 0 ];
           } else if ( chance == 2 ) {
-            //$scope.explanation = 'shield field failed';
             return [ 0, 2 ];
           }
         }
       } else if ( moveA == 'water' ) {
         if ( moveB == 'volcano' ) {
-          //$scope.explanation = 'Water vaporates the heat';
           return [ 1, 2 ];
         } else if ( moveB == 'water' ) {
-          //$scope.explanation = '';
           return [ 1, 1 ];
         } else if ( moveB == 'lightning' ) {
-          //$scope.explanation = '';
           return [ 2, 1 ];
         } else if ( moveB == 'shield' ) {
           var chance = Math.floor(Math.random()*3);
           if ( chance == 0 ) {
-            //$scope.explanation = 'shield field reflected the attack';
             return [ 2, 0 ];
           } else if ( chance == 1 ) {
-            //$scope.explanation = 'shield field cancelled the attack';
             return [ 0, 0 ];
           } else if ( chance == 2 ) {
-            //$scope.explanation = 'shield field failed';
             return [ 0, 2 ];
           }
         }
@@ -70,13 +62,10 @@ angular.module('PvP')
         } else if ( moveB == 'shield' ) {
           var chance = Math.floor(Math.random()*3);
           if ( chance == 0 ) {
-            //$scope.explanation = 'shield field reflected the attack';
             return [ 2, 0 ];
           } else if ( chance == 1 ) {
-            //$scope.explanation = 'shield field cancelled the attack';
             return [ 0, 0 ];
           } else if ( chance == 2 ) {
-            //$scope.explanation = 'shield field failed';
             return [ 0, 2 ];
           }
         }
@@ -84,13 +73,10 @@ angular.module('PvP')
         if ( moveB == 'volcano' ) {
           var chance = Math.floor(Math.random()*3);
           if ( chance == 0 ) {
-            //$scope.explanation = 'shield field reflected the attack';
             return [ 0, 2 ];
           } else if ( chance == 1 ) {
-            //$scope.explanation = 'shield field cancelled the attack';
             return [ 0, 0 ];
           } else if ( chance == 2 ) {
-            //$scope.explanation = 'shield field failed';
             return [ 2, 0 ];
           }
         } else if ( moveB == 'water' ) {
@@ -110,7 +96,6 @@ angular.module('PvP')
           else if ( chance == 2 )
             return [ 2, 0 ];
         } else if ( moveB == 'shield' ) {
-          //$scope.explanation = 'Has no effect on each other...';
           return [ 0, 0 ];
         }
       }
@@ -132,6 +117,7 @@ angular.module('PvP')
         return moves[id];
       },
 
-      damageMatrix: damageMatrix
+      damageMatrix: damageMatrix,
+      textualizeAttack: textualizeAttack
     };
   });
