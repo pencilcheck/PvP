@@ -72,9 +72,7 @@ margin-left: 120px;
 }
 #player2planet {
     width: 200px;
-    position: relative;
-    left: 600px;
-    top: -270px;
+    
 }
 
 #nonclickable {
@@ -114,11 +112,22 @@ a#player1life:hover {
     color: red;
 }
 
+#player2heart {
+    position: relative;
+    width: 45px;
+}
+
+#player2score {
+    position: relative;
+    left: 0px;
+    top: 10px;
+    color: red;
+}
+
 #player2life {
 position: relative;
-width: 45px;
-top: -267px;
-left: 457px;
+left: -150px;
+top: 60px;
 }
 
 #pushright {
