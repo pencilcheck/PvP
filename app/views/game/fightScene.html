@@ -45,10 +45,14 @@
           </tr>
         </tbody>
       </table>
+      
+
     </div>
   </span>
 </div>
 
+<h1 id="maintext">Round {{currentRound()}}</h1>
+    <h2 class="well">{{dialog}}</h2>
 <div class="row">
   <div class="col-md-6">
     <div ng-show="currentPlayer().notSeenAnimation">
@@ -56,10 +60,16 @@
       <button ng-click="replayAnimation()">Replay Animation</button>
       <button ng-click="skipAnimation()">Skip Animation</button>
     </div>
-    <h1 id="maintext">Round {{currentRound()}}</h1>
-    <h2 class="well">{{dialog}}</h2>
+    
 
     <div id="maincanvas">
+      <div id="planetscanvas">
+        <img src="images/planets/player1.png" id="player1planet">
+        <a id="player1life" class="normalTip" tooltip="Your Life Points">
+          <img id="player1heart" src="images/misc/life.png">
+          <span id="player1score">x {{currentPlayer().health}}</span>
+        </a>
+      </div>
       <div id="buttonscanvas">
         <div class="player1buttons">
           <button ng-repeat="(key, move) in currentPlayer().selectedMoves"
@@ -73,15 +83,33 @@
         </div>
 
       </div>
-      <div id="planetscanvas">
-        <img src="images/planets/player1.png" id="player1planet">
-        <a id="player1life" class="normalTip" tooltip="Your Life Points">
-          <img id="player1heart" src="images/misc/life.png">
-          <span id="player1score">x {{currentPlayer().health}}</span>
+      
+    </div>
+  </div>
+  Second player table
+  <div class="maincanvas">
+    <div id="planetscanvas">
+        <img src="images/planets/player1.png" id="player2planet">
+        <a id="player2life" class="normalTip" tooltip="Your Life Points">
+          <img id="player2heart" src="images/misc/life.png">
+          <span id="player2score">x {{currentPlayer().health}}</span>
         </a>
+
+      </div>
+    <div id="buttonscanvas">
+      <div class="player2buttons"> 
+        <button ng-repeat="(key, move) in currentPlayer().selectedMoves"
+             tooltip="{{move.name}}"
+             ng-click="fight(move)">
+           <img id="mainbutton" ng-src="{{move.src}}">
+          </button>
+          <button ng-click="feelingLucky()" tooltip="I'm Feeling Lucky">
+            <img id="mainbutton" src="images/buttons/rollthedicebutton.png">
+          </button>
       </div>
     </div>
   </div>
+    
   <div class="col-md-6">
     <ul>
       <li ng-repeat="round in rounds">
