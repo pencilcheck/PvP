@@ -28,7 +28,8 @@ angular.module('PvP')
           }
           break;
         case 'game_ended':
-          $scope.viewUrl = 'views/game/endGame.html';
+          $scope.viewUrl = 'views/game/fightScene.html';
+          $scope.dialog = newVal.detail.name + ' is victorious!'
           break;
         default:
           break;

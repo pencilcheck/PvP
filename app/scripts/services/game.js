@@ -81,6 +81,22 @@ angular.module('PvP')
                     game.state = {
                       name: "game_ended"
                     };
+
+                    var winnerId;
+                    if (game.players[userId].health > 0) {
+                      winnerId = opponentId;
+                    } else if (game.players[opponentId].health > 0) {
+                      winnerId = userId;
+                    } else {
+                      // Both players have negative health
+                      if (Math.abs(result[0]) > Math.abs(result[1])) {
+                        winnerId = opponentId;
+                      } else if (Math.abs(result[0]) < Math.abs(result[1])) {
+                        winnerId = userId;
+                      }
+                    }
+
+                    game.state.detail = game.players[winnerId]
                   } else {
                     game.state = {
                       name: "waiting_move"
