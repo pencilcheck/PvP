@@ -56,11 +56,6 @@ angular.module('PvP')
                 rounds.$save(lastIndex);
 
                 if (Object.keys(lastRound.move).length == Object.keys(game.players).length) {
-                  game.state = {
-                    name: "waiting_move"
-                  };
-                  game.$save('state');
-
                   // Fight
                   var opponentId = null;
                   Object.keys(game.players).forEach(function (id) {
@@ -81,6 +76,17 @@ angular.module('PvP')
                   console.log(game.players[userId].name, game.players[opponentId].name, lastRound.move[userId].name, lastRound.move[opponentId].name, result[0], result[1]);
                   lastRound.log = text;
                   rounds.$save(lastIndex);
+
+                  if (game.players[userId].health <= 0 || game.players[opponentId].health <= 0) {
+                    game.state = {
+                      name: "game_ended"
+                    };
+                  } else {
+                    game.state = {
+                      name: "waiting_move"
+                    };
+                  }
+                  game.$save('state');
                 }
               } else {
                 var data = {
