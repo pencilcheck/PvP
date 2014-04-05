@@ -75,6 +75,21 @@ margin-left: 120px;
     
 }
 
+#loserPlayer {
+    width: 300px;
+}
+
+#winnerPlayer {
+    width: 500px;
+}
+
+#rematchbutton {
+    position: absolute;
+    right: 310px;
+    font-size: 25px;
+}
+
+
 #nonclickable {
     width: 55px; 
     left: 580px; 
