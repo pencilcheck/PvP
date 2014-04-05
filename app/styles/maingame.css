@@ -87,6 +87,7 @@ margin-left: 120px;
     position: absolute;
     right: 310px;
     font-size: 25px;
+    z-index:1000;
 }
 
 #nonclickable {
