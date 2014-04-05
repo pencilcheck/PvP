@@ -29,6 +29,30 @@ angular.module('PvP')
           break;
         case 'game_ended':
           $scope.viewUrl = 'views/game/endGame.html';
+          $scope.winner = newVal.detail
+
+          gameConfig.hasRematchRequestFromOpponent().then(function (request) {
+            if (request) {
+              $modal.open({
+                backdrop: 'static',
+                keyboard: false,
+                templateUrl: 'views/game/modal/requestRematch.html',
+                controller: function ($scope, $modalInstance) {
+                  $scope.requester = request.requester
+
+                  $scope.accept = function () {
+                    gameConfig.acceptRematchRequest()
+                    $modalInstance.close();
+                  };
+
+                  $scope.reject = function () {
+                    gameConfig.rejectRematchRequest()
+                    $modalInstance.close();
+                  };
+                }
+              });
+            }
+          })
           break;
         default:
           break;
@@ -44,7 +68,7 @@ angular.module('PvP')
         $modal.open({
           backdrop: 'static',
           keyboard: false,
-          templateUrl: 'animationModal.html',
+          templateUrl: '/views/game/modal/animation.html',
           controller: function ($scope, $modalInstance) {
             $scope.skip = function () {
               gameConfig.currentPlayer().notSeenAnimation = null;
@@ -68,6 +92,10 @@ angular.module('PvP')
 
     $scope.currentPlayer = function () {
       return gameConfig.currentPlayer();
+    };
+
+    $scope.opponentPlayer = function () {
+      return gameConfig.opponentPlayer();
     };
 
     // Select Moves Stage
@@ -111,5 +139,17 @@ angular.module('PvP')
     };
 
     $scope.feelingLucky = function () {
+    };
+
+    // End Scene
+    $scope.rematch = function () {
+      gameConfig.hasRematchRequestFromOpponent().then(function (request) {
+        if (!request) {
+          gameConfig.requestRematch();
+        } else {
+          // auto accept
+          gameConfig.acceptRematchRequest(request.id);
+        }
+      })
     };
   });

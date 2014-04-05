@@ -5,7 +5,7 @@
 
 
 <div class="rematch">
-<button id="rematchbutton">REMATCH BITCH</button>
+  <button id="rematchbutton" ng-click="rematch()">REMATCH, BITCH</button>
 </div>
 <div class="row">
   <div>
@@ -13,8 +13,8 @@
       <div id="planetscanvas">
         <img src="images/planets/player1.png" id="loserPlayer">
       </div>   
-       <div id="planetscanvas">
-        <img src="images/planets/player1.png" id="winnerPlayer">(this is the winner player)
+      <div id="planetscanvas">
+        <img src="images/planets/player1.png" id="winnerPlayer">{{winner.name}}
       </div>      
     </div>  
   </div>

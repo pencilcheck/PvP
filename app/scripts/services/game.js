@@ -1,8 +1,9 @@
 'user strict';
 
 angular.module('PvP')
-  .factory('Game', function ($rootScope, $routeParams, $q, Games, Moves, Channel, $firebase, firebaseUrl, convertFirebase) {
-    var meta = Games.get(),
+  .factory('Game', function ($rootScope, $routeParams, $q, Games, Moves, Channel, $firebase, firebaseUrl, convertFirebase, UserSession) {
+    var games = Games.all(),
+        meta = Games.get(),
         log = [];
 
     return function (gameId, userId) {
@@ -15,11 +16,115 @@ angular.module('PvP')
           },
           game: game,
           players: game.players,
+          opponentPlayer: function () {
+            var opponentId = null;
+            Object.keys(game.players).forEach(function (id) {
+              if (userId != id) {
+                opponentId = id;
+              }
+            });
+            return game.players[opponentId];
+          },
           currentPlayer: function () {
             return game.players[userId];
           },
           state: game.state,
           rounds: game.$child('rounds'),
+          acceptRematchRequest: function (requestId) {
+            var requests = $firebase(new Firebase(firebaseUrl + 'rematchRequests/'))
+            return convertFirebase($firebase(new Firebase(firebaseUrl + 'rematchRequests/' + requestId))).then(function (request) {
+              if (request) {
+                // respond
+                request.$update({response: 'accept'}).then(function () {
+                  request.$on('change', function () {
+                    console.log('requester has created a new game')
+                    if (ref.gameId) {
+                      // joins the game
+                      UserSession.signIn().then(function (user) {
+                        Games.join(ref.gameId, user).then(function () {
+                          requests.$remove(request.name()).then(function () {
+                            $location.path('/game/' + ref.gameId);
+                          })
+                        });
+                      });
+                    }
+                  })
+                })
+              }
+            })
+          },
+          rejectRematchRequest: function (requestId) {
+            return convertFirebase($firebase(new Firebase(firebaseUrl + 'rematchRequests/' + requestId))).then(function (request) {
+              if (request) {
+                // respond
+                request.$update({response: 'reject'})
+              }
+            })
+          },
+          hasRematchRequestFromOpponent: function () {
+            var opponentId = null;
+            Object.keys(game.players).forEach(function (id) {
+              if (userId != id) {
+                opponentId = id;
+              }
+            });
+
+            var rematchesReq = $firebase(new Firebase(firebaseUrl + 'rematchRequests'))
+            return convertFirebase(requestsReq).then(function (requests) {
+              var request = null
+              requests.$getIndex().forEach(function (key) {
+                var request = requests[key]
+                if (request.requester == opponentId && request.userToRematch == userId) {
+                  request = requests[key]
+                  request.id = key
+                }
+              })
+
+              return request
+            })
+          },
+          requestRematch: function () {
+            var opponentId = null;
+            Object.keys(game.players).forEach(function (id) {
+              if (userId != id) {
+                opponentId = id;
+              }
+            });
+
+            var requests = $firebase(new Firebase(firebaseUrl + 'rematchRequests'))
+            requests.$add({
+              requester: userId,
+              userToRematch: opponentId,
+              response: null
+            }).then(function (ref) {
+              ref.$on('change', function () {
+                console.log('opponent has responded to rematch request', ref.name())
+                if (ref.response == 'accept') {
+                  // create a new game
+                  UserSession.signIn().then(function addGame(user) {
+                    games.$add({
+                      title: 'Rematch',
+                      description: 'Best game ever',
+                      rounds: [],
+                      state: {
+                        name: 'waiting_join',
+                        detail: user.uid
+                      }
+                    }).then(function (ref) {
+                      var id = ref.name();
+                      ref.$update({
+                        gameId: id
+                      }).then(function () {
+                        Games.join(id, user).then(function () {
+                          $location.path('/game/' + id);
+                        });
+                      })
+                    });
+                  })
+                }
+              })
+            })
+          },
           commitMove: function (move) {
             //$scope.game.$save('players').then(function () {
             convertFirebase(game.$child('players').$child(userId)).$then(function (player) {
