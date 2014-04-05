@@ -31,6 +31,7 @@ angular.module('PvP')
           state: game.state,
           rounds: game.$child('rounds'),
           acceptRematchRequest: function (requestId) {
+            console.log('accept rematch request', requestId)
             var requests = $firebase(new Firebase(firebaseUrl + 'rematchRequests/'))
             return convertFirebase($firebase(new Firebase(firebaseUrl + 'rematchRequests/' + requestId))).$then(function (request) {
               if (request) {
@@ -42,6 +43,7 @@ angular.module('PvP')
                       // joins the game
                       UserSession.signIn().then(function (user) {
                         Games.join(ref.gameId, user).then(function () {
+                          console.log('joins the game')
                           requests.$remove(request.name()).then(function () {
                             $location.path('/game/' + ref.gameId);
                           })
@@ -54,6 +56,7 @@ angular.module('PvP')
             })
           },
           rejectRematchRequest: function (requestId) {
+            console.log('reject rematch request', requestId)
             return convertFirebase($firebase(new Firebase(firebaseUrl + 'rematchRequests/' + requestId))).$then(function (request) {
               if (request) {
                 // respond
@@ -62,6 +65,7 @@ angular.module('PvP')
             })
           },
           hasRematchRequestFromOpponent: function () {
+            console.log('hasRematchRequestFromOpponent')
             var opponentId = null;
             Object.keys(game.players).forEach(function (id) {
               if (userId != id) {
@@ -75,6 +79,7 @@ angular.module('PvP')
               requests.$getIndex().forEach(function (key) {
                 var request = requests[key]
                 if (request.requester == opponentId && request.userToRematch == userId) {
+                  console.log('found', opponentId)
                   request = requests[key]
                   request.id = key
                 }
@@ -84,6 +89,7 @@ angular.module('PvP')
             })
           },
           requestRematch: function () {
+            console.log('requesting rematch')
             var opponentId = null;
             Object.keys(game.players).forEach(function (id) {
               if (userId != id) {
@@ -97,11 +103,14 @@ angular.module('PvP')
               userToRematch: opponentId,
               response: null
             }).then(function (ref) {
+              console.log('created rematch request record')
               $firebase(ref).$on('change', function () {
-                console.log('opponent has responded to rematch request', ref.name())
+                console.log(ref)
                 if (ref.response == 'accept') {
+                  console.log('opponent has responded to rematch request', ref.name())
                   // create a new game
                   UserSession.signIn().then(function addGame(user) {
+                    console.log('creating the game')
                     games.$add({
                       title: 'Rematch',
                       description: 'Best game ever',
