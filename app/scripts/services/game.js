@@ -77,7 +77,6 @@ angular.module('PvP')
             return convertFirebase(requestsReq).$then(function (requests) {
               var request = null
               requests.$getIndex().forEach(function (key) {
-                var request = requests[key]
                 if (request.requester == opponentId && request.userToRematch == userId) {
                   console.log('found', opponentId)
                   request = requests[key]
