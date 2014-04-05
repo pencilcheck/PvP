@@ -97,7 +97,7 @@ angular.module('PvP')
               userToRematch: opponentId,
               response: null
             }).then(function (ref) {
-              ref.$on('change', function () {
+              $firebase(ref).$on('change', function () {
                 console.log('opponent has responded to rematch request', ref.name())
                 if (ref.response == 'accept') {
                   // create a new game
