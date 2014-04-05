@@ -69,7 +69,7 @@ angular.module('PvP')
               }
             });
 
-            var rematchesReq = $firebase(new Firebase(firebaseUrl + 'rematchRequests'))
+            var requestsReq = $firebase(new Firebase(firebaseUrl + 'rematchRequests'))
             return convertFirebase(requestsReq).then(function (requests) {
               var request = null
               requests.$getIndex().forEach(function (key) {
