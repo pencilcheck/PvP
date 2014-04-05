@@ -85,6 +85,7 @@ angular.module('PvP')
                 }
               })
 
+              console.log('before returning', request)
               return request
             })
           },
