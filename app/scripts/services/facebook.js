@@ -27,6 +27,7 @@ angular.module('PvP')
 
         auth.login('facebook', {
           rememberMe: true,
+          preferRedirect: true,
           scope: 'email,user_likes'
         });
 
