@@ -29,7 +29,7 @@
 #maintext
 {
     color: #00FF5C;
-        font-family: "Adobe Caslon Pro", "Hoefler Text", Georgia, Garamond, Times, serif;
+    font-family: "Adobe Caslon Pro", "Hoefler Text", Georgia, Garamond, Times, serif;
     letter-spacing:0.1em;
     text-align:center;
     margin: 40px auto;
@@ -88,7 +88,6 @@ margin-left: 120px;
     right: 310px;
     font-size: 25px;
 }
-
 
 #nonclickable {
     width: 55px; 

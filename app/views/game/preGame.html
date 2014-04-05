@@ -1,17 +1,10 @@
-<!DOCTYPE html>
+<h2>Waiting for your friend to show up, care for <a class="button-next">a mini game</a> to pass the time?</h2>
 
-<head>
-<link href="styles/minigame.css" rel="stylesheet" type="text/css">
-</head>
-
-
-<h2>No one is in this game right now, care for a small game?</h2>
-<p class="game-intro">Join the numbers and get to the <strong>2048 tile!</strong></p>
+<div id="wholegame">
 <br>
 <br>
-  
-  
 
+<div class="test">
   <div class="container">
     <div class="heading">
       <h1 class="title"></h1>
@@ -79,6 +72,8 @@
     Created by <a href="http://gabrielecirulli.com" target="_blank">Gabriele Cirulli.</a> Based on <a href="https://itunes.apple.com/us/app/1024!/id823499224" target="_blank">1024 by Veewo Studio</a> and conceptually similar to <a href="http://asherv.com/threes/" target="_blank">Threes by Asher Vollmer.</a>
     </p>
   </div>
+</div>
+</div>
 
   <script src="scripts/minigame/bind_polyfill.js"></script>
   <script src="scripts/minigame/classlist_polyfill.js"></script>
@@ -90,4 +85,16 @@
   <script src="scripts/minigame/local_storage_manager.js"></script>
   <script src="scripts/minigame/game_manager.js"></script>
   <script src="scripts/minigame/application.js"></script>
+  <script type="text/javascript">
+  console.log("ilovepenn");
+	$(function() {
+		console.log("ilovepenn");
+		$("#wholegame").hide();
+	    $('h2 a.button-next').click(function() {
+	        $("#wholegame").show();
+	        console.log("ilovepenn");
+	    });
+	});
+
+  </script>
 
