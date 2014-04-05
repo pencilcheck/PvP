@@ -32,7 +32,7 @@ angular.module('PvP')
           rounds: game.$child('rounds'),
           acceptRematchRequest: function (requestId) {
             var requests = $firebase(new Firebase(firebaseUrl + 'rematchRequests/'))
-            return convertFirebase($firebase(new Firebase(firebaseUrl + 'rematchRequests/' + requestId))).then(function (request) {
+            return convertFirebase($firebase(new Firebase(firebaseUrl + 'rematchRequests/' + requestId))).$then(function (request) {
               if (request) {
                 // respond
                 request.$update({response: 'accept'}).then(function () {
@@ -54,7 +54,7 @@ angular.module('PvP')
             })
           },
           rejectRematchRequest: function (requestId) {
-            return convertFirebase($firebase(new Firebase(firebaseUrl + 'rematchRequests/' + requestId))).then(function (request) {
+            return convertFirebase($firebase(new Firebase(firebaseUrl + 'rematchRequests/' + requestId))).$then(function (request) {
               if (request) {
                 // respond
                 request.$update({response: 'reject'})
@@ -70,7 +70,7 @@ angular.module('PvP')
             });
 
             var requestsReq = $firebase(new Firebase(firebaseUrl + 'rematchRequests'))
-            return convertFirebase(requestsReq).then(function (requests) {
+            return convertFirebase(requestsReq).$then(function (requests) {
               var request = null
               requests.$getIndex().forEach(function (key) {
                 var request = requests[key]
