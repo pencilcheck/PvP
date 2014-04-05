@@ -32,6 +32,7 @@ angular.module('PvP')
           $scope.winner = newVal.detail
 
           gameConfig.hasRematchRequestFromOpponent().then(function (request) {
+            console.log('in end game state, is there a rematch request?', request)
             if (request) {
               $modal.open({
                 backdrop: 'static',

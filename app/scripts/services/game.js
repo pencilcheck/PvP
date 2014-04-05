@@ -103,10 +103,11 @@ angular.module('PvP')
               userToRematch: opponentId,
               response: null
             }).then(function (ref) {
+              var req = $firebase(ref)
               console.log('created rematch request record')
-              $firebase(ref).$on('change', function () {
-                console.log(ref)
-                if (ref.response == 'accept') {
+              req.$on('change', function () {
+                console.log(req)
+                if (req.response == 'accept') {
                   console.log('opponent has responded to rematch request', ref.name())
                   // create a new game
                   UserSession.signIn().then(function addGame(user) {
@@ -121,7 +122,7 @@ angular.module('PvP')
                       }
                     }).then(function (ref) {
                       var id = ref.name();
-                      ref.$update({
+                      req.$update({
                         gameId: id
                       }).then(function () {
                         Games.join(id, user).then(function () {
