@@ -1,10 +1,24 @@
 'user strict';
 
 angular.module('PvP')
-  .factory('Game', function ($rootScope, $routeParams, $q, Games, Moves, Channel, $firebase, firebaseUrl, convertFirebase, UserSession) {
+  .factory('Game', function ($location, $rootScope, $routeParams, $q, Games, Moves, Channel, $firebase, firebaseUrl, convertFirebase, UserSession) {
     var games = Games.all(),
         meta = Games.get(),
         log = [];
+
+    function rematchRequests() {
+      return convertFirebase($firebase(new Firebase(firebaseUrl + 'rematchRequests')))
+    }
+
+    function getOpponentId(players, userId) {
+      var opponentId = null;
+      Object.keys(players).forEach(function (id) {
+        if (userId != id) {
+          opponentId = id;
+        }
+      });
+      return opponentId
+    }
 
     return function (gameId, userId) {
       return Games.get(gameId).$then(function (game) {
@@ -30,109 +44,84 @@ angular.module('PvP')
           },
           state: game.state,
           rounds: game.$child('rounds'),
-          acceptRematchRequest: function (requestId) {
-            console.log('accept rematch request', requestId)
-            var requests = $firebase(new Firebase(firebaseUrl + 'rematchRequests/'))
-            return convertFirebase($firebase(new Firebase(firebaseUrl + 'rematchRequests/' + requestId))).$then(function (request) {
-              if (request) {
-                // respond
-                request.$update({response: 'accept'}).then(function () {
-                  request.$on('change', function () {
+          acceptRematchRequest: function (request) {
+            console.log('accept request', request)
+            if (request) {
+              request.response = 'accept'
+              request.$save().then(function () {
+                request.$on('change', function () {
+                  if (request.gameId) {
                     console.log('requester has created a new game')
-                    if (ref.gameId) {
-                      // joins the game
-                      UserSession.signIn().then(function (user) {
-                        Games.join(ref.gameId, user).then(function () {
-                          console.log('joins the game')
-                          requests.$remove(request.name()).then(function () {
-                            $location.path('/game/' + ref.gameId);
-                          })
-                        });
+                    // joins the game
+                    UserSession.signIn().then(function (user) {
+                      Games.join(request.gameId, user).then(function () {
+                        console.log('joins the game')
+                        request.$remove().then(function () {
+                          $location.path('/game/' + request.gameId);
+                        })
                       });
-                    }
-                  })
+                    });
+                  }
                 })
-              }
-            })
-          },
-          rejectRematchRequest: function (requestId) {
-            console.log('reject rematch request', requestId)
-            return convertFirebase($firebase(new Firebase(firebaseUrl + 'rematchRequests/' + requestId))).$then(function (request) {
-              if (request) {
-                // respond
-                request.$update({response: 'reject'})
-              }
-            })
-          },
-          hasRematchRequestFromOpponent: function () {
-            console.log('hasRematchRequestFromOpponent')
-            var opponentId = null;
-            Object.keys(game.players).forEach(function (id) {
-              if (userId != id) {
-                opponentId = id;
-              }
-            });
-
-            var requestsReq = $firebase(new Firebase(firebaseUrl + 'rematchRequests'))
-            return convertFirebase(requestsReq).$then(function (requests) {
-              var request = null
-              requests.$getIndex().forEach(function (key) {
-                if (requests[key].requester == opponentId && requests[key].userToRematch == userId) {
-                  console.log('found', opponentId)
-                  request = requests[key]
-                  request.id = key
-                }
               })
-
-              console.log('before returning', request)
-              return request
-            })
+            }
+          },
+          rejectRematchRequest: function (request) {
+            console.log('reject', request)
+            if (request) {
+              console.log('reject rematch request', request)
+              // FIXME: request has no $update method
+              request.response = 'reject'
+              request.$save()
+            }
           },
           requestRematch: function () {
             console.log('requesting rematch')
-            var opponentId = null;
-            Object.keys(game.players).forEach(function (id) {
-              if (userId != id) {
-                opponentId = id;
-              }
-            });
+            var self = this,
+                requests = $firebase(new Firebase(firebaseUrl + 'rematchRequests'))
+                opponentId = getOpponentId(game.players, userId)
 
-            var requests = $firebase(new Firebase(firebaseUrl + 'rematchRequests'))
             requests.$add({
               requester: userId,
               userToRematch: opponentId,
+              fromGameId: gameId,
               response: null
-            }).then(function (ref) {
-              var req = $firebase(ref)
-              console.log('created rematch request record')
-              req.$on('change', function () {
-                console.log(req)
-                if (req.response == 'accept') {
-                  console.log('opponent has responded to rematch request', ref.name())
-                  // create a new game
-                  UserSession.signIn().then(function addGame(user) {
-                    console.log('creating the game')
-                    games.$add({
-                      title: 'Rematch',
-                      description: 'Best game ever',
-                      rounds: [],
-                      state: {
-                        name: 'waiting_join',
-                        detail: user.uid
-                      }
-                    }).then(function (ref) {
-                      var id = ref.name();
-                      req.$update({
-                        gameId: id
-                      }).then(function () {
-                        Games.join(id, user).then(function () {
-                          $location.path('/game/' + id);
-                        });
-                      })
-                    });
-                  })
-                }
+            })
+          },
+          listenOnRematchRequests: function (callbacks) {
+            console.log('listenOnRematchRequests')
+            var self = this,
+                requestsReq = $firebase(new Firebase(firebaseUrl + 'rematchRequests')),
+                opponentId = getOpponentId(game.players, userId)
+            
+            function onChange() {
+              rematchRequests().$then(function (requests) {
+                console.log('onChange')
+                requests.$getIndex().forEach(function (key) {
+
+                  // Responded
+                  if (requests[key].requester == userId && requests[key].userToRematch == opponentId && requests[key].fromGameId == gameId && requests[key].response) {
+                    console.log('hasResponse', requests[key])
+                    convertFirebase(requests.$child(key)).$then(function (request) {
+                        callbacks.hasResponse(request)
+                    })
+                  }
+
+                  // Request
+                  if (requests[key].requester == opponentId && requests[key].userToRematch == userId && requests[key].fromGameId == gameId && !requests[key].response) {
+                    console.log('hasRequest', requests[key])
+                    convertFirebase(requests.$child(key)).$then(function (request) {
+                        callbacks.hasRequest(request)
+                    })
+                  }
+                })
               })
+            }
+            onChange()
+
+            requestsReq.$on('change', function () {
+              console.log('requestsReq onChange')
+              onChange()
             })
           },
           commitMove: function (move) {
@@ -172,12 +161,8 @@ angular.module('PvP')
 
                 if (Object.keys(lastRound.move).length == Object.keys(game.players).length) {
                   // Fight
-                  var opponentId = null;
-                  Object.keys(game.players).forEach(function (id) {
-                    if (userId != id) {
-                      opponentId = id;
-                    }
-                  });
+                  var opponentId = getOpponentId(game.players, userId);
+
                   var result = Moves.damageMatrix(lastRound.move[userId].name, lastRound.move[opponentId].name);
                   game.players[userId].health -= result[0];
                   game.players[opponentId].health -= result[1];

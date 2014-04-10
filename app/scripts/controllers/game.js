@@ -1,12 +1,13 @@
 'use strict';
 
 angular.module('PvP')
-  .controller('GameCtrl', function ($scope, $routeParams, $modal, gameConfig, Moves, convertFirebase) {
+  .controller('GameCtrl', function ($location, $firebase, $scope, $routeParams, $modal, UserSession, Games, gameConfig, Moves, convertFirebase) {
     $scope.moves = Moves.all();
     $scope.players = gameConfig.players;
     $scope.game = gameConfig.game;
     $scope.rounds = gameConfig.rounds;
     $scope.state = gameConfig.state;
+    $scope.rematchModal = null
 
     function switchState(newVal, oldVal) {
       if (newVal != oldVal) {
@@ -31,27 +32,66 @@ angular.module('PvP')
           $scope.viewUrl = 'views/game/endGame.html';
           $scope.winner = newVal.detail
 
-          gameConfig.hasRematchRequestFromOpponent().then(function (request) {
-            console.log('in end game state, is there a rematch request?', request)
-            if (request) {
-              $modal.open({
-                backdrop: 'static',
-                keyboard: false,
-                templateUrl: 'views/game/modal/requestRematch.html',
-                controller: function ($scope, $modalInstance) {
-                  $scope.requester = request.requester
+          gameConfig.listenOnRematchRequests({
+            hasResponse: function (request) {
+              console.log('hasResponse', request)
 
-                  $scope.accept = function () {
-                    gameConfig.acceptRematchRequest()
-                    $modalInstance.close();
-                  };
+              if (request.response == 'accept') {
+                console.log('opponent has accepted the request')
+                // create a new game
+                UserSession.signIn().then(function addGame(user) {
+                  console.log('creating the game')
+                  Games.create({
+                    title: 'Rematch',
+                    description: 'Best game ever',
+                    rounds: [],
+                    state: {
+                      name: 'waiting_join',
+                      detail: user.uid
+                    }
+                  }).then(function (gameRef) {
+                    var id = gameRef.name();
+                    request.gameId = id
+                    request.$save().then(function () {
+                      Games.join(id, user).then(function () {
+                        $location.path('/game/' + id);
+                      });
+                    })
+                  });
+                })
+              } else if (request.response == 'reject') {
+                console.log('opponent has rejected the request')
+                // TODO: show user the response
+                request.$remove()
+              }
+            },
+            hasRequest: function (request) {
+              console.log('hasRequest', request)
+              var outScope = $scope
+              if (!$scope.rematchModal) {
+                $scope.rematchModal = $modal.open({
+                  backdrop: 'static',
+                  keyboard: false,
+                  templateUrl: 'views/game/modal/requestRematch.html',
+                  controller: function ($scope, $modalInstance) {
+                    $scope.requester = request.requester
 
-                  $scope.reject = function () {
-                    gameConfig.rejectRematchRequest()
-                    $modalInstance.close();
-                  };
-                }
-              });
+                    $scope.accept = function () {
+                      console.log('[MODAL] accepting request', request)
+                      gameConfig.acceptRematchRequest(request)
+                      outScope.rematchModal = null
+                      $modalInstance.close();
+                    };
+
+                    $scope.reject = function () {
+                      console.log('[MODAL] rejecting request', request)
+                      gameConfig.rejectRematchRequest(request)
+                      outScope.rematchModal = null
+                      $modalInstance.close();
+                    };
+                  }
+                });
+              }
             }
           })
           break;
@@ -66,6 +106,7 @@ angular.module('PvP')
 
     $scope.$watch('currentPlayer().notSeenAnimation', function (newVal) {
       if (newVal) {
+        /*
         $modal.open({
           backdrop: 'static',
           keyboard: false,
@@ -84,6 +125,7 @@ angular.module('PvP')
             };
           }
         });
+        */
       }
     }, true);
 
@@ -144,13 +186,6 @@ angular.module('PvP')
 
     // End Scene
     $scope.rematch = function () {
-      gameConfig.hasRematchRequestFromOpponent().then(function (request) {
-        if (!request) {
-          gameConfig.requestRematch();
-        } else {
-          // auto accept
-          gameConfig.acceptRematchRequest(request.id);
-        }
-      })
+      gameConfig.requestRematch();
     };
   });

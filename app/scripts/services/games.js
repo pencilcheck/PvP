@@ -14,6 +14,10 @@ angular.module('PvP')
         return id ? convertFirebase(gamesRef.$child(id)) : {};
       },
 
+      create: function (options) {
+        return gamesRef.$add(options)
+      },
+
       join: function (id, user) {
         return convertFirebase(gamesRef.$child(id)).$then(function (game) {
           game.players = game.players || {};
