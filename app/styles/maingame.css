@@ -145,8 +145,7 @@ a#player1life:hover {
 
 #player2life {
 position: relative;
-left: -150px;
-top: 60px;
+
 }
 
 #pushright {
@@ -161,12 +160,37 @@ margin-left: 180px;
 
 #player2score {
     position: relative;
-    top: -296px;
-    left: 701px;
     color: red;
 }
 
+#console-log {
+    position:fixed;
+    height: 100px;
+    overflow-y: scroll;
+    background-color: white;
+    padding-left: 25px;
+    padding-right: 40px;
+    border: 1px solid;
+    border-radius: 5px;
+    bottom: 5%;
+    right:15%;
 
+}
+
+.displayHide {
+    position: fixed;
+    bottom: 0%;
+}
+
+::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 7px;
+}
+::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: rgba(0,0,0,.5);
+    -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
+}
 
 
 

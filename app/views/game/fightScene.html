@@ -108,12 +108,27 @@
       </div>
     </div>
   </div>
-    
-  <div class="col-md-6">
-    <ul>
-      <li ng-repeat="round in rounds">
+    <br>
+
+    <div class="col-md-5" id="console-log" style="display: none">
+      <ul>
+        <li ng-repeat="round in rounds">
         {{round.log}}
-      </li>
-    </ul>
-  </div>
+        </li>
+      </ul>
+    </div>
+    <button class="displayHide">Toggle this shit</button>
+
 </div>
+
+
+
+
+ 
+<script>
+$( "button.displayHide" ).click(function() {
+  console.log("wtfinside");
+  $( "div.col-md-5" ).toggle();
+  console.log("after");
+});
+</script>
