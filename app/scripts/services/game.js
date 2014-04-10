@@ -1,14 +1,11 @@
 'user strict';
 
 angular.module('PvP')
-  .factory('Game', function ($location, $rootScope, $routeParams, $q, Games, Moves, Channel, $firebase, firebaseUrl, convertFirebase, UserSession) {
+  .factory('Game', function ($window, $location, $rootScope, $routeParams, $q, Games, Moves, Channel, $firebase, firebaseUrl, convertFirebase, UserSession) {
     var games = Games.all(),
         meta = Games.get(),
-        log = [];
-
-    function rematchRequests() {
-      return convertFirebase($firebase(new Firebase(firebaseUrl + 'rematchRequests')))
-    }
+        log = [],
+        requestsReq = $firebase(new Firebase(firebaseUrl + 'rematchRequests'))
 
     function getOpponentId(players, userId) {
       var opponentId = null;
@@ -42,6 +39,9 @@ angular.module('PvP')
           currentPlayer: function () {
             return game.players[userId];
           },
+          turnOffListeners: function () {
+            requestsReq.$off()
+          },
           state: game.state,
           rounds: game.$child('rounds'),
           acceptRematchRequest: function (request) {
@@ -51,15 +51,16 @@ angular.module('PvP')
               request.$save().then(function () {
                 request.$on('change', function () {
                   if (request.gameId) {
-                    console.log('requester has created a new game')
+                    request.$off()
+                    requestsReq.$off()
+                    console.log('requester has created a new game', request.gameId)
                     // joins the game
-                    UserSession.signIn().then(function (user) {
-                      Games.join(request.gameId, user).then(function () {
-                        console.log('joins the game')
-                        request.$remove().then(function () {
-                          $location.path('/game/' + request.gameId);
-                        })
-                      });
+                    Games.join(request.gameId).then(function () {
+                      console.log('joins the game')
+                      request.$remove().then(function () {
+                        // Have to force it
+                        $window.location.href = '/#/game/' + request.gameId
+                      })
                     });
                   }
                 })
@@ -78,10 +79,9 @@ angular.module('PvP')
           requestRematch: function () {
             console.log('requesting rematch')
             var self = this,
-                requests = $firebase(new Firebase(firebaseUrl + 'rematchRequests'))
                 opponentId = getOpponentId(game.players, userId)
 
-            requests.$add({
+            requestsReq.$add({
               requester: userId,
               userToRematch: opponentId,
               fromGameId: gameId,
@@ -91,16 +91,15 @@ angular.module('PvP')
           listenOnRematchRequests: function (callbacks) {
             console.log('listenOnRematchRequests')
             var self = this,
-                requestsReq = $firebase(new Firebase(firebaseUrl + 'rematchRequests')),
                 opponentId = getOpponentId(game.players, userId)
             
             function onChange() {
-              rematchRequests().$then(function (requests) {
+              convertFirebase(requestsReq).$then(function (requests) {
                 console.log('onChange')
                 requests.$getIndex().forEach(function (key) {
 
                   // Responded
-                  if (requests[key].requester == userId && requests[key].userToRematch == opponentId && requests[key].fromGameId == gameId && requests[key].response) {
+                  if (requests[key].requester == userId && requests[key].userToRematch == opponentId && requests[key].fromGameId == gameId && requests[key].response && !requests[key].gameId) { // No gameId
                     console.log('hasResponse', requests[key])
                     convertFirebase(requests.$child(key)).$then(function (request) {
                         callbacks.hasResponse(request)
@@ -125,7 +124,6 @@ angular.module('PvP')
             })
           },
           commitMove: function (move) {
-            //$scope.game.$save('players').then(function () {
             convertFirebase(game.$child('players').$child(userId)).$then(function (player) {
               var moves = player.selectedMoves || {};
               moves[move.name] = move;

@@ -8,11 +8,6 @@ angular.module('PvP')
         tooltip: '@'
       },
       link: function (scope, element, attributes) {
-        scope.$watch('tooltip', function (newVal) {
-          element.aToolTip({
-            tipContent: newVal
-          });
-        });
       }
     }
   });

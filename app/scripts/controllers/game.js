@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('PvP')
-  .controller('GameCtrl', function ($location, $firebase, $scope, $routeParams, $modal, UserSession, Games, gameConfig, Moves, convertFirebase) {
+  .controller('GameCtrl', function ($window, $location, $firebase, $scope, $routeParams, $modal, UserSession, Games, gameConfig, Moves, convertFirebase) {
     $scope.moves = Moves.all();
     $scope.players = gameConfig.players;
     $scope.game = gameConfig.game;
@@ -38,27 +38,18 @@ angular.module('PvP')
 
               if (request.response == 'accept') {
                 console.log('opponent has accepted the request')
+                request.$off()
+                gameConfig.turnOffListeners()
                 // create a new game
-                UserSession.signIn().then(function addGame(user) {
-                  console.log('creating the game')
-                  Games.create({
-                    title: 'Rematch',
-                    description: 'Best game ever',
-                    rounds: [],
-                    state: {
-                      name: 'waiting_join',
-                      detail: user.uid
-                    }
-                  }).then(function (gameRef) {
-                    var id = gameRef.name();
-                    request.gameId = id
-                    request.$save().then(function () {
-                      Games.join(id, user).then(function () {
-                        $location.path('/game/' + id);
-                      });
-                    })
-                  });
-                })
+                Games.create({
+                  title: 'Rematch',
+                  description: 'Best game ever',
+                }).then(function (id) {
+                  request.gameId = id
+                  request.$save().then(function () {
+                    $window.location.href = '/#/game/' + id
+                  })
+                });
               } else if (request.response == 'reject') {
                 console.log('opponent has rejected the request')
                 // TODO: show user the response

@@ -30,21 +30,11 @@ angular.module('PvP')
     $scope.games = Games.all();
 
     $scope.add = function() {
-      UserSession.signIn().then(function addGame(user) {
-        $scope.games.$add({
-          title: 'test',
-          description: 'Best game ever',
-          rounds: [],
-          state: {
-            name: 'waiting_join',
-            detail: user.uid
-          }
-        }).then(function (ref) {
-          var id = ref.name();
-          Games.join(id, user).then(function () {
-            $location.path('/game/' + id);
-          });
-        });
+      Games.create({
+        title: 'test',
+        description: 'Best game ever',
+      }).then(function (id) {
+        $location.path('/game/' + id);
       });
     };
   });
