@@ -1,6 +1,6 @@
-<link rel="stylesheet" href="styles/maingame.css">  
+  
 <link href="styles/style3.css" rel="stylesheet" type="text/css" />
-<script src="scripts/tooltip.js"></script>
+<link rel="stylesheet" href="styles/maingame.css">
 <script src="scripts/imagechange.js"></script>
 <div id="comparisontable">
   <div id="testing123">
@@ -51,8 +51,8 @@
   </span>
 </div>
 
-<h1 id="maintext">Round {{currentRound()}}</h1>
-    <h2 class="well">{{dialog}}</h2>
+<!--<h1 id="maintext">Round {{currentRound()}}</h1> -->
+    <h2 class="well" id="topDialogBox">{{dialog}}</h2>
 <div class="row">
   <div class="col-md-6">
     <div ng-show="currentPlayer().notSeenAnimation">
@@ -96,25 +96,29 @@
         </a>
 
       </div>
-    <div id="buttonscanvas">
-      <div class="player2buttons"> 
-        <button ng-repeat="(key, move) in currentPlayer().selectedMoves"
-             tooltip="{{move.name}}"
-             ng-click="fight(move)">
-           <img id="mainbutton" ng-src="{{move.src}}">
-          </button>
-          <button ng-click="feelingLucky()" tooltip="I'm Feeling Lucky">
-            <img id="mainbutton" src="images/buttons/rollthedicebutton.png">
-          </button>
-      </div>
-    </div>
+   
   </div>
-    
-  <div class="col-md-6">
-    <ul>
-      <li ng-repeat="round in rounds">
+    <br>
+
+    <div class="col-md-5" id="console-log" style="display: none">
+      <ul>
+        <li ng-repeat="round in rounds">
         {{round.log}}
-      </li>
-    </ul>
-  </div>
+        </li>
+      </ul>
+    </div>
+    <button class="displayHide">!!!!!!!!!!!!!!3Toggle this shit</button>
+
 </div>
+
+
+
+
+ 
+<script>
+$( "button.displayHide" ).click(function() {
+  console.log("wtfinside");
+  $( "div.col-md-5" ).toggle();
+  console.log("after");
+});
+</script>
