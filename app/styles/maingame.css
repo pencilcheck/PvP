@@ -1,3 +1,14 @@
+body {
+    background-image:url("/images/bg.jpg");
+    background-repeat:no-repeat;
+    background-size:100%;
+    width: auto;
+    padding:0px;
+    color:white;
+    background-;
+]
+}
+
 #mainbutton {
     width: 55px;
     margin-right: 15px;      
@@ -76,6 +87,12 @@ margin-left: 120px;
     width: 250px;
     margin-left: 99%;
     margin-top: -10%;
+    -moz-transform: scaleX(-1);
+    -o-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+    filter: FlipH;
+    -ms-filter: "FlipH";
     
 }
 
@@ -115,7 +132,7 @@ a#player1life:hover {
 #player1life {
     position: relative;
     width: 45px;
-    top: 100px;
+    top: 210px;
     left: -173px;
 }
 
@@ -131,21 +148,28 @@ a#player1life:hover {
     color: red;
 }
 
+.player1buttons {
+    position: relative;
+    top: 200px;
+    left: -315px;
+}
+
 #player2heart {
     position: relative;
     width: 45px;
+    top: -5px;
+}
 }
 
 #player2score {
     position: relative;
-    left: 0px;
-    top: 10px;
     color: red;
 }
 
 #player2life {
-position: relative;
-
+    position: relative;
+    left: 125%;
+    top: -40px;
 }
 
 #pushright {
@@ -167,7 +191,7 @@ margin-left: 180px;
     position:fixed;
     height: 100px;
     overflow-y: scroll;
-    background-color: white;
+    background-color: black;
     padding-left: 25px;
     padding-right: 40px;
     border: 1px solid;
@@ -192,6 +216,13 @@ margin-left: 180px;
     -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
 }
 
+::-webkit-scrollbar-track-piece  {
+background-color: #C2D2E4;
+}
+::-webkit-scrollbar-thumb:vertical {
+height: 30px;
+background-color: #0A4C95;
+}
 
 
 .push_button {
