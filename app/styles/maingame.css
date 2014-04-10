@@ -69,9 +69,13 @@ margin-left: 120px;
 
 #player1planet {
     width: 250px;
+    margin-left: -5%;
+    margin-top: 75%;
 }
 #player2planet {
-    width: 200px;
+    width: 250px;
+    margin-left: 99%;
+    margin-top: -10%;
     
 }
 
