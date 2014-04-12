@@ -150,10 +150,16 @@ angular.module('PvP')
             game.$save('state');
           },
           commitAttack: function (move) {
+            var self = this
             convertFirebase(game.$child('rounds')).$then(function (rounds) {
               var lastIndex = rounds.$getIndex()[rounds.$getIndex().length-1];
               var lastRound = rounds[lastIndex];
               if (lastRound && lastRound.move && Object.keys(lastRound.move).length < Object.keys(game.players).length) {
+                // To support cooldown later
+                var selectedMoves = self.currentPlayer().selectedMoves
+                selectedMoves[move.name].waited = selectedMoves[move.name].waited || 2 // waited turns in cd
+                selectedMoves[move.name].used = selectedMoves[move.name].used || 0 // used turns
+
                 lastRound.move[userId] = move;
                 rounds.$save(lastIndex);
 
