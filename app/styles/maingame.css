@@ -447,3 +447,273 @@ div#testing123:active > span
 {
   display: block;
 }
+
+.water-move {
+    width: 100px;
+    height: 100px;
+    margin-top: 5px;
+    background: url(/images/attacks/attacks.png) 0px 0;
+    margin-bottom: 5px;
+    position: relative;
+    top: 0px;
+    left: 300px;
+}
+.water-move:active:after {
+    content: ' ';
+    width: 100px;
+    height: 100px;
+    margin-top: 5px;
+    background: url(/images/attacks/attacks.png) 0px 100px;
+    margin-bottom: 5px;
+    position: absolute;
+    top: -5px;
+    left: 0px;
+}
+.fire-move {
+    width: 100px;
+    height: 100px;
+    margin-top: 5px;
+    background: url(/images/attacks/attacks.png) 0px 500px;
+    margin-bottom: 5px;
+    position: relative;
+    top: 0px;
+    left: 300px;
+}
+.fire-move:active:after {
+    content: ' ';
+    width: 100px;
+    height: 100px;
+    margin-top: 5px;
+    background: url(/images/attacks/attacks.png) 0px 100px;
+    margin-bottom: 5px;
+    position: absolute;
+    top: -5px;
+    left: 0px;
+}
+.shield-move {
+    width: 100px;
+    height: 100px;
+    margin-top: 5px;
+    background: url(/images/attacks/attacks.png) 0px 400px;
+    margin-bottom: 5px;
+    position: relative;
+    top: 0px;
+    left: 300px;
+}
+.shield-move:active:after {
+    content: ' ';
+    width: 100px;
+    height: 100px;
+    margin-top: 5px;
+    background: url(/images/attacks/attacks.png) 0px 100px;
+    margin-bottom: 5px;
+    position: absolute;
+    top: -5px;
+    left: 0px;
+}
+.lightning-move {
+    width: 100px;
+    height: 100px;
+    margin-top: 5px;
+    background: url(/images/attacks/attacks.png) 0px 600px;
+    margin-bottom: 5px;
+    position: relative;
+    top: 0px;
+    left: 300px;
+}
+.lightning-move:active:after {
+    content: ' ';
+    width: 100px;
+    height: 100px;
+    margin-top: 5px;
+    background: url(/images/attacks/attacks.png) 0px 100px;
+    margin-bottom: 5px;
+    position: absolute;
+    top: -5px;
+    left: 0px;
+}
+.dice-move {
+    width: 100px;
+    height: 100px;
+    margin-top: 5px;
+    background: url(/images/attacks/attacks.png) 0px 300px;
+    margin-bottom: 5px;
+    position: relative;
+    top: 0px;
+    left: 300px;
+}
+.dice-move:active:after {
+    content: ' ';
+    width: 100px;
+    height: 100px;
+    margin-top: 5px;
+    background: url(/images/attacks/attacks.png) 0px 100px;
+    margin-bottom: 5px;
+    position: absolute;
+    top: -5px;
+    left: 0px;
+}
+/* FOR PENN: this is what we need to hover over when you select something. When you click on the attack again, this class should GO AWAY :); */
+.selected-move:after {
+    content: ' ';
+    width: 100px;
+    height: 100px;
+    margin-top: 5px;
+    background: url(/images/attacks/attacks.png) 0px 200px;
+    margin-bottom: 5px;
+    position: absolute;
+    top: -5px;
+    left: 0px;
+}
+
+.dice-attack {
+    width: 52px;
+    height: 56px;
+    margin-top: 5px;
+    background: url(/images/attacks/buttons.png) -200px 0px;
+    margin-bottom: 5px;
+    position: relative;
+    top: 0px;
+    left: 300px;
+}
+.dice-attack:active:after {
+    content: ' ';
+    width: 52px;
+    height: 56px;
+    margin-top: 5px;
+    background: url(/images/attacks/buttons.png) -200px -60px;
+    margin-bottom: 5px;
+    position: absolute;
+    top: -5px;
+    left: 0px;
+}
+.fire-attack {
+    width: 52px;
+    height: 56px;
+    margin-top: 5px;
+    background: url(/images/attacks/buttons.png) -100px 0px;
+    margin-bottom: 5px;
+    position: relative;
+    top: 0px;
+    left: 300px;
+}
+.fire-attack:active:after {
+    content: ' ';
+    width: 52px;
+    height: 56px;
+    margin-top: 5px;
+    background: url(/images/attacks/buttons.png) -100px -60px;
+    margin-bottom: 5px;
+    position: absolute;
+    top: -5px;
+    left: 0px;
+}
+.water-attack {
+    width: 52px;
+    height: 56px;
+    margin-top: 5px;
+    background: url(/images/attacks/buttons.png) 0px 0px;
+    margin-bottom: 5px;
+    position: relative;
+    top: 0px;
+    left: 300px;
+}
+.water-attack:active:after {
+    content: ' ';
+    width: 52px;
+    height: 56px;
+    margin-top: 5px;
+    background: url(/images/attacks/buttons.png) 0px -60px;
+    margin-bottom: 5px;
+    position: absolute;
+    top: -5px;
+    left: 0px;
+}
+.lightning-attack {
+    width: 52px;
+    height: 56px;
+    margin-top: 5px;
+    background: url(/images/attacks/buttons.png) -50px 0px;
+    margin-bottom: 5px;
+    position: relative;
+    top: 0px;
+    left: 300px;
+}
+.lightning-attack:active:after {
+    content: ' ';
+    width: 52px;
+    height: 56px;
+    margin-top: 5px;
+    background: url(/images/attacks/buttons.png) -50px -60px;
+    margin-bottom: 5px;
+    position: absolute;
+    top: -5px;
+    left: 0px;
+}
+.shield-attack {
+    width: 52px;
+    height: 56px;
+    margin-top: 5px;
+    background: url(/images/attacks/buttons.png) -150px 0px;
+    margin-bottom: 5px;
+    position: relative;
+    top: 0px;
+    left: 300px;
+}
+.shield-attack:active:after {
+    content: ' ';
+    width: 52px;
+    height: 56px;
+    margin-top: 5px;
+    background: url(/images/attacks/buttons.png) -150px -60px;
+    margin-bottom: 5px;
+    position: absolute;
+    top: -5px;
+    left: 0px;
+}
+.start-animation-btn {
+    width: 170px;
+    height: 120px;
+    margin-top: 5px;
+    background: url(/images/attacks/buttons.png) 300px -118px;
+    margin-bottom: 5px;
+    position: relative;
+    top: 0px;
+    left: 300px;
+}
+.start-animation-btn:active:after {
+    content: ' ';
+    width: 169px;
+    height: 119px;
+    background: url(/images/attacks/buttons.png) 300px -233px;
+    position: absolute;
+    top: -5px;
+    left: 0px;
+}
+
+/*
+we are getting rid of these two buttons because we believe that the player should either pick a move, or type shit talk and pick a move, no other things
+
+ [during game] attack button- during fight mode, a user selects one move and presses this button 
+.submit-btn-attack-move {
+    width: 40px;
+    height: 50px;
+    margin-top: 5px;
+    background: url(/images/attacks/buttons.png) 40px 0px;
+    margin-bottom: 5px;
+    position: relative;
+    top: 0px;
+    left: 300px;
+}
+.submit-btn-attack-move:active:after {
+    content: ' ';
+    width: 42px;
+    height: 73px;
+
+    background: url(/images/attacks/buttons.png) 40px -59px;
+    margin-bottom: 5px;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+*/
