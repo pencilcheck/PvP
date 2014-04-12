@@ -19,6 +19,7 @@ angular.module('PvP')
         console.log('creating the game')
         return UserSession.signIn().then(function (user) {
           options = _.extend(options, {
+            createdAt: moment(),
             rounds: [],
             state: {
               name: 'waiting_join',
