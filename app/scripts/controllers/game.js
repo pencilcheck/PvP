@@ -137,8 +137,14 @@ angular.module('PvP')
       return $scope.currentPlayer().selectedMoves && $scope.currentPlayer().selectedMoves[move];
     };
 
+    $scope.selectedMovesCount = function () {
+      return $scope.currentPlayer().selectedMoves ? Object.keys($scope.currentPlayer().selectedMoves).length : 0;
+    };
+
     $scope.selectMove = function(move) {
-      gameConfig.commitMove(move);
+      if ($scope.selectedMovesCount() < 3) {
+        gameConfig.commitMove(move);
+      }
     };
 
     $scope.unselectMove = function(move) {
