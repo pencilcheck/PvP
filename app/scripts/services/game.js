@@ -182,9 +182,9 @@ angular.module('PvP')
 
                     var winnerId;
                     if (game.players[userId].health > 0) {
-                      winnerId = opponentId;
-                    } else if (game.players[opponentId].health > 0) {
                       winnerId = userId;
+                    } else if (game.players[opponentId].health > 0) {
+                      winnerId = opponentId;
                     } else {
                       // Both players have negative health
                       if (Math.abs(result[0]) > Math.abs(result[1])) {
