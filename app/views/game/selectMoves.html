@@ -10,7 +10,7 @@
     <h1>Selected moves</h1>
     <ul>
       <li ng-repeat="(name, move) in currentPlayer().selectedMoves">
-        <a ng-click="deselectMove(move)"><b>{{name}}</b></a>
+        <a ng-click="unselectMove(move)"><b>{{name}}</b></a>
       </li>
     </ul>
     <button class="btn btn-success" ng-click="doneSelectingMoves()">Done</button>

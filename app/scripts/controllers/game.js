@@ -141,8 +141,8 @@ angular.module('PvP')
       gameConfig.commitMove(move);
     };
 
-    $scope.deselectMove = function(move) {
-      delete $scope.currentPlayer().selectedMoves[move.name];
+    $scope.unselectMove = function(move) {
+      gameConfig.uncommitMove(move);
     };
 
     $scope.doneSelectingMoves = function () {

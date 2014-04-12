@@ -123,6 +123,15 @@ angular.module('PvP')
               onChange()
             })
           },
+          uncommitMove: function (move) {
+            convertFirebase(game.$child('players').$child(userId)).$then(function (player) {
+              var moves = player.selectedMoves || {};
+              delete moves[move.name];
+              player.selectedMoves = moves;
+              player.$save();
+              return player;
+            });
+          },
           commitMove: function (move) {
             convertFirebase(game.$child('players').$child(userId)).$then(function (player) {
               var moves = player.selectedMoves || {};
