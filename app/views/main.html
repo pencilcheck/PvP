@@ -1,14 +1,21 @@
 <link href="styles/minigame.css" rel="stylesheet" type="text/css">
 <div class="jumbotron">
-  
-<img src="http://www.gemologyproject.com/wiki/images/5/5f/Placeholder.jpg" /><br><br><br>
-<button ng-click="add()">Start a game</button>
-
-  
-
+  <img src="http://www.gemologyproject.com/wiki/images/5/5f/Placeholder.jpg" /><br><br><br>
+  <button ng-click="add()">Start a game</button>
 </div>
 
-<div class="row marketing" ng-repeat="game in games">
-    <h4>{{game.title}}</h4>
-    <p>{{game}}</p>
+
+<link href="styles/lobby.css" rel="stylesheet" type="text/css">
+<div class="panel panel-default" ng-repeat="game in games | orderByPriority" ng-click="openGame(game.$id)">
+  <div class="panel-heading">
+    <h3 class="panel-title">
+      {{game.title}}
+    </h3>
   </div>
+  <div class="panel-body">
+    Created at: {{game.createdAt | calendar}}
+    <div class="well">
+      {{game.description}}
+    </div>
+  </div>
+</div>

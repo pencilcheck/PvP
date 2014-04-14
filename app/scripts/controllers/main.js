@@ -37,4 +37,10 @@ angular.module('PvP')
         $location.path('/game/' + id);
       });
     };
+
+    $scope.openGame = function (id) {
+      Games.join(id).then(function () {
+        $location.path('/game/' + id);
+      });
+    }
   });
