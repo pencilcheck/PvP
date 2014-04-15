@@ -8,6 +8,20 @@ angular.module('PvP')
       return playerA + ' has taken ' + damageA + ' from ' + moveB + '; ' + playerB + ' has taken ' + damageB + ' from ' + moveA + '.';
     };
 
+    function shieldProb(reverse) {
+      var chance = Math.floor(Math.random()*2);
+      if (change == 0) {
+        return reverse ? [2, 0] : [0, 2]; // Fails
+      } else {
+        var chance = Math.floor(Math.random()*5);
+        if (change < 2) {
+          return [0, 0];
+        } else {
+          return reverse ? [0, 2] : [2, 0];
+        }
+      }
+    }
+
     function damageMatrix(moveA, moveB) {
       console.log(moveA, moveB);
       if ( moveA == 'volcano' ) {
@@ -18,14 +32,7 @@ angular.module('PvP')
         } else if ( moveB == 'lightning' ) {
           return [ 1, 2 ];
         } else if ( moveB == 'shield' ) {
-          var chance = Math.floor(Math.random()*3);
-          if ( chance == 0 ) {
-            return [ 2, 0 ];
-          } else if ( chance == 1 ) {
-            return [ 0, 0 ];
-          } else if ( chance == 2 ) {
-            return [ 0, 2 ];
-          }
+          return shieldProb();
         }
       } else if ( moveA == 'water' ) {
         if ( moveB == 'volcano' ) {
@@ -35,14 +42,7 @@ angular.module('PvP')
         } else if ( moveB == 'lightning' ) {
           return [ 2, 1 ];
         } else if ( moveB == 'shield' ) {
-          var chance = Math.floor(Math.random()*3);
-          if ( chance == 0 ) {
-            return [ 2, 0 ];
-          } else if ( chance == 1 ) {
-            return [ 0, 0 ];
-          } else if ( chance == 2 ) {
-            return [ 0, 2 ];
-          }
+          return shieldProb();
         }
       } else if ( moveA == 'lightning' ) {
         if ( moveB == 'volcano' )
@@ -60,41 +60,15 @@ angular.module('PvP')
           } else if ( chance == 1 )
             return [ 2, 2 ];
         } else if ( moveB == 'shield' ) {
-          var chance = Math.floor(Math.random()*3);
-          if ( chance == 0 ) {
-            return [ 2, 0 ];
-          } else if ( chance == 1 ) {
-            return [ 0, 0 ];
-          } else if ( chance == 2 ) {
-            return [ 0, 2 ];
-          }
+          return shieldProb();
         }
       } else if ( moveA == 'shield' ) {
         if ( moveB == 'volcano' ) {
-          var chance = Math.floor(Math.random()*3);
-          if ( chance == 0 ) {
-            return [ 0, 2 ];
-          } else if ( chance == 1 ) {
-            return [ 0, 0 ];
-          } else if ( chance == 2 ) {
-            return [ 2, 0 ];
-          }
+          return shieldProb(true);
         } else if ( moveB == 'water' ) {
-          var chance = Math.floor(Math.random()*3);
-          if ( chance == 0 )
-            return [ 0, 2 ];
-          else if ( chance == 1 )
-            return [ 0, 0 ];
-          else if ( chance == 2 )
-            return [ 2, 0 ];
+          return shieldProb(true);
         } else if ( moveB == 'lightning' ) {
-          var chance = Math.floor(Math.random()*3);
-          if ( chance == 0 )
-            return [ 0, 2 ];
-          else if ( chance == 1 )
-            return [ 0, 0 ];
-          else if ( chance == 2 )
-            return [ 2, 0 ];
+          return shieldProb(true);
         } else if ( moveB == 'shield' ) {
           return [ 0, 0 ];
         }
