@@ -178,7 +178,8 @@ angular.module('PvP')
             getCurrentRound(game).then(function (round) {
               round.move = round.move || {}
               if (round.move && !round.move[userId] || !round.move) {
-                round.move[userId] = move;
+                round.move[userId] = move
+                round.smackTalk[userId] = smackTalk
 
                 if (Object.keys(round.move).length < Object.keys(game.players).length) {
                   game.state = {
@@ -225,7 +226,6 @@ angular.module('PvP')
                   }
                 }
 
-                console.log(round)
                 round.$save();
                 game.$save('state');
               }
