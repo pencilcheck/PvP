@@ -134,7 +134,7 @@ angular.module('PvP')
 
     // Select Moves Stage
     $scope.isSelected = function(move) {
-      return $scope.currentPlayer().selectedMoves && $scope.currentPlayer().selectedMoves[move];
+      return $scope.currentPlayer().selectedMoves && $scope.currentPlayer().selectedMoves[move.name];
     };
 
     $scope.selectedMovesCount = function () {
