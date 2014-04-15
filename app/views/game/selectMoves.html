@@ -25,7 +25,7 @@
         </a>
       </div>
     </fieldset>
-    <button class="btn btn-success" ng-click="doneSelectingMoves()">Done</button>
+    <button ng-show="selectedMovesCount() >= 3" class="btn btn-success" ng-click="doneSelectingMoves()">Done</button>
   </div>
 
   <div class="col-md-6">

@@ -10,11 +10,11 @@ angular.module('PvP')
 
     function shieldProb(reverse) {
       var chance = Math.floor(Math.random()*2);
-      if (change == 0) {
+      if (chance == 0) {
         return reverse ? [2, 0] : [0, 2]; // Fails
       } else {
         var chance = Math.floor(Math.random()*5);
-        if (change < 2) {
+        if (chance < 2) {
           return [0, 0];
         } else {
           return reverse ? [0, 2] : [2, 0];
