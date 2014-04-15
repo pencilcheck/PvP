@@ -576,8 +576,10 @@ div#testing123:active > span
 }
 
 .dice-attack {
+    margin-left:5px;
+    margin-right:5px;
     float:left;
-    width: 52px;
+    width: 50px;
     height: 56px;
     margin-top: 5px;
     background: url(/images/attacks/buttons.png) -200px 0px;
@@ -587,9 +589,11 @@ div#testing123:active > span
     left: 300px;
 }
 .dice-attack:active:after {
+    margin-left:5px;
+    margin-right:5px;
     float:left;
     content: ' ';
-    width: 52px;
+    width: 50px;
     height: 56px;
     margin-top: 5px;
     background: url(/images/attacks/buttons.png) -200px -60px;
@@ -599,8 +603,10 @@ div#testing123:active > span
     left: 0px;
 }
 .fire-attack {
+    margin-left:5px;
+    margin-right:5px;
     float:left;
-    width: 52px;
+    width: 50px;
     height: 56px;
     margin-top: 5px;
     background: url(/images/attacks/buttons.png) -100px 0px;
@@ -610,9 +616,11 @@ div#testing123:active > span
     left: 300px;
 }
 .fire-attack:active:after {
+    margin-left:5px;
+    margin-right:5px;
     content: ' ';
     float:left;
-    width: 52px;
+    width: 50px;
     height: 56px;
     margin-top: 5px;
     background: url(/images/attacks/buttons.png) -100px -60px;
@@ -622,8 +630,10 @@ div#testing123:active > span
     left: 0px;
 }
 .water-attack {
+    margin-left:5px;
+    margin-right:5px;
     float:left;
-    width: 52px;
+    width: 50px;
     height: 56px;
     margin-top: 5px;
     background: url(/images/attacks/buttons.png) 0px 0px;
@@ -633,9 +643,11 @@ div#testing123:active > span
     left: 300px;
 }
 .water-attack:active:after {
+    margin-left:5px;
+    margin-right:5px;
     float:left;
     content: ' ';
-    width: 52px;
+    width: 50px;
     height: 56px;
     margin-top: 5px;
     background: url(/images/attacks/buttons.png) 0px -60px;
@@ -645,8 +657,10 @@ div#testing123:active > span
     left: 0px;
 }
 .lightning-attack {
+    margin-left:5px;
+    margin-right:5px;
     float:left;
-    width: 52px;
+    width: 50px;
     height: 56px;
     margin-top: 5px;
     background: url(/images/attacks/buttons.png) -50px 0px;
@@ -656,9 +670,11 @@ div#testing123:active > span
     left: 300px;
 }
 .lightning-attack:active:after {
+    margin-left:5px;
+    margin-right:5px;
     float:left;
     content: ' ';
-    width: 52px;
+    width: 50px;
     height: 56px;
     margin-top: 5px;
     background: url(/images/attacks/buttons.png) -50px -60px;
@@ -668,8 +684,10 @@ div#testing123:active > span
     left: 0px;
 }
 .shield-attack {
+    margin-left:5px;
+    margin-right:5px;
     float:left;
-    width: 52px;
+    width: 50px;
     height: 56px;
     margin-top: 5px;
     background: url(/images/attacks/buttons.png) -150px 0px;
@@ -679,9 +697,11 @@ div#testing123:active > span
     left: 300px;
 }
 .shield-attack:active:after {
+    margin-left:5px;
+    margin-right:5px;
     float:left;
     content: ' ';
-    width: 52px;
+    width: 50px;
     height: 56px;
     margin-top: 5px;
     background: url(/images/attacks/buttons.png) -150px -60px;
