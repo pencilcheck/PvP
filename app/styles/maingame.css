@@ -149,7 +149,7 @@ a#player1life:hover {
 }
 
 .player1buttons {
-    position: relative;
+    position: absolute;
     top: 200px;
     left: -315px;
 }
@@ -449,6 +449,8 @@ div#testing123:active > span
 }
 
 .water-move {
+    margin-left:3px;
+    margin-right:3px;
     float:left;
     width: 100px;
     height: 100px;
@@ -460,6 +462,7 @@ div#testing123:active > span
     left: 300px;
 }
 .water-move:active:after {
+ 
     float:left;
     content: ' ';
     width: 100px;
@@ -472,6 +475,8 @@ div#testing123:active > span
     left: 0px;
 }
 .fire-move {
+    margin-left:3px;
+    margin-right:3px;
     float:left;
     width: 100px;
     height: 100px;
@@ -483,6 +488,7 @@ div#testing123:active > span
     left: 300px;
 }
 .fire-move:active:after {
+
     float:left;
     content: ' ';
     width: 100px;
@@ -495,6 +501,8 @@ div#testing123:active > span
     left: 0px;
 }
 .shield-move {
+    margin-left:3px;
+    margin-right:3px;
     float:left;
     width: 100px;
     height: 100px;
@@ -506,6 +514,7 @@ div#testing123:active > span
     left: 300px;
 }
 .shield-move:active:after {
+    
     float:left;
     content: ' ';
     width: 100px;
@@ -518,6 +527,8 @@ div#testing123:active > span
     left: 0px;
 }
 .lightning-move {
+    margin-left:3px;
+    margin-right:3px;
     float:left;
     width: 100px;
     height: 100px;
@@ -529,6 +540,7 @@ div#testing123:active > span
     left: 300px;
 }
 .lightning-move:active:after {
+   
     float:left;
     content: ' ';
     width: 100px;
@@ -541,6 +553,8 @@ div#testing123:active > span
     left: 0px;
 }
 .dice-move {
+    margin-left:3px;
+    margin-right:3px;
     width: 100px;
     height: 100px;
     margin-top: 5px;
@@ -551,6 +565,8 @@ div#testing123:active > span
     left: 300px;
 }
 .dice-move:active:after {
+    margin-left:3px;
+    margin-right:3px;
     content: ' ';
     width: 100px;
     height: 100px;
@@ -717,8 +733,8 @@ div#testing123:active > span
     background: url(/images/attacks/buttons.png) 300px -118px;
     margin-bottom: 5px;
     position: relative;
-    top: 0px;
-    left: 300px;
+    top: 200px;
+    left: 450px;
 }
 .start-animation-btn:active:after {
     content: ' ';
