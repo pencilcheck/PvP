@@ -449,6 +449,7 @@ div#testing123:active > span
 }
 
 .water-move {
+    float:left;
     width: 100px;
     height: 100px;
     margin-top: 5px;
@@ -459,6 +460,7 @@ div#testing123:active > span
     left: 300px;
 }
 .water-move:active:after {
+    float:left;
     content: ' ';
     width: 100px;
     height: 100px;
@@ -470,6 +472,7 @@ div#testing123:active > span
     left: 0px;
 }
 .fire-move {
+    float:left;
     width: 100px;
     height: 100px;
     margin-top: 5px;
@@ -480,6 +483,7 @@ div#testing123:active > span
     left: 300px;
 }
 .fire-move:active:after {
+    float:left;
     content: ' ';
     width: 100px;
     height: 100px;
@@ -491,6 +495,7 @@ div#testing123:active > span
     left: 0px;
 }
 .shield-move {
+    float:left;
     width: 100px;
     height: 100px;
     margin-top: 5px;
@@ -501,6 +506,7 @@ div#testing123:active > span
     left: 300px;
 }
 .shield-move:active:after {
+    float:left;
     content: ' ';
     width: 100px;
     height: 100px;
@@ -512,6 +518,7 @@ div#testing123:active > span
     left: 0px;
 }
 .lightning-move {
+    float:left;
     width: 100px;
     height: 100px;
     margin-top: 5px;
@@ -522,6 +529,7 @@ div#testing123:active > span
     left: 300px;
 }
 .lightning-move:active:after {
+    float:left;
     content: ' ';
     width: 100px;
     height: 100px;
@@ -555,6 +563,7 @@ div#testing123:active > span
 }
 /* FOR PENN: this is what we need to hover over when you select something. When you click on the attack again, this class should GO AWAY :); */
 .selected-move:after {
+    float:left;
     content: ' ';
     width: 100px;
     height: 100px;
@@ -567,6 +576,7 @@ div#testing123:active > span
 }
 
 .dice-attack {
+    float:left;
     width: 52px;
     height: 56px;
     margin-top: 5px;
@@ -577,6 +587,7 @@ div#testing123:active > span
     left: 300px;
 }
 .dice-attack:active:after {
+    float:left;
     content: ' ';
     width: 52px;
     height: 56px;
@@ -588,6 +599,7 @@ div#testing123:active > span
     left: 0px;
 }
 .fire-attack {
+    float:left;
     width: 52px;
     height: 56px;
     margin-top: 5px;
@@ -599,6 +611,7 @@ div#testing123:active > span
 }
 .fire-attack:active:after {
     content: ' ';
+    float:left;
     width: 52px;
     height: 56px;
     margin-top: 5px;
@@ -609,6 +622,7 @@ div#testing123:active > span
     left: 0px;
 }
 .water-attack {
+    float:left;
     width: 52px;
     height: 56px;
     margin-top: 5px;
@@ -619,6 +633,7 @@ div#testing123:active > span
     left: 300px;
 }
 .water-attack:active:after {
+    float:left;
     content: ' ';
     width: 52px;
     height: 56px;
@@ -630,6 +645,7 @@ div#testing123:active > span
     left: 0px;
 }
 .lightning-attack {
+    float:left;
     width: 52px;
     height: 56px;
     margin-top: 5px;
@@ -640,6 +656,7 @@ div#testing123:active > span
     left: 300px;
 }
 .lightning-attack:active:after {
+    float:left;
     content: ' ';
     width: 52px;
     height: 56px;
@@ -651,6 +668,7 @@ div#testing123:active > span
     left: 0px;
 }
 .shield-attack {
+    float:left;
     width: 52px;
     height: 56px;
     margin-top: 5px;
@@ -661,6 +679,7 @@ div#testing123:active > span
     left: 300px;
 }
 .shield-attack:active:after {
+    float:left;
     content: ' ';
     width: 52px;
     height: 56px;
