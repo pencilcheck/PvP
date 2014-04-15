@@ -1,5 +1,4 @@
-  
-<link href="styles/style3.css" rel="stylesheet" type="text/css" />
+
 
 <script src="scripts/imagechange.js"></script>
 <div id="comparisontable">
@@ -63,6 +62,9 @@
 
     <div id="maincanvas">
       <div id="planetscanvas">
+        <div class="bubble">
+          <p>fuck this shit fuck this shit i am the boss, who the hell are you ? fuck this shit i am the boss, who the hell are you ? </p>
+        </div>
         <img src="images/planets/player1.png" id="player1planet">
         <a id="player1life" class="normalTip" tooltip="Your Life Points">
           <img id="player1heart" src="images/misc/life.png">
@@ -71,12 +73,6 @@
       </div>
       <div id="buttonscanvas">
         <div class="player1buttons">
-          <!--<button ng-repeat="(key, move) in currentPlayer().selectedMoves"-->
-             <!--tooltip="{{move.name}}"-->
-             <!--ng-click="fight(move)">-->
-           <!--<img id="mainbutton" ng-src="{{move.src}}">-->
-          <!--</button>-->
-
           <a ng-repeat="(key, move) in currentPlayer().selectedMoves"
              ng-click="fight(move, 'iloveyuri')">
             <div ng-show="move.name == 'volcano'" class="fire-attack" tooltip="Fire"></div>
@@ -84,10 +80,7 @@
             <div ng-show="move.name == 'lightning'" class="lightning-attack" tooltip="Lightning"></div>
             <div ng-show="move.name == 'shield'" class="shield-attack" tooltip="Shield"></div>
           </a>
-          <!--<div class="fire-attack"></div>-->
-          <!--<div class="water-attack"></div>-->
-          <!--<div class="lightning-attack"></div>-->
-          <!--<div class="shield-attack"></div>-->
+          <!-- agreed not to have this, select the attack and ur good <div class="submit-btn-attack-move "></div>!-->
           <!--<div class="dice-attack"></div>-->
           <!--<div class="submit-btn-attack-move "></div>-->
           <!--<div class="start-animation-btn"></div>-->
@@ -107,7 +100,9 @@
           <img id="player2heart" src="images/misc/life.png">
           <span id="player2score">x {{opponentPlayer().health}}</span>
         </a>
-
+        <div class="bubbleSecondPlayer">
+          <p>i am going to murder you twice sdfsdf sdfasfdas dfasf asddf asdf asdf sdf</p>
+        </div>
       </div>
 
 
@@ -115,6 +110,7 @@
 
    
   </div>
+
     <br>
 
     <div class="col-md-5" id="console-log" style="display: none">
@@ -126,14 +122,11 @@
     </div>
     <button class="displayHide">!!!!!!!!!!!!!!3Toggle this shit</button>
 
+      <div class="start-animation-btn"></div>
+
 
 
 </div>
-
-<div class="bubble">
-  <p><input type='text' /></p>
-</div>
-
 <script>
 $( "button.displayHide" ).click(function() {
   $( "div.col-md-5" ).toggle();

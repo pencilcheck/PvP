@@ -9,60 +9,6 @@ body {
 ]
 }
 
-div.bubble {
-  display: block;
-  margin: 0 auto 40px auto;
-  width: 250px;
-  background-color: white;
-  border: solid 6px #143463;
-  border-radius: 20px;
-  text-align: center;
-  position: relative;
-}
-
-div.bubble:before, div.bubble:after {
-  border-color: White transparent transparent transparent;
-  border-style: solid;
-  border-width: 20px 0px 0px 40px;
-  content: &quot;&quot;;
-  display: block;
-  height: 0;
-  width: 0;
-  line-height: 0;
-  position: absolute;
-  z-index: 5;
-  bottom: -20px;
-  left: 150px;
-}
-div.bubble:after {
-  border-color: #143463 transparent transparent transparent;
-  border-style: solid;
-  border-width: 24px 0px 0px 48px;
-  content: &quot;&quot;;
-  z-index: 4;
-  bottom: -30px;
-  left: 148px;
-}
-div.bubble p {
-  margin: 10px;
-  font-size: 11px;
-  color: #143463;
-}
-div.bubble:before, div.bubble:after {
-  border-color: black transparent transparent transparent;
-  border-style: solid;
-  border-width: 20px 0px 0px 40px;
-  content: &quot;&quot;;
-  display: block;
-  height: 0;
-  width: 0;
-  line-height: 0;
-  position: absolute;
-  z-index: 5;
-  bottom: -20px;
-  left: 150px;
-}
-
 #mainbutton {
     width: 55px;
     margin-right: 15px;      
@@ -203,7 +149,7 @@ a#player1life:hover {
 }
 
 .player1buttons {
-    position: relative;
+    position: absolute;
     top: 200px;
     left: -315px;
 }
@@ -503,6 +449,9 @@ div#testing123:active > span
 }
 
 .water-move {
+    margin-left:3px;
+    margin-right:3px;
+    float:left;
     width: 100px;
     height: 100px;
     margin-top: 5px;
@@ -513,6 +462,8 @@ div#testing123:active > span
     left: 300px;
 }
 .water-move:active:after {
+ 
+    float:left;
     content: ' ';
     width: 100px;
     height: 100px;
@@ -524,6 +475,9 @@ div#testing123:active > span
     left: 0px;
 }
 .fire-move {
+    margin-left:3px;
+    margin-right:3px;
+    float:left;
     width: 100px;
     height: 100px;
     margin-top: 5px;
@@ -534,6 +488,8 @@ div#testing123:active > span
     left: 300px;
 }
 .fire-move:active:after {
+
+    float:left;
     content: ' ';
     width: 100px;
     height: 100px;
@@ -545,6 +501,9 @@ div#testing123:active > span
     left: 0px;
 }
 .shield-move {
+    margin-left:3px;
+    margin-right:3px;
+    float:left;
     width: 100px;
     height: 100px;
     margin-top: 5px;
@@ -555,6 +514,8 @@ div#testing123:active > span
     left: 300px;
 }
 .shield-move:active:after {
+    
+    float:left;
     content: ' ';
     width: 100px;
     height: 100px;
@@ -566,6 +527,9 @@ div#testing123:active > span
     left: 0px;
 }
 .lightning-move {
+    margin-left:3px;
+    margin-right:3px;
+    float:left;
     width: 100px;
     height: 100px;
     margin-top: 5px;
@@ -576,6 +540,8 @@ div#testing123:active > span
     left: 300px;
 }
 .lightning-move:active:after {
+   
+    float:left;
     content: ' ';
     width: 100px;
     height: 100px;
@@ -587,6 +553,8 @@ div#testing123:active > span
     left: 0px;
 }
 .dice-move {
+    margin-left:3px;
+    margin-right:3px;
     width: 100px;
     height: 100px;
     margin-top: 5px;
@@ -597,6 +565,8 @@ div#testing123:active > span
     left: 300px;
 }
 .dice-move:active:after {
+    margin-left:3px;
+    margin-right:3px;
     content: ' ';
     width: 100px;
     height: 100px;
@@ -609,6 +579,7 @@ div#testing123:active > span
 }
 /* FOR PENN: this is what we need to hover over when you select something. When you click on the attack again, this class should GO AWAY :); */
 .selected-move:after {
+    float:left;
     content: ' ';
     width: 100px;
     height: 100px;
@@ -621,7 +592,10 @@ div#testing123:active > span
 }
 
 .dice-attack {
-    width: 52px;
+    margin-left:2px;
+    margin-right:2px;
+    float:left;
+    width: 50px;
     height: 56px;
     margin-top: 5px;
     background: url(/images/attacks/buttons.png) -200px 0px;
@@ -631,8 +605,11 @@ div#testing123:active > span
     left: 300px;
 }
 .dice-attack:active:after {
+    margin-left:2px;
+    margin-right:2px;
+    float:left;
     content: ' ';
-    width: 52px;
+    width: 50px;
     height: 56px;
     margin-top: 5px;
     background: url(/images/attacks/buttons.png) -200px -60px;
@@ -642,7 +619,10 @@ div#testing123:active > span
     left: 0px;
 }
 .fire-attack {
-    width: 52px;
+    margin-left:2px;
+    margin-right:2px;
+    float:left;
+    width: 50px;
     height: 56px;
     margin-top: 5px;
     background: url(/images/attacks/buttons.png) -100px 0px;
@@ -652,8 +632,11 @@ div#testing123:active > span
     left: 300px;
 }
 .fire-attack:active:after {
+    margin-left:2px;
+    margin-right:2px;
     content: ' ';
-    width: 52px;
+    float:left;
+    width: 50px;
     height: 56px;
     margin-top: 5px;
     background: url(/images/attacks/buttons.png) -100px -60px;
@@ -663,7 +646,10 @@ div#testing123:active > span
     left: 0px;
 }
 .water-attack {
-    width: 52px;
+    margin-left:2px;
+    margin-right:2px;
+    float:left;
+    width: 50px;
     height: 56px;
     margin-top: 5px;
     background: url(/images/attacks/buttons.png) 0px 0px;
@@ -673,8 +659,11 @@ div#testing123:active > span
     left: 300px;
 }
 .water-attack:active:after {
+    margin-left:2px;
+    margin-right:2px;
+    float:left;
     content: ' ';
-    width: 52px;
+    width: 50px;
     height: 56px;
     margin-top: 5px;
     background: url(/images/attacks/buttons.png) 0px -60px;
@@ -684,7 +673,10 @@ div#testing123:active > span
     left: 0px;
 }
 .lightning-attack {
-    width: 52px;
+    margin-left:2px;
+    margin-right:2px;
+    float:left;
+    width: 50px;
     height: 56px;
     margin-top: 5px;
     background: url(/images/attacks/buttons.png) -50px 0px;
@@ -694,8 +686,11 @@ div#testing123:active > span
     left: 300px;
 }
 .lightning-attack:active:after {
+    margin-left:2px;
+    margin-right:2px;
+    float:left;
     content: ' ';
-    width: 52px;
+    width: 50px;
     height: 56px;
     margin-top: 5px;
     background: url(/images/attacks/buttons.png) -50px -60px;
@@ -705,7 +700,10 @@ div#testing123:active > span
     left: 0px;
 }
 .shield-attack {
-    width: 52px;
+    margin-left:2px;
+    margin-right:2px;
+    float:left;
+    width: 50px;
     height: 56px;
     margin-top: 5px;
     background: url(/images/attacks/buttons.png) -150px 0px;
@@ -715,8 +713,11 @@ div#testing123:active > span
     left: 300px;
 }
 .shield-attack:active:after {
+    margin-left:2px;
+    margin-right:2px;
+    float:left;
     content: ' ';
-    width: 52px;
+    width: 50px;
     height: 56px;
     margin-top: 5px;
     background: url(/images/attacks/buttons.png) -150px -60px;
@@ -732,8 +733,8 @@ div#testing123:active > span
     background: url(/images/attacks/buttons.png) 300px -118px;
     margin-bottom: 5px;
     position: relative;
-    top: 0px;
-    left: 300px;
+    top: 200px;
+    left: 450px;
 }
 .start-animation-btn:active:after {
     content: ' ';
@@ -771,4 +772,87 @@ we are getting rid of these two buttons because we believe that the player shoul
     left: 0px;
 }
 */
+div.bubble {
+    margin-bottom: -92px;
+    display: block;
+    margin: 0 auto 40px auto;
+    width: 250px;
+    background-color: white;
+    border: solid 6px #143463;
+    border-radius: 20px;
+    text-align: center;
+    bottom: -285px;
+    position: relative;
+    left: -25px;
+    z-index: 100;
+}
+div.bubble p {
+  margin: 10px;
+  font-size: 11px;
+  color: #143463;
+}
+div.bubble:before, div.bubble:after {
+  border-color: White transparent transparent transparent;
+  border-style: solid;
+  border-width: 20px 0px 0px 40px;
+  content: '';
+  display: block;
+  height: 0;
+  width: 0;
+  line-height: 0;
+  position: absolute;
+  z-index: 5;
+  bottom: -20px;
+  left: 150px;
+}
+div.bubble:after {
+  border-color: #143463 transparent transparent transparent;
+  border-style: solid;
+  border-width: 24px 0px 0px 48px;
+  content: '';
+  z-index: 4;
+  bottom: -30px;
+  left: 148px;
+}
+div.bubbleSecondPlayer {
+    display: block;
+    margin: 0 auto 40px auto;
+    width: 250px;
+    background-color: white;
+    border: solid 6px #143463;
+    border-radius: 20px;
+    text-align: center;
+    position: relative;
+    top: -30px;
+    left: 250px;
+    z-index: 100;
+}
+div.bubbleSecondPlayer p {
+  margin: 10px;
+  font-size: 11px;
+  color: #143463;
+}
 
+div.bubbleSecondPlayer:before, div.bubbleSecondPlayer:after {
+border-color: transparent white white white;
+border-style: solid;
+border-width: 20px 0px 0px 40px;
+content: '';
+display: block;
+height: 0;
+width: 0;
+line-height: 0;
+position: absolute;
+z-index: 5;
+top: -20px;
+left: 150px;
+}
+div.bubbleSecondPlayer:after {
+border-color: transparent transparent transparent #143463;
+border-style: solid;
+border-width: 26px 1px 0px 47px;
+content: '';
+z-index: 4;
+top: -28px;
+left: 147px;
+}
