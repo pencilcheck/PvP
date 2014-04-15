@@ -71,27 +71,33 @@
       </div>
       <div id="buttonscanvas">
         <div class="player1buttons">
-          <button ng-repeat="(key, move) in currentPlayer().selectedMoves"
+          <!--<button ng-repeat="(key, move) in currentPlayer().selectedMoves"-->
+             <!--tooltip="{{move.name}}"-->
+             <!--ng-click="fight(move)">-->
+           <!--<img id="mainbutton" ng-src="{{move.src}}">-->
+          <!--</button>-->
+
+          <a ng-repeat="(key, move) in currentPlayer().selectedMoves"
              tooltip="{{move.name}}"
              ng-click="fight(move)">
-           <img id="mainbutton" ng-src="{{move.src}}">
-          </button>
-          <div class="fire-attack"></div>
-          <div class="water-attack"></div>
-          <div class="lightning-attack"></div>
-          <div class="shield-attack"></div>
-          <div class="dice-attack"></div>
-          <div class="submit-btn-attack-move "></div>
-          <div class="start-animation-btn"></div>
+            <div ng-show="move.name == 'volcano'" class="fire-attack" tooltip="Fire"></div>
+            <div ng-show="move.name == 'water'" class="water-attack" tooltip="Water"></div>
+            <div ng-show="move.name == 'lightning'" class="lightning-attack" tooltip="Lightning"></div>
+            <div ng-show="move.name == 'shield'" class="shield-attack" tooltip="Shield"></div>
+          </a>
+          <!--<div class="fire-attack"></div>-->
+          <!--<div class="water-attack"></div>-->
+          <!--<div class="lightning-attack"></div>-->
+          <!--<div class="shield-attack"></div>-->
+          <!--<div class="dice-attack"></div>-->
+          <!--<div class="submit-btn-attack-move "></div>-->
+          <!--<div class="start-animation-btn"></div>-->
           
-
-          <button ng-click="feelingLucky()" tooltip="I'm Feeling Lucky">
-            <img id="mainbutton" src="images/buttons/rollthedicebutton.png">
-          </button>
+          <!--<button ng-click="feelingLucky()" tooltip="I'm Feeling Lucky">-->
+            <!--<img id="mainbutton" src="images/buttons/rollthedicebutton.png">-->
+          <!--</button>-->
         </div>
-
       </div>
-      
     </div>
   </div>
   Second player table
@@ -126,16 +132,11 @@
 </div>
 
 <div class="bubble">
-<p>fuck this shit</p>
+  <p><input type='text' /></p>
 </div>
 
-
-
- 
 <script>
 $( "button.displayHide" ).click(function() {
-  console.log("wtfinside");
   $( "div.col-md-5" ).toggle();
-  console.log("after");
 });
 </script>
