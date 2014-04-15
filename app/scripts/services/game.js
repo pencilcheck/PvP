@@ -177,6 +177,8 @@ angular.module('PvP')
           commitAttack: function (move, smackTalk) {
             getCurrentRound(game).then(function (round) {
               round.move = round.move || {}
+              round.smackTalk = round.smackTalk || {}
+
               if (round.move && !round.move[userId] || !round.move) {
                 round.move[userId] = move
                 round.smackTalk[userId] = smackTalk
