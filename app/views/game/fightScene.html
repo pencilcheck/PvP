@@ -78,8 +78,7 @@
           <!--</button>-->
 
           <a ng-repeat="(key, move) in currentPlayer().selectedMoves"
-             tooltip="{{move.name}}"
-             ng-click="fight(move)">
+             ng-click="fight(move, 'iloveyuri')">
             <div ng-show="move.name == 'volcano'" class="fire-attack" tooltip="Fire"></div>
             <div ng-show="move.name == 'water'" class="water-attack" tooltip="Water"></div>
             <div ng-show="move.name == 'lightning'" class="lightning-attack" tooltip="Lightning"></div>

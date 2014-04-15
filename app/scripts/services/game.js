@@ -11,10 +11,26 @@ angular.module('PvP')
       var opponentId = null;
       Object.keys(players).forEach(function (id) {
         if (userId != id) {
-          opponentId = id;
+          opponentId = id
         }
       });
       return opponentId
+    }
+
+    function getCurrentRound(game) {
+      return convertFirebase(game.$child('rounds')).$then(function (rounds) {
+        var index = rounds.$getIndex().slice(-1)[0]
+
+        if (index && rounds[index].move && Object.keys(rounds[index].move).length < Object.keys(game.players).length) {
+          return convertFirebase(rounds.$child(index)).$then(function (round) {
+            return round
+          })
+        } else {
+          return rounds.$add({move: {}, log: ''}).then(function (round) {
+            return $firebase(round)
+          })
+        }
+      })
     }
 
     return function (gameId, userId) {
@@ -22,22 +38,22 @@ angular.module('PvP')
         var o = {
           onChange: function (attr, cb) {
             game.$child(attr).$on('change', function () {
-              cb(game[attr]);
-            });
+              cb(game[attr])
+            })
           },
           game: game,
           players: game.players,
           opponentPlayer: function () {
-            var opponentId = null;
+            var opponentId = null
             Object.keys(game.players).forEach(function (id) {
               if (userId != id) {
-                opponentId = id;
+                opponentId = id
               }
-            });
-            return game.players[opponentId];
+            })
+            return game.players[opponentId]
           },
           currentPlayer: function () {
-            return game.players[userId];
+            return game.players[userId]
           },
           turnOffListeners: function () {
             requestsReq.$off()
@@ -61,7 +77,7 @@ angular.module('PvP')
                         // Have to force it
                         $window.location.href = '/#/game/' + request.gameId
                       })
-                    });
+                    })
                   }
                 })
               })
@@ -158,37 +174,29 @@ angular.module('PvP')
             }
             game.$save('state');
           },
-          commitAttack: function (move) {
-            var self = this
-            convertFirebase(game.$child('rounds')).$then(function (rounds) {
-              var lastIndex = rounds.$getIndex()[rounds.$getIndex().length-1];
-              var lastRound = rounds[lastIndex];
-              if (lastRound && lastRound.move && Object.keys(lastRound.move).length < Object.keys(game.players).length) {
-                // To support cooldown later
-                var selectedMoves = self.currentPlayer().selectedMoves
-                selectedMoves[move.name].waited = selectedMoves[move.name].waited || 2 // waited turns in cd
-                selectedMoves[move.name].used = selectedMoves[move.name].used || 0 // used turns
+          commitAttack: function (move, smackTalk) {
+            getCurrentRound(game).then(function (round) {
+              round.move = round.move || {}
+              if (round.move && !round.move[userId] || !round.move) {
+                round.move[userId] = move;
 
-                lastRound.move[userId] = move;
-                rounds.$save(lastIndex);
+                if (Object.keys(round.move).length < Object.keys(game.players).length) {
+                  game.state = {
+                    name: "waiting_other_move",
+                    detail: userId
+                  };
+                } else if (Object.keys(round.move).length == Object.keys(game.players).length) {
+                  var opponentId = getOpponentId(game.players, userId),
+                      result = Moves.damageMatrix(round.move[userId].name, round.move[opponentId].name);
 
-                if (Object.keys(lastRound.move).length == Object.keys(game.players).length) {
-                  // Fight
-                  var opponentId = getOpponentId(game.players, userId);
+                  round.log = Moves.textualizeAttack(game.players[userId].name, game.players[opponentId].name, round.move[userId].name, round.move[opponentId].name, result[0], result[1]);
 
-                  var result = Moves.damageMatrix(lastRound.move[userId].name, lastRound.move[opponentId].name);
                   game.players[userId].health -= result[0];
                   game.players[opponentId].health -= result[1];
 
-                  Object.keys(game.players).forEach(function (userId) {
-                    game.players[userId].notSeenAnimation = lastIndex;
-                  });
+                  game.players[userId].notSeenAnimation = round.$id;
+                  game.players[opponentId].notSeenAnimation = round.$id;
                   game.$save('players');
-
-                  var text = Moves.textualizeAttack(game.players[userId].name, game.players[opponentId].name, lastRound.move[userId].name, lastRound.move[opponentId].name, result[0], result[1]);
-                  console.log(game.players[userId].name, game.players[opponentId].name, lastRound.move[userId].name, lastRound.move[opponentId].name, result[0], result[1]);
-                  lastRound.log = text;
-                  rounds.$save(lastIndex);
 
                   if (game.players[userId].health <= 0 || game.players[opponentId].health <= 0) {
                     game.state = {
@@ -215,24 +223,13 @@ angular.module('PvP')
                       name: "waiting_move"
                     };
                   }
-                  game.$save('state');
                 }
-              } else {
-                var data = {
-                  move: {
-                  },
-                  log: ""
-                };
-                data.move[userId] = move;
-                rounds.$add(data)
 
-                game.state = {
-                  name: "waiting_other_move",
-                  detail: userId
-                };
+                console.log(round)
+                round.$save();
                 game.$save('state');
               }
-            });
+            })
           }
         };
 

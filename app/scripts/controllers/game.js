@@ -173,8 +173,8 @@ angular.module('PvP')
     $scope.skipAnimation = function () {
     };
 
-    $scope.fight = function (move) {
-      gameConfig.commitAttack(move);
+    $scope.fight = function (move, smackTalk) {
+      gameConfig.commitAttack(move, smackTalk);
       $scope.dialog = $scope.currentPlayer().name + " selected " + move.name;
     };
 
