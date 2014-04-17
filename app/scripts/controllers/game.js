@@ -107,30 +107,24 @@ angular.module('PvP')
       $scope.currentPlayer().attackCommitted = false;
       $scope.game.$save('players')
       if (newVal) {
+        gameConfig.currentPlayer().notSeenAnimation = null
+        gameConfig.game.$save('players')
+        /*
         $modal.open({
           backdrop: 'static',
           keyboard: false,
           templateUrl: '/views/game/modal/animation.html',
           controller: function ($scope, $modalInstance) {
-            $scope.skip = function () {
-              gameConfig.currentPlayer().notSeenAnimation = null
-              gameConfig.game.$save('players')
-              $modalInstance.close()
-            }
-
-            $scope.play = function () {
+            $scope.skip = $scope.play = function () {
               gameConfig.currentPlayer().notSeenAnimation = null
               gameConfig.game.$save('players')
               $modalInstance.close()
             }
           }
         })
+        */
       }
     }, true)
-
-    //$scope.$watch('rounds.$getIndex().length', function () {
-      //$scope.dialog = 'What should ' + $scope.currentPlayer().name + ' do?'
-    //})
 
     $scope.currentPlayer = function () {
       return gameConfig.currentPlayer()
