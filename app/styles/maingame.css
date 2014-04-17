@@ -9,7 +9,9 @@ body {
 
 }
 
-::selection {background-color:rgba(0,0,0,0);}
+::selection {background-color:rgba(0,0,0,0);
+
+}
 
 #mainbutton {
     width: 55px;
@@ -715,11 +717,9 @@ div#testing123:active > span
     width: 170px;
     height: 120px;
     background: url(/images/attacks/buttons.png) 370px -118px;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    margin-top: -50px;
-    margin-left: -100px;
+    position: relative;
+    top: 200px;
+    left: 450px;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     -khtml-user-select: none;
