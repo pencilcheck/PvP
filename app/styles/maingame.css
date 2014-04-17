@@ -203,13 +203,14 @@ margin-left: 180px;
     position:fixed;
     height: 100px;
     overflow-y: scroll;
-    background-color: black;
+    background-color: rgba(255, 255, 255, 0.1);
     padding-left: 25px;
     padding-right: 40px;
     border: 1px solid;
     border-radius: 5px;
     bottom: 5%;
     right:15%;
+    z-index: 9999;
 
 }
 
@@ -756,8 +757,7 @@ div.bubble {
     display: block;
     margin: 0 auto 40px auto;
     width: 250px;
-    background-color: white;
-    border: solid 6px #143463;
+    background-color: rgba(64,90,128,0.5);
     border-radius: 20px;
     text-align: center;
     bottom: -285px;
@@ -770,8 +770,8 @@ div.bubble p {
   font-size: 11px;
   color: #143463;
 }
-div.bubble:before, div.bubble:after {
-  border-color: White transparent transparent transparent;
+div.bubble:before {
+  border-color: rgba(64,90,128,0.5) transparent transparent transparent;
   border-style: solid;
   border-width: 20px 0px 0px 40px;
   content: '';
@@ -784,15 +784,7 @@ div.bubble:before, div.bubble:after {
   bottom: -20px;
   left: 150px;
 }
-div.bubble:after {
-  border-color: #143463 transparent transparent transparent;
-  border-style: solid;
-  border-width: 24px 0px 0px 48px;
-  content: '';
-  z-index: 4;
-  bottom: -30px;
-  left: 148px;
-}
+
 div.bubbleSecondPlayer {
     display: block;
     margin: 0 auto 40px auto;
