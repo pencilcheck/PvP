@@ -98,6 +98,9 @@ margin-left: 120px;
 
 #loserPlayer {
     width: 300px;
+    right: -900px;
+    position: relative;
+    top: 400px;
 }
 
 #winnerPlayer {
@@ -729,21 +732,18 @@ div#testing123:active > span
 .start-animation-btn {
     width: 170px;
     height: 120px;
-    margin-top: 5px;
     background: url(/images/attacks/buttons.png) 300px -118px;
-    margin-bottom: 5px;
     position: relative;
     top: 200px;
     left: 450px;
 }
-.start-animation-btn:active:after {
+.start-animation-btn:active {
     content: ' ';
     width: 169px;
-    height: 119px;
-    background: url(/images/attacks/buttons.png) 300px -233px;
-    position: absolute;
-    top: -5px;
-    left: 0px;
+    height: 120px;
+    margin-top: 7px;
+    background: url(/images/attacks/buttons.png) 300px -240px;
+    
 }
 
 /*
