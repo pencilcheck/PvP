@@ -111,6 +111,11 @@ margin-left: 120px;
     position: relative;
 }
 
+.WinnerPlayerName {
+position: relative;
+left: 75%;
+}
+
 #rematchbutton {
     position: absolute;
     right: 310px;
@@ -719,6 +724,8 @@ div#testing123:active > span
     background: url(/images/attacks/buttons.png) 370px -240px;
     
 }
+
+
 
 /*
 we are getting rid of these two buttons because we believe that the player should either pick a move, or type shit talk and pick a move, no other things
