@@ -23,11 +23,14 @@ angular.module('PvP')
 
         if (index && rounds[index] && rounds[index].move && Object.keys(rounds[index].move).length < Object.keys(game.players).length) {
           return convertFirebase(rounds.$child(index)).$then(function (round) {
+            round.$id = index
             return round
           })
         } else {
           return rounds.$add({move: {}, log: ''}).then(function (round) {
-            return $firebase(round)
+            var r = $firebase(round)
+            r.$id = round.name()
+            return r
           })
         }
       })
@@ -42,6 +45,7 @@ angular.module('PvP')
             })
           },
           game: game,
+          rounds: game.$child('rounds'),
           players: game.players,
           opponentPlayer: function () {
             var opponentId = null
@@ -177,26 +181,18 @@ angular.module('PvP')
             this.currentPlayer().movesCommitted = true;
             game.$save('players')
           },
-          getLastestSmackTalk: function () {
-            return getCurrentRound(game).then(function (round) {
-              return round.smackTalk ? round.smackTalk[userId] : ''
-            })
-          },
-          getLastestSelectedAttack: function () {
-            return getCurrentRound(game).then(function (round) {
-              return round.move ? round.move[userId] : null
-            })
-          },
           commitAttack: function (move, smackTalk) {
             var self = this
 
             getCurrentRound(game).then(function (round) {
-              round.move = round.move || {}
-              round.smackTalk = round.smackTalk || {}
-
               if (round.move && !round.move[userId] || !round.move) {
+                round.move = round.move || {}
+                round.smackTalk = round.smackTalk || {}
+
                 round.move[userId] = move
                 round.smackTalk[userId] = smackTalk
+
+                game.players[userId].lastRoundId = round.$id
 
                 if (Object.keys(round.move).length < Object.keys(game.players).length) {
                   game.state = {
@@ -245,8 +241,6 @@ angular.module('PvP')
 
                 round.$save()
                 game.$save('state')
-
-                self.currentPlayer().attackCommitted = true;
                 game.$save('players')
               }
             })

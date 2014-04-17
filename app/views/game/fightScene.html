@@ -63,11 +63,11 @@
       <div id="planetscanvas">
         <div class="bubble">
           <p>
-            <input type="text" placeholder='Smack Talk' ng-hide="attackCommitted()" ng-model="smackTalk" />
-            <a ng-repeat="(key, move) in currentPlayer().selectedMoves" ng-click="fight(move, smackTalk)" ng-class="[move.attackCss]" tooltip="{{move.name}}" ng-hide="attackCommitted()"></a>
-            <a ng-click="dice(smackTalk)" class="dice-attack" tooltip="Dice" ng-hide="attackCommitted()"></a>
-            <div ng-show="attackCommitted()" ng-class="[selectedAttack.attackCss]" tooltip="{{selectedAttack.name}}"></div>
-            <p ng-show="attackCommitted()">{{smackTalk}}</p>
+            <input type="text" placeholder='Smack Talk' ng-hide="attackCommitted" ng-model="smackTalk" />
+            <a ng-repeat="(key, move) in currentPlayer().selectedMoves" ng-click="fight(move, smackTalk)" ng-class="[move.attackCss]" tooltip="{{move.name}}" ng-hide="attackCommitted"></a>
+            <a ng-click="dice(smackTalk)" class="dice-attack" tooltip="Dice" ng-hide="attackCommitted"></a>
+            <div ng-show="attackCommitted" ng-class="[lastAttack.attackCss]" tooltip="{{lastAttack.name}}"></div>
+            <p ng-show="attackCommitted">{{lastSmackTalk}}</p>
           </p>
         </div>
 

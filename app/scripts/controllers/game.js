@@ -8,18 +8,15 @@ angular.module('PvP')
     $scope.rounds = gameConfig.rounds
     $scope.state = gameConfig.state
     $scope.rematchModal = null
-    $scope.attackCommitted = function () {
-      return gameConfig.currentPlayer().attackCommitted
-    }
+
     $scope.movesCommitted = function () {
       return gameConfig.currentPlayer().movesCommitted
     }
-    gameConfig.getLastestSmackTalk().then(function (talk) {
-      $scope.smackTalk = talk
-    });
-    gameConfig.getLastestSelectedAttack().then(function (attack) {
-      $scope.selectedAttack = attack
-    })
+
+    $scope.attackCommitted = false
+    $scope.lastAttack = null
+    $scope.lastSmackTalk = null
+
 
     function switchState(newVal, oldVal) {
       if (newVal != oldVal) {
@@ -31,8 +28,10 @@ angular.module('PvP')
           $scope.viewUrl = 'views/game/selectMoves.html'
           break
         case 'waiting_move':
-          $scope.currentPlayer().attackCommitted = false;
-          $scope.game.$save('players')
+          $scope.attackCommitted = true
+          $scope.lastAttack = move
+          $scope.lastSmackTalk = smackTalk
+
           $scope.viewUrl = 'views/game/fightScene.html'
           $scope.dialog = 'What should ' + $scope.currentPlayer().name + ' do?'
           break
@@ -110,8 +109,6 @@ angular.module('PvP')
     $scope.$watch('state', switchState)
 
     $scope.$watch('currentPlayer().notSeenAnimation', function (newVal) {
-      $scope.currentPlayer().attackCommitted = false;
-      $scope.game.$save('players')
       if (newVal) {
         gameConfig.currentPlayer().notSeenAnimation = false
         gameConfig.game.$save('players')
@@ -164,16 +161,6 @@ angular.module('PvP')
     }
 
     // Fight Scene Stage
-    $scope.currentRound = function () {
-      var count = 0
-      $scope.rounds.$getIndex().forEach(function (index) {
-        if ($scope.rounds[index] && $scope.players && Object.keys($scope.rounds[index]).length == Object.keys($scope.players).length) {
-          count += 1
-        }
-      })
-      return count
-    }
-
     $scope.replayAnimation = function () {
     }
 
@@ -181,8 +168,9 @@ angular.module('PvP')
     }
 
     $scope.fight = function (move, smackTalk) {
-      $scope.selectedAttack = move
-      $scope.smackTalk = smackTalk
+      $scope.attackCommitted = true
+      $scope.lastAttack = move
+      $scope.lastSmackTalk = smackTalk
       gameConfig.commitAttack(move, smackTalk)
       $scope.dialog = $scope.currentPlayer().name + " selected " + move.name
     }
