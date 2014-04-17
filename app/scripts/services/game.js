@@ -215,7 +215,6 @@ angular.module('PvP')
 
                   game.players[userId].notSeenAnimation = true
                   game.players[opponentId].notSeenAnimation = true
-                  game.$save('players')
 
                   if (game.players[userId].health <= 0 || game.players[opponentId].health <= 0) {
                     game.state = {

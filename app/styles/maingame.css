@@ -717,18 +717,20 @@ div#testing123:active > span
     width: 170px;
     height: 120px;
     background: url(/images/attacks/buttons.png) 370px -118px;
-    position: relative;
-    top: 200px;
-    left: 450px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin-top: -60px;
+    margin-left: -85px;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     -khtml-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+    z-index: 100;
 }
 .start-animation-btn:active {
-    content: ' ';
     width: 169px;
     height: 120px;
     margin-top: 7px;
@@ -739,7 +741,12 @@ div#testing123:active > span
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-    
+    z-index: 100;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin-top: -50px;
+    margin-left: -85px;
 }
 
 /*
