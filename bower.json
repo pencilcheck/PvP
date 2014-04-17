@@ -25,6 +25,7 @@
     "angular-scenario": "1.2.6"
   },
   "resolutions": {
-    "firebase-simple-login": "~1.2.3"
+    "firebase-simple-login": "~1.2.3",
+    "jquery": "~2.1.0"
   }
 }
