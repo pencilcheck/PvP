@@ -23,7 +23,7 @@ angular.module('PvP')
     }
 
     function damageMatrix(moveA, moveB) {
-      console.log(moveA, moveB);
+      console.log('damageMatrix', moveA, moveB);
       if ( moveA == 'Fire' ) {
         if ( moveB == 'Fire' ) {
           return [ 2, 2 ];

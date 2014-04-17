@@ -11,6 +11,9 @@ angular.module('PvP')
     $scope.attackCommitted = function () {
       return gameConfig.currentPlayer().attackCommitted
     };
+    $scope.movesCommitted = function () {
+      return gameConfig.currentPlayer().movesCommitted
+    };
 
     function switchState(newVal, oldVal) {
       if (newVal != oldVal) {
@@ -23,6 +26,7 @@ angular.module('PvP')
           break
         case 'waiting_move':
           $scope.currentPlayer().attackCommitted = false;
+          $scope.game.$save('players')
           $scope.viewUrl = 'views/game/fightScene.html'
           $scope.dialog = 'What should ' + $scope.currentPlayer().name + ' do?'
           break
@@ -100,8 +104,9 @@ angular.module('PvP')
     $scope.$watch('state', switchState)
 
     $scope.$watch('currentPlayer().notSeenAnimation', function (newVal) {
+      $scope.currentPlayer().attackCommitted = false;
+      $scope.game.$save('players')
       if (newVal) {
-        /*
         $modal.open({
           backdrop: 'static',
           keyboard: false,
@@ -120,7 +125,6 @@ angular.module('PvP')
             }
           }
         })
-        */
       }
     }, true)
 

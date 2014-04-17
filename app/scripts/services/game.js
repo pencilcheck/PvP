@@ -174,10 +174,12 @@ angular.module('PvP')
             }
             game.$save('state')
 
-            this.currentPlayer().attackCommitted = true;
+            this.currentPlayer().movesCommitted = true;
             game.$save('players')
           },
           commitAttack: function (move, smackTalk) {
+            var self = this
+
             getCurrentRound(game).then(function (round) {
               round.move = round.move || {}
               round.smackTalk = round.smackTalk || {}
@@ -194,14 +196,15 @@ angular.module('PvP')
                 } else if (Object.keys(round.move).length == Object.keys(game.players).length) {
                   var opponentId = getOpponentId(game.players, userId),
                       result = Moves.damageMatrix(round.move[userId].name, round.move[opponentId].name)
+                  console.log('result of damage', result);
 
                   round.log = Moves.textualizeAttack(game.players[userId].name, game.players[opponentId].name, round.move[userId].name, round.move[opponentId].name, result[0], result[1])
 
                   game.players[userId].health -= result[0]
                   game.players[opponentId].health -= result[1]
 
-                  game.players[userId].notSeenAnimation = round.$id
-                  game.players[opponentId].notSeenAnimation = round.$id
+                  game.players[userId].notSeenAnimation = true
+                  game.players[opponentId].notSeenAnimation = true
                   game.$save('players')
 
                   if (game.players[userId].health <= 0 || game.players[opponentId].health <= 0) {
@@ -233,6 +236,9 @@ angular.module('PvP')
 
                 round.$save()
                 game.$save('state')
+
+                self.currentPlayer().attackCommitted = true;
+                game.$save('players')
               }
             })
           }
