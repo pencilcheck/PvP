@@ -113,7 +113,7 @@ angular.module('PvP')
       $scope.currentPlayer().attackCommitted = false;
       $scope.game.$save('players')
       if (newVal) {
-        gameConfig.currentPlayer().notSeenAnimation = null
+        gameConfig.currentPlayer().notSeenAnimation = false
         gameConfig.game.$save('players')
         /*
         $modal.open({
@@ -122,7 +122,7 @@ angular.module('PvP')
           templateUrl: '/views/game/modal/animation.html',
           controller: function ($scope, $modalInstance) {
             $scope.skip = $scope.play = function () {
-              gameConfig.currentPlayer().notSeenAnimation = null
+              gameConfig.currentPlayer().notSeenAnimation = false
               gameConfig.game.$save('players')
               $modalInstance.close()
             }
