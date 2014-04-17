@@ -2,15 +2,12 @@
 <link rel="stylesheet" href="styles/maingame.css">
 <div class="row">
   <div class="col-md-6">
-    <div ng-hide="movesCommitted">
+    <div ng-hide="movesCommitted()">
       <h1>Choose 3 Moves:</h1>
       <fieldset ng-disabled="selectedMovesCount() >= 3">
         <div ng-repeat="move in moves" ng-hide="isSelected(move)">
-          <a ng-disabled="movesCommitted" ng-click="selectMove(move)">
-            <div ng-show="move.name == 'volcano'" class="fire-move" tooltip="Fire"></div>
-            <div ng-show="move.name == 'water'" class="water-move" tooltip="Water"></div>
-            <div ng-show="move.name == 'lightning'" class="lightning-move" tooltip="Lightning"></div>
-            <div ng-show="move.name == 'shield'" class="shield-move" tooltip="Shield"></div>
+          <a ng-click="selectMove(move)">
+            <div ng-class="[move.moveCss]" tooltip="{{move.name}}"></div>
           </a>
         </div>
       </fieldset>
@@ -18,24 +15,18 @@
       <h1>Selected moves</h1>
       <fieldset>
         <div ng-repeat="(name, move) in currentPlayer().selectedMoves">
-          <a ng-disabled="movesCommitted" ng-click="unselectMove(move)">
-            <div ng-show="move.name == 'volcano'" class="fire-move" tooltip="Fire"></div>
-            <div ng-show="move.name == 'water'" class="water-move" tooltip="Water"></div>
-            <div ng-show="move.name == 'lightning'" class="lightning-move" tooltip="Lightning"></div>
-            <div ng-show="move.name == 'shield'" class="shield-move" tooltip="Shield"></div>
+          <a ng-click="unselectMove(move)">
+            <div ng-class="[move.moveCss]" tooltip="{{move.name}}"></div>
           </a>
         </div>
       </fieldset>
     </div>
-    <fieldset ng-show="movesCommitted">
+    <fieldset ng-show="movesCommitted()">
       <div ng-repeat="(name, move) in currentPlayer().selectedMoves">
-        <div ng-show="move.name == 'volcano'" class="fire-move" tooltip="Fire"></div>
-        <div ng-show="move.name == 'water'" class="water-move" tooltip="Water"></div>
-        <div ng-show="move.name == 'lightning'" class="lightning-move" tooltip="Lightning"></div>
-        <div ng-show="move.name == 'shield'" class="shield-move" tooltip="Shield"></div>
+        <div ng-class="[move.moveCss]" tooltip="{{move.name}}"></div>
       </div>
     </fieldset>
-    <button ng-disabled="movesCommitted" ng-show="selectedMovesCount() >= 3" class="btn btn-success" ng-click="doneSelectingMoves()">Done</button>
+    <button ng-hide="movesCommitted()" ng-show="selectedMovesCount() >= 3" class="btn btn-success" ng-click="doneSelectingMoves()">Done</button>
   </div>
 
   <div class="col-md-6">

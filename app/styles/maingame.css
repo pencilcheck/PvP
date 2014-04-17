@@ -599,139 +599,109 @@ div#testing123:active > span
 }
 
 .dice-attack {
+    display: inline;
     margin-left:2px;
     margin-right:2px;
-    float:left;
     width: 60px;
     height: 60px;
     margin-top: 5px;
     background: url(/images/attacks/buttons.png) -240px 0px;
     margin-bottom: 5px;
-    position: relative;
-    top: 0px;
-    left: 300px;
 }
 .dice-attack:active:after {
+    display: inline;
     margin-left:2px;
     margin-right:2px;
-    float:left;
     content: ' ';
     width: 60px;
     height: 60px;
     margin-top: 5px;
     background: url(/images/attacks/buttons.png) -240px -60px;
     margin-bottom: 5px;
-    position: absolute;
-    top: -5px;
-    left: 0px;
 }
 .fire-attack {
+    display: inline-block;
     margin-left:2px;
     margin-right:2px;
-    float:left;
     width: 60px;
     height: 60px;
     margin-top: 5px;
     background: url(/images/attacks/buttons.png) -120px 0px;
     margin-bottom: 5px;
-    position: relative;
-    top: 0px;
-    left: 300px;
 }
 .fire-attack:active:after {
+    display: inline-block;
     margin-left:2px;
     margin-right:2px;
     content: ' ';
-    float:left;
     width: 60px;
     height: 60px;
     margin-top: 5px;
     background: url(/images/attacks/buttons.png) -120px -60px;
     margin-bottom: 5px;
-    position: absolute;
-    top: -5px;
-    left: 0px;
 }
 .water-attack {
+    display: inline-block;
     margin-left:2px;
     margin-right:2px;
-    float:left;
     width: 60px;
     height: 60px;
     margin-top: 5px;
     background: url(/images/attacks/buttons.png) 0px 0px;
     margin-bottom: 5px;
-    position: relative;
-    top: 0px;
-    left: 300px;
 }
 .water-attack:active:after {
+    display: inline-block;
     margin-left:2px;
     margin-right:2px;
-    float:left;
     content: ' ';
     width: 60px;
     height: 60px;
     margin-top: 5px;
     background: url(/images/attacks/buttons.png) 0px -60px;
     margin-bottom: 5px;
-    position: absolute;
-    top: -5px;
-    left: 0px;
 }
 .lightning-attack {
+    display: inline-block;
     margin-left:2px;
     margin-right:2px;
-    float:left;
     width: 60px;
     height: 60px;
     margin-top: 5px;
     background: url(/images/attacks/buttons.png) -60px 0px;
     margin-bottom: 5px;
-    position: relative;
-    top: 0px;
-    left: 300px;
 }
 .lightning-attack:active:after {
+    display: inline-block;
     margin-left:2px;
     margin-right:2px;
-    float:left;
     content: ' ';
     width: 60px;
     height: 60px;
     margin-top: 5px;
     background: url(/images/attacks/buttons.png) -60px -60px;
     margin-bottom: 5px;
-    position: absolute;
-    top: -5px;
-    left: 0px;
 }
 .shield-attack {
+    display: inline-block;
     margin-left:2px;
     margin-right:2px;
-    float:left;
     width: 60px;
     height: 60px;
     margin-top: 5px;
     background: url(/images/attacks/buttons.png) -180px 0px;
     margin-bottom: 5px;
-    position: relative;
-    top: 0px;
-    left: 300px;
 }
 .shield-attack:active:after {
+    display: inline-block;
     margin-left:2px;
     margin-right:2px;
-    float:left;
     content: ' ';
     width: 60px;
     height: 60px;
     margin-top: 5px;
     background: url(/images/attacks/buttons.png) -180px -60px;
     margin-bottom: 5px;
-    position: absolute;
-    top: -5px;
-    left: 0px;
 }
 .start-animation-btn {
     width: 170px;
