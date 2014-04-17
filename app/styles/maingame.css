@@ -718,17 +718,17 @@ div#testing123:active > span
     position: fixed;
     top: 50%;
     left: 50%;
-    margin-top: -50px;
-    margin-left: -100px;
+    margin-top: -60px;
+    margin-left: -85px;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     -khtml-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+    z-index: 100;
 }
 .start-animation-btn:active {
-    content: ' ';
     width: 169px;
     height: 120px;
     margin-top: 7px;
@@ -739,7 +739,12 @@ div#testing123:active > span
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-    
+    z-index: 100;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin-top: -50px;
+    margin-left: -85px;
 }
 
 /*
