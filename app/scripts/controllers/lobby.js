@@ -6,6 +6,8 @@ angular.module('PvP')
     $scope.openGame = function (id) {
       Games.join(id).then(function () {
         $location.path('/game/' + id);
+      }, function (reason) {
+        alert(reason);
       });
     }
   });

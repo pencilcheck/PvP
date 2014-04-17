@@ -1,14 +1,1 @@
-<link href="styles/lobby.css" rel="stylesheet" type="text/css">
-<div class="panel panel-default" ng-repeat="game in games | orderByPriority" ng-click="openGame(game.$id)">
-  <div class="panel-heading">
-    <h3 class="panel-title">
-      {{game.title}}
-    </h3>
-  </div>
-  <div class="panel-body">
-    Created at: {{game.createdAt | calendar}}
-    <div class="well">
-      {{game.description}}
-    </div>
-  </div>
-</div>
+<div ng-include="'views/partials/gameList.html'"></div>

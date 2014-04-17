@@ -22,6 +22,7 @@ angular.module('PvP')
       }
     }
 
+    // TODO: move to firebase
     function damageMatrix(moveA, moveB) {
       console.log('damageMatrix', moveA, moveB);
       if ( moveA == 'Fire' ) {

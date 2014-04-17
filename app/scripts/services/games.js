@@ -37,6 +37,11 @@ angular.module('PvP')
         return UserSession.signIn().then(function (user) {
           return convertFirebase(gamesRef.$child(id)).$then(function (game) {
             game.players = game.players || {};
+
+            if (Object.keys(game.players).length >= 2) {
+              return $q.reject('Room is full');
+            }
+
             game.players[user.uid] = {
               uid: user.uid,
               selectedMoves: {},
