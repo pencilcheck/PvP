@@ -221,6 +221,7 @@ margin-left: 180px;
 .displayHide {
     position: fixed;
     bottom: 0%;
+    right: 10%;
 }
 
 ::-webkit-scrollbar {
