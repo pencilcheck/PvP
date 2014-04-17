@@ -64,11 +64,9 @@
       <div id="planetscanvas">
         <div class="bubble">
           <p>
-            <input type="text" />
-            <a ng-repeat="(key, move) in currentPlayer().selectedMoves" ng-click="fight(move, 'iloveyuri')" ng-class="[move.attackCss]" tooltip="{{move.name}}"></a>
-            <a ng-click="dice('iloveyuri')" class="dice-attack" tooltip="Dice"></a>
-            <!--<div class="submit-btn-attack-move "></div>-->
-            <!--<div class="start-animation-btn"></div>-->
+            <input type="text" ng-hide="attackCommitted()" ng-model="smackTalk" />
+            <a ng-repeat="(key, move) in currentPlayer().selectedMoves" ng-click="fight(move, smackTalk)" ng-class="[move.attackCss]" tooltip="{{move.name}}" ng-hide="attackCommitted()"></a>
+            <a ng-click="dice(smackTalk)" class="dice-attack" tooltip="Dice" ng-hide="attackCommitted()"></a>
           </p>
         </div>
         <img src="images/planets/player1.png" id="player1planet">

@@ -2,7 +2,7 @@
 <link rel="stylesheet" href="styles/maingame.css">
 <div class="row">
   <div class="col-md-6">
-    <div ng-hide="movesCommitted()">
+    <div ng-hide="attackCommitted()">
       <h1>Choose 3 Moves:</h1>
       <fieldset ng-disabled="selectedMovesCount() >= 3">
         <div ng-repeat="move in moves" ng-hide="isSelected(move)">
@@ -21,12 +21,12 @@
         </div>
       </fieldset>
     </div>
-    <fieldset ng-show="movesCommitted()">
+    <fieldset ng-show="attackCommitted()">
       <div ng-repeat="(name, move) in currentPlayer().selectedMoves">
         <div ng-class="[move.moveCss]" tooltip="{{move.name}}"></div>
       </div>
     </fieldset>
-    <button ng-hide="movesCommitted()" ng-show="selectedMovesCount() >= 3" class="btn btn-success" ng-click="doneSelectingMoves()">Done</button>
+    <button ng-hide="attackCommitted()" ng-show="selectedMovesCount() >= 3" class="btn btn-success" ng-click="doneSelectingMoves()">Done</button>
   </div>
 
   <div class="col-md-6">

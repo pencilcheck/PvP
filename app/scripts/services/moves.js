@@ -24,32 +24,32 @@ angular.module('PvP')
 
     function damageMatrix(moveA, moveB) {
       console.log(moveA, moveB);
-      if ( moveA == 'volcano' ) {
-        if ( moveB == 'volcano' ) {
+      if ( moveA == 'Fire' ) {
+        if ( moveB == 'Fire' ) {
           return [ 2, 2 ];
-        } else if ( moveB == 'water' ) {
+        } else if ( moveB == 'Water' ) {
           return [ 2, 1 ];
-        } else if ( moveB == 'lightning' ) {
+        } else if ( moveB == 'Lightning' ) {
           return [ 1, 2 ];
-        } else if ( moveB == 'shield' ) {
+        } else if ( moveB == 'Shield' ) {
           return shieldProb();
         }
-      } else if ( moveA == 'water' ) {
-        if ( moveB == 'volcano' ) {
+      } else if ( moveA == 'Water' ) {
+        if ( moveB == 'Fire' ) {
           return [ 1, 2 ];
-        } else if ( moveB == 'water' ) {
+        } else if ( moveB == 'Water' ) {
           return [ 1, 1 ];
-        } else if ( moveB == 'lightning' ) {
+        } else if ( moveB == 'Lightning' ) {
           return [ 2, 1 ];
-        } else if ( moveB == 'shield' ) {
+        } else if ( moveB == 'Shield' ) {
           return shieldProb();
         }
-      } else if ( moveA == 'lightning' ) {
-        if ( moveB == 'volcano' )
+      } else if ( moveA == 'Lightning' ) {
+        if ( moveB == 'Fire' )
           return [ 2, 1 ];
-        else if ( moveB == 'water' )
+        else if ( moveB == 'Water' )
           return [ 1, 2 ];
-        else if ( moveB == 'lightning' ) {
+        else if ( moveB == 'Lightning' ) {
           var chance = Math.floor(Math.random()*2);
           if ( chance == 0 ) {
             side = Math.floor(Math.random()*2);
@@ -59,17 +59,17 @@ angular.module('PvP')
               return [ 0, 3 ];
           } else if ( chance == 1 )
             return [ 2, 2 ];
-        } else if ( moveB == 'shield' ) {
+        } else if ( moveB == 'Shield' ) {
           return shieldProb();
         }
-      } else if ( moveA == 'shield' ) {
-        if ( moveB == 'volcano' ) {
+      } else if ( moveA == 'Shield' ) {
+        if ( moveB == 'Fire' ) {
           return shieldProb(true);
-        } else if ( moveB == 'water' ) {
+        } else if ( moveB == 'Water' ) {
           return shieldProb(true);
-        } else if ( moveB == 'lightning' ) {
+        } else if ( moveB == 'Lightning' ) {
           return shieldProb(true);
-        } else if ( moveB == 'shield' ) {
+        } else if ( moveB == 'Shield' ) {
           return [ 0, 0 ];
         }
       }

@@ -174,7 +174,7 @@ angular.module('PvP')
             }
             game.$save('state')
 
-            this.currentPlayer().movesCommitted = true;
+            this.currentPlayer().attackCommitted = true;
             game.$save('players')
           },
           commitAttack: function (move, smackTalk) {

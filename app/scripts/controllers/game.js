@@ -8,8 +8,8 @@ angular.module('PvP')
     $scope.rounds = gameConfig.rounds
     $scope.state = gameConfig.state
     $scope.rematchModal = null
-    $scope.movesCommitted = function () {
-      return gameConfig.currentPlayer().movesCommitted
+    $scope.attackCommitted = function () {
+      return gameConfig.currentPlayer().attackCommitted
     };
 
     function switchState(newVal, oldVal) {
@@ -22,6 +22,7 @@ angular.module('PvP')
           $scope.viewUrl = 'views/game/selectMoves.html'
           break
         case 'waiting_move':
+          $scope.currentPlayer().attackCommitted = false;
           $scope.viewUrl = 'views/game/fightScene.html'
           $scope.dialog = 'What should ' + $scope.currentPlayer().name + ' do?'
           break
