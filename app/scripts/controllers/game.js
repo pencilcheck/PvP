@@ -2,13 +2,15 @@
 
 angular.module('PvP')
   .controller('GameCtrl', function ($window, $location, $firebase, $scope, $routeParams, $modal, UserSession, Games, gameConfig, Moves, convertFirebase) {
-    $scope.movesCommitted = false
     $scope.moves = Moves.all()
     $scope.players = gameConfig.players
     $scope.game = gameConfig.game
     $scope.rounds = gameConfig.rounds
     $scope.state = gameConfig.state
     $scope.rematchModal = null
+    $scope.movesCommitted = function () {
+      return gameConfig.currentPlayer().movesCommitted
+    };
 
     function switchState(newVal, oldVal) {
       if (newVal != oldVal) {
@@ -154,7 +156,6 @@ angular.module('PvP')
 
     $scope.doneSelectingMoves = function () {
       gameConfig.doneCommitMoves()
-      $scope.movesCommitted = true
     }
 
     // Fight Scene Stage

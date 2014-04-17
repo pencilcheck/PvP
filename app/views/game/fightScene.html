@@ -44,7 +44,7 @@
           </tr>
         </tbody>
       </table>
-      
+
 
     </div>
   </span>
@@ -58,12 +58,18 @@
       <button ng-click="replayAnimation()">Replay Animation</button>
       <button ng-click="skipAnimation()">Skip Animation</button>
     </div>
-    
+
 
     <div id="maincanvas">
       <div id="planetscanvas">
         <div class="bubble">
-          <p>fuck this shit fuck this shit i am the boss, who the hell are you ? fuck this shit i am the boss, who the hell are you ? </p>
+          <p>
+            <input type="text" />
+            <a ng-repeat="(key, move) in currentPlayer().selectedMoves" ng-click="fight(move, 'iloveyuri')" ng-class="[move.attackCss]" tooltip="{{move.name}}"></a>
+            <a ng-click="dice('iloveyuri')" class="dice-attack" tooltip="Dice"></a>
+            <!--<div class="submit-btn-attack-move "></div>-->
+            <!--<div class="start-animation-btn"></div>-->
+          </p>
         </div>
         <img src="images/planets/player1.png" id="player1planet">
         <a id="player1life" class="normalTip" tooltip="Your Life Points">
@@ -71,30 +77,12 @@
           <span id="player1score">x {{currentPlayer().health}}</span>
         </a>
       </div>
-      <div id="buttonscanvas">
-        <div class="player1buttons">
-          <a ng-repeat="(key, move) in currentPlayer().selectedMoves"
-             ng-click="fight(move, 'iloveyuri')">
-            <div ng-show="move.name == 'volcano'" class="fire-attack" tooltip="Fire"></div>
-            <div ng-show="move.name == 'water'" class="water-attack" tooltip="Water"></div>
-            <div ng-show="move.name == 'lightning'" class="lightning-attack" tooltip="Lightning"></div>
-            <div ng-show="move.name == 'shield'" class="shield-attack" tooltip="Shield"></div>
-          </a>
-          <!-- agreed not to have this, select the attack and ur good <div class="submit-btn-attack-move "></div>!-->
-          <!--<div class="dice-attack"></div>-->
-          <!--<div class="submit-btn-attack-move "></div>-->
-          <!--<div class="start-animation-btn"></div>-->
-          
-          <!--<button ng-click="feelingLucky()" tooltip="I'm Feeling Lucky">-->
-            <!--<img id="mainbutton" src="images/buttons/rollthedicebutton.png">-->
-          <!--</button>-->
-        </div>
-      </div>
     </div>
   </div>
-  Second player table
-  <div class="maincanvas">
-    <div id="planetscanvas">
+  <div class="col-md-6">
+    Second player table
+    <div class="maincanvas">
+      <div id="planetscanvas">
         <img src="images/planets/player1.png" id="player2planet">
         <a id="player2life" class="normalTip" tooltip="Your Life Points">
           <img id="player2heart" src="images/misc/life.png">
@@ -104,31 +92,26 @@
           <p>i am going to murder you twice sdfsdf sdfasfdas dfasf asddf asdf asdf sdf</p>
         </div>
       </div>
-
-
-
-
-   
+    </div>
+    <br>
   </div>
 
-    <br>
+  <div class="col-md-5" id="console-log" style="display: none">
+    <ul>
+      <li ng-repeat="round in rounds">
+      {{round.log}}
+      </li>
+    </ul>
+  </div>
+  <button class="displayHide">!!!!!!!!!!!!!!3Toggle this shit</button>
 
-    <div class="col-md-5" id="console-log" style="display: none">
-      <ul>
-        <li ng-repeat="round in rounds">
-        {{round.log}}
-        </li>
-      </ul>
-    </div>
-    <button class="displayHide">!!!!!!!!!!!!!!3Toggle this shit</button>
-
-      <div class="start-animation-btn"></div>
+  <div class="start-animation-btn"></div>
 
 
 
 </div>
 <script>
-$( "button.displayHide" ).click(function() {
-  $( "div.col-md-5" ).toggle();
-});
+  $( "button.displayHide" ).click(function() {
+    $( "div.col-md-5" ).toggle();
+  });
 </script>
