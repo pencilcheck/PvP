@@ -47,6 +47,7 @@
 </div>
 
 <h2 class="well" id="topDialogBox">{{dialog}}</h2>
+<div class="start-animation-btn"></div>
 <div class="row">
   <div class="col-md-6">
     <div ng-show="currentPlayer().notSeenAnimation">
@@ -75,40 +76,34 @@
         </a>
       </div>
     </div>
-    <div class="col-md-6">
-
-      <div class="maincanvas">
-        <div id="planetscanvas">
-          <img src="images/planets/player1.png" id="player2planet"></img>
-          <a id="player2life" class="normalTip" tooltip="Your Life Points">
-            <img id="player2heart" src="images/misc/life.png"></img>
-            <span id="player2score">x {{opponentPlayer().health}}</span>
-          </a>
-          <div class="bubbleSecondPlayer">
-            <p>i am going to murder you twice sdfsdf sdfasfdas dfasf asddf asdf asdf sdf</p>
-          </div>
+  </div>
+  <div class="col-md-6">
+    <div class="maincanvas">
+      <div id="planetscanvas">
+        <img src="images/planets/player1.png" id="player2planet"></img>
+        <a id="player2life" class="normalTip" tooltip="Your Life Points">
+          <img id="player2heart" src="images/misc/life.png"></img>
+          <span id="player2score">x {{opponentPlayer().health}}</span>
+        </a>
+        <div class="bubbleSecondPlayer">
+          <p>i am going to murder you twice sdfsdf sdfasfdas dfasf asddf asdf asdf sdf</p>
         </div>
       </div>
-      <br>
     </div>
-
-    <div class="col-md-5" id="console-log" style="display: none">
-      <ul>
-        <li ng-repeat="round in rounds">
-        {{round.log}}
-        </li>
-      </ul>
-    </div>
-    <button class="displayHide">!!!!!!!!!!!!!!3Toggle this shit</button>
-
-    <div class="start-animation-btn"></div>
-
-
-
   </div>
+</div>
+<div class="row">
+  <div class="col-md-5" id="console-log" style="display: none">
+    <ul>
+      <li ng-repeat="round in rounds">
+      {{round.log}}
+      </li>
+    </ul>
+  </div>
+  <button class="displayHide">!!!!!!!!!!!!!!3Toggle this shit</button>
   <script>
     $( "button.displayHide" ).click(function() {
-      $( "div.col-md-5" ).toggle();
+      $( "#console-log" ).toggle();
     });
   </script>
 </div>
