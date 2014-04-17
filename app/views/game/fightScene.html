@@ -1,5 +1,3 @@
-
-
 <script src="scripts/imagechange.js"></script>
 <div id="comparisontable">
   <div id="testing123">
@@ -44,8 +42,6 @@
           </tr>
         </tbody>
       </table>
-
-
     </div>
   </span>
 </div>
@@ -64,52 +60,55 @@
       <div id="planetscanvas">
         <div class="bubble">
           <p>
-            <input type="text" ng-hide="attackCommitted()" ng-model="smackTalk" />
+            <input type="text" placeholder='Smack Talk' ng-hide="attackCommitted()" ng-model="smackTalk" />
             <a ng-repeat="(key, move) in currentPlayer().selectedMoves" ng-click="fight(move, smackTalk)" ng-class="[move.attackCss]" tooltip="{{move.name}}" ng-hide="attackCommitted()"></a>
             <a ng-click="dice(smackTalk)" class="dice-attack" tooltip="Dice" ng-hide="attackCommitted()"></a>
+            <div ng-show="attackCommitted()" ng-class="[selectedAttack.attackCss]" tooltip="{{selectedAttack.name}}"></div>
+            <p ng-show="attackCommitted()">{{smackTalk}}</p>
           </p>
         </div>
-        <img src="images/planets/player1.png" id="player1planet">
+
+        <img src="images/planets/player1.png" id="player1planet"></img>
         <a id="player1life" class="normalTip" tooltip="Your Life Points">
-          <img id="player1heart" src="images/misc/life.png">
+          <img id="player1heart" src="images/misc/life.png"></img>
           <span id="player1score">x {{currentPlayer().health}}</span>
         </a>
       </div>
     </div>
-  </div>
-  <div class="col-md-6">
+    <div class="col-md-6">
 
-    <div class="maincanvas">
-      <div id="planetscanvas">
-        <img src="images/planets/player1.png" id="player2planet">
-        <a id="player2life" class="normalTip" tooltip="Your Life Points">
-          <img id="player2heart" src="images/misc/life.png">
-          <span id="player2score">x {{opponentPlayer().health}}</span>
-        </a>
-        <div class="bubbleSecondPlayer">
-          <p>i am going to murder you twice sdfsdf sdfasfdas dfasf asddf asdf asdf sdf</p>
+      <div class="maincanvas">
+        <div id="planetscanvas">
+          <img src="images/planets/player1.png" id="player2planet"></img>
+          <a id="player2life" class="normalTip" tooltip="Your Life Points">
+            <img id="player2heart" src="images/misc/life.png"></img>
+            <span id="player2score">x {{opponentPlayer().health}}</span>
+          </a>
+          <div class="bubbleSecondPlayer">
+            <p>i am going to murder you twice sdfsdf sdfasfdas dfasf asddf asdf asdf sdf</p>
+          </div>
         </div>
       </div>
+      <br>
     </div>
-    <br>
+
+    <div class="col-md-5" id="console-log" style="display: none">
+      <ul>
+        <li ng-repeat="round in rounds">
+        {{round.log}}
+        </li>
+      </ul>
+    </div>
+    <button class="displayHide">!!!!!!!!!!!!!!3Toggle this shit</button>
+
+    <div class="start-animation-btn"></div>
+
+
+
   </div>
-
-  <div class="col-md-5" id="console-log" style="display: none">
-    <ul>
-      <li ng-repeat="round in rounds">
-      {{round.log}}
-      </li>
-    </ul>
-  </div>
-  <button class="displayHide">!!!!!!!!!!!!!!3Toggle this shit</button>
-
-  <div class="start-animation-btn"></div>
-
-
-
+  <script>
+    $( "button.displayHide" ).click(function() {
+      $( "div.col-md-5" ).toggle();
+    });
+  </script>
 </div>
-<script>
-  $( "button.displayHide" ).click(function() {
-    $( "div.col-md-5" ).toggle();
-  });
-</script>

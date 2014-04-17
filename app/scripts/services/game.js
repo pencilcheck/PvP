@@ -21,7 +21,7 @@ angular.module('PvP')
       return convertFirebase(game.$child('rounds')).$then(function (rounds) {
         var index = rounds.$getIndex().slice(-1)[0]
 
-        if (index && rounds[index].move && Object.keys(rounds[index].move).length < Object.keys(game.players).length) {
+        if (index && rounds[index] && rounds[index].move && Object.keys(rounds[index].move).length < Object.keys(game.players).length) {
           return convertFirebase(rounds.$child(index)).$then(function (round) {
             return round
           })
@@ -176,6 +176,16 @@ angular.module('PvP')
 
             this.currentPlayer().movesCommitted = true;
             game.$save('players')
+          },
+          getLastestSmackTalk: function () {
+            return getCurrentRound(game).then(function (round) {
+              return round.smackTalk ? round.smackTalk[userId] : ''
+            })
+          },
+          getLastestSelectedAttack: function () {
+            return getCurrentRound(game).then(function (round) {
+              return round.move ? round.move[userId] : null
+            })
           },
           commitAttack: function (move, smackTalk) {
             var self = this

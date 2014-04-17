@@ -10,10 +10,16 @@ angular.module('PvP')
     $scope.rematchModal = null
     $scope.attackCommitted = function () {
       return gameConfig.currentPlayer().attackCommitted
-    };
+    }
     $scope.movesCommitted = function () {
       return gameConfig.currentPlayer().movesCommitted
-    };
+    }
+    gameConfig.getLastestSmackTalk().then(function (talk) {
+      $scope.smackTalk = talk
+    });
+    gameConfig.getLastestSelectedAttack().then(function (attack) {
+      $scope.selectedAttack = attack
+    })
 
     function switchState(newVal, oldVal) {
       if (newVal != oldVal) {
@@ -175,6 +181,8 @@ angular.module('PvP')
     }
 
     $scope.fight = function (move, smackTalk) {
+      $scope.selectedAttack = move
+      $scope.smackTalk = smackTalk
       gameConfig.commitAttack(move, smackTalk)
       $scope.dialog = $scope.currentPlayer().name + " selected " + move.name
     }
