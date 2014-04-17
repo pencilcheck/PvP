@@ -28,9 +28,7 @@ angular.module('PvP')
           $scope.viewUrl = 'views/game/selectMoves.html'
           break
         case 'waiting_move':
-          $scope.attackCommitted = true
-          $scope.lastAttack = move
-          $scope.lastSmackTalk = smackTalk
+          $scope.attackCommitted = false
 
           $scope.viewUrl = 'views/game/fightScene.html'
           $scope.dialog = 'What should ' + $scope.currentPlayer().name + ' do?'
