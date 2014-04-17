@@ -1,4 +1,4 @@
-'user strict';
+'user strict'
 
 angular.module('PvP')
   .factory('Game', function ($window, $location, $rootScope, $routeParams, $q, Games, Moves, Channel, $firebase, firebaseUrl, convertFirebase, UserSession) {
@@ -8,12 +8,12 @@ angular.module('PvP')
         requestsReq = $firebase(new Firebase(firebaseUrl + 'rematchRequests'))
 
     function getOpponentId(players, userId) {
-      var opponentId = null;
+      var opponentId = null
       Object.keys(players).forEach(function (id) {
         if (userId != id) {
           opponentId = id
         }
-      });
+      })
       return opponentId
     }
 
@@ -141,21 +141,21 @@ angular.module('PvP')
           },
           uncommitMove: function (move) {
             convertFirebase(game.$child('players').$child(userId)).$then(function (player) {
-              var moves = player.selectedMoves || {};
-              delete moves[move.name];
-              player.selectedMoves = moves;
-              player.$save();
-              return player;
-            });
+              var moves = player.selectedMoves || {}
+              delete moves[move.name]
+              player.selectedMoves = moves
+              player.$save()
+              return player
+            })
           },
           commitMove: function (move) {
             convertFirebase(game.$child('players').$child(userId)).$then(function (player) {
-              var moves = player.selectedMoves || {};
-              moves[move.name] = move;
-              player.selectedMoves = moves;
-              player.$save();
-              return player;
-            });
+              var moves = player.selectedMoves || {}
+              moves[move.name] = move
+              player.selectedMoves = moves
+              player.$save()
+              return player
+            })
           },
           doneCommitMoves: function () {
             // FIXME: update game.state from firebase before checking
@@ -164,15 +164,15 @@ angular.module('PvP')
                 game.state = {
                   name: 'waiting_pick',
                   detail: userId
-                };
+                }
               } else if (game.state.detail != userId) {
                 game.state = {
                   name: 'waiting_move',
                   detail: 'both'
-                };
+                }
               }
             }
-            game.$save('state');
+            game.$save('state')
           },
           commitAttack: function (move, smackTalk) {
             getCurrentRound(game).then(function (round) {
@@ -187,36 +187,36 @@ angular.module('PvP')
                   game.state = {
                     name: "waiting_other_move",
                     detail: userId
-                  };
+                  }
                 } else if (Object.keys(round.move).length == Object.keys(game.players).length) {
                   var opponentId = getOpponentId(game.players, userId),
-                      result = Moves.damageMatrix(round.move[userId].name, round.move[opponentId].name);
+                      result = Moves.damageMatrix(round.move[userId].name, round.move[opponentId].name)
 
-                  round.log = Moves.textualizeAttack(game.players[userId].name, game.players[opponentId].name, round.move[userId].name, round.move[opponentId].name, result[0], result[1]);
+                  round.log = Moves.textualizeAttack(game.players[userId].name, game.players[opponentId].name, round.move[userId].name, round.move[opponentId].name, result[0], result[1])
 
-                  game.players[userId].health -= result[0];
-                  game.players[opponentId].health -= result[1];
+                  game.players[userId].health -= result[0]
+                  game.players[opponentId].health -= result[1]
 
-                  game.players[userId].notSeenAnimation = round.$id;
-                  game.players[opponentId].notSeenAnimation = round.$id;
-                  game.$save('players');
+                  game.players[userId].notSeenAnimation = round.$id
+                  game.players[opponentId].notSeenAnimation = round.$id
+                  game.$save('players')
 
                   if (game.players[userId].health <= 0 || game.players[opponentId].health <= 0) {
                     game.state = {
                       name: "game_ended"
-                    };
+                    }
 
-                    var winnerId;
+                    var winnerId
                     if (game.players[userId].health > 0) {
-                      winnerId = userId;
+                      winnerId = userId
                     } else if (game.players[opponentId].health > 0) {
-                      winnerId = opponentId;
+                      winnerId = opponentId
                     } else {
                       // Both players have negative health
                       if (Math.abs(result[0]) > Math.abs(result[1])) {
-                        winnerId = opponentId;
+                        winnerId = opponentId
                       } else if (Math.abs(result[0]) < Math.abs(result[1])) {
-                        winnerId = userId;
+                        winnerId = userId
                       }
                     }
 
@@ -224,29 +224,29 @@ angular.module('PvP')
                   } else {
                     game.state = {
                       name: "waiting_move"
-                    };
+                    }
                   }
                 }
 
-                round.$save();
-                game.$save('state');
+                round.$save()
+                game.$save('state')
               }
             })
           }
-        };
+        }
 
 
         o.watch('game', function (id, oldVal, newVal) {
           // Update to server
-          Games.g.$save(gameId);
-        });
+          Games.g.$save(gameId)
+        })
 
         o.watch('players', function (id, oldVal, newVal) {
           // Update to server
-          Games.g.$save(gameId);
-        });
+          Games.g.$save(gameId)
+        })
 
-        return o;
-      });
-    };
-  });
+        return o
+      })
+    }
+  })
