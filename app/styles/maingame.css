@@ -97,14 +97,18 @@ margin-left: 120px;
 }
 
 #loserPlayer {
-    width: 300px;
-    right: -900px;
+    width: 100px;
     position: relative;
-    top: 400px;
+    margin-top: 300px;
+    margin-left: 200px;
+   
+
 }
 
 #winnerPlayer {
-    width: 500px;
+    width: 300px;
+    margin-left: 70%;
+    position: relative;
 }
 
 #rematchbutton {
@@ -598,10 +602,10 @@ div#testing123:active > span
     margin-left:2px;
     margin-right:2px;
     float:left;
-    width: 50px;
-    height: 56px;
+    width: 60px;
+    height: 60px;
     margin-top: 5px;
-    background: url(/images/attacks/buttons.png) -200px 0px;
+    background: url(/images/attacks/buttons.png) -240px 0px;
     margin-bottom: 5px;
     position: relative;
     top: 0px;
@@ -612,10 +616,10 @@ div#testing123:active > span
     margin-right:2px;
     float:left;
     content: ' ';
-    width: 50px;
-    height: 56px;
+    width: 60px;
+    height: 60px;
     margin-top: 5px;
-    background: url(/images/attacks/buttons.png) -200px -60px;
+    background: url(/images/attacks/buttons.png) -240px -60px;
     margin-bottom: 5px;
     position: absolute;
     top: -5px;
@@ -625,10 +629,10 @@ div#testing123:active > span
     margin-left:2px;
     margin-right:2px;
     float:left;
-    width: 50px;
-    height: 56px;
+    width: 60px;
+    height: 60px;
     margin-top: 5px;
-    background: url(/images/attacks/buttons.png) -100px 0px;
+    background: url(/images/attacks/buttons.png) -120px 0px;
     margin-bottom: 5px;
     position: relative;
     top: 0px;
@@ -639,10 +643,10 @@ div#testing123:active > span
     margin-right:2px;
     content: ' ';
     float:left;
-    width: 50px;
-    height: 56px;
+    width: 60px;
+    height: 60px;
     margin-top: 5px;
-    background: url(/images/attacks/buttons.png) -100px -60px;
+    background: url(/images/attacks/buttons.png) -120px -60px;
     margin-bottom: 5px;
     position: absolute;
     top: -5px;
@@ -652,8 +656,8 @@ div#testing123:active > span
     margin-left:2px;
     margin-right:2px;
     float:left;
-    width: 50px;
-    height: 56px;
+    width: 60px;
+    height: 60px;
     margin-top: 5px;
     background: url(/images/attacks/buttons.png) 0px 0px;
     margin-bottom: 5px;
@@ -666,8 +670,8 @@ div#testing123:active > span
     margin-right:2px;
     float:left;
     content: ' ';
-    width: 50px;
-    height: 56px;
+    width: 60px;
+    height: 60px;
     margin-top: 5px;
     background: url(/images/attacks/buttons.png) 0px -60px;
     margin-bottom: 5px;
@@ -679,10 +683,10 @@ div#testing123:active > span
     margin-left:2px;
     margin-right:2px;
     float:left;
-    width: 50px;
-    height: 56px;
+    width: 60px;
+    height: 60px;
     margin-top: 5px;
-    background: url(/images/attacks/buttons.png) -50px 0px;
+    background: url(/images/attacks/buttons.png) -60px 0px;
     margin-bottom: 5px;
     position: relative;
     top: 0px;
@@ -693,10 +697,10 @@ div#testing123:active > span
     margin-right:2px;
     float:left;
     content: ' ';
-    width: 50px;
-    height: 56px;
+    width: 60px;
+    height: 60px;
     margin-top: 5px;
-    background: url(/images/attacks/buttons.png) -50px -60px;
+    background: url(/images/attacks/buttons.png) -60px -60px;
     margin-bottom: 5px;
     position: absolute;
     top: -5px;
@@ -706,10 +710,10 @@ div#testing123:active > span
     margin-left:2px;
     margin-right:2px;
     float:left;
-    width: 50px;
-    height: 56px;
+    width: 60px;
+    height: 60px;
     margin-top: 5px;
-    background: url(/images/attacks/buttons.png) -150px 0px;
+    background: url(/images/attacks/buttons.png) -180px 0px;
     margin-bottom: 5px;
     position: relative;
     top: 0px;
@@ -720,10 +724,10 @@ div#testing123:active > span
     margin-right:2px;
     float:left;
     content: ' ';
-    width: 50px;
-    height: 56px;
+    width: 60px;
+    height: 60px;
     margin-top: 5px;
-    background: url(/images/attacks/buttons.png) -150px -60px;
+    background: url(/images/attacks/buttons.png) -180px -60px;
     margin-bottom: 5px;
     position: absolute;
     top: -5px;
@@ -732,7 +736,7 @@ div#testing123:active > span
 .start-animation-btn {
     width: 170px;
     height: 120px;
-    background: url(/images/attacks/buttons.png) 300px -118px;
+    background: url(/images/attacks/buttons.png) 370px -118px;
     position: relative;
     top: 200px;
     left: 450px;
@@ -742,7 +746,7 @@ div#testing123:active > span
     width: 169px;
     height: 120px;
     margin-top: 7px;
-    background: url(/images/attacks/buttons.png) 300px -240px;
+    background: url(/images/attacks/buttons.png) 370px -240px;
     
 }
 

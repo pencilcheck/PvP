@@ -1,7 +1,3 @@
-<link rel="stylesheet" href="styles/maingame.css">  
-<link href="styles/style3.css" rel="stylesheet" type="text/css" />
-<script src="scripts/tooltip.js"></script>
-<script src="scripts/imagechange.js"></script>
 
 
 <div class="rematch">
@@ -9,13 +5,16 @@
 </div>
 <div class="row">
   <div>
-    <div id="maincanvas">
+    <div id="maincanvas">  
       <div id="planetscanvas">
+        <img src="images/planets/player1.png" id="winnerPlayer"><div class="WinnerPlayerName">{{winner.name}}</div>
+      </div>  
+        <div id="planetscanvas">
         <img src="images/planets/player1.png" id="loserPlayer">
-      </div>   
-      <div id="planetscanvas">
-        <img src="images/planets/player1.png" id="winnerPlayer">{{winner.name}}
-      </div>      
+      </div>     
     </div>  
   </div>
+</div>
+<div class="back2lobby">
+  <a class="btn" id="back2lobbybutton" ng-click="back2lobby()">back 2 lobby, BITCH</a>
 </div>
