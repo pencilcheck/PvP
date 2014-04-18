@@ -1,11 +1,36 @@
 'user strict';
 
 angular.module('PvP')
-  .factory('Moves', function (firebaseUrl, $firebase, convertFirebase) {
-    var moves = convertFirebase($firebase(new Firebase(firebaseUrl + 'moves')));
+  .factory('Moves', function (firebaseUrl) {
+    var moves = {
+      fire: {
+        attackCss: 'fire-attack',
+        moveCss: 'fire-move',
+        name: 'Fire',
+        src: 'images/buttons/volcanobutton.png'
+      },
+      lightning: {
+        attackCss: 'lightning-attack',
+        moveCss: 'lightning-move',
+        name: 'Lightning',
+        src: 'images/buttons/lightningbutton.png'
+      },
+      water: {
+        attackCss: 'water-attack',
+        moveCss: 'water-move',
+        name: 'Water',
+        src: 'images/buttons/waterbutton.png'
+      },
+      shield: {
+        attackCss: 'shield-attack',
+        moveCss: 'shield-move',
+        name: 'Shield',
+        src: 'images/buttons/magneticfieldbutton.png'
+      }
+    }
 
     function textualizeAttack(playerA, playerB, moveA, moveB, damageA, damageB) {
-      return playerA + ' has taken ' + damageA + ' from ' + moveB + '; ' + playerB + ' has taken ' + damageB + ' from ' + moveA + '.';
+      return playerA + ' has taken ' + damageA + ' from ' + moveB + ' :: ' + playerB + ' has taken ' + damageB + ' from ' + moveA + '.';
     };
 
     function shieldProb(reverse) {
@@ -80,18 +105,7 @@ angular.module('PvP')
 
 
     return {
-      all: function () {
-        return moves;
-      },
-
-      add: function (move) {
-        return moves.$add(move);
-      },
-
-      get: function (id) {
-        return moves[id];
-      },
-
+      moves: moves,
       damageMatrix: damageMatrix,
       textualizeAttack: textualizeAttack
     };

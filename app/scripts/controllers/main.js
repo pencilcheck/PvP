@@ -1,56 +1,36 @@
 'use strict';
 
 angular.module('PvP')
-  .controller('MainCtrl', function ($scope, $location, $filter, Games, Moves, $firebase, UserSession) {
+  .controller('MainCtrl', function ($scope, $location, $filter, Games, UserSession) {
 
-    Moves.all().$then(function (moves) {
-      console.log(moves.$getIndex());
-      if (moves.$getIndex().length == 0) {
-        Moves.add({
-          name: 'Fire',
-          attackCss: 'fire-attack',
-          moveCss: 'fire-attack',
-          src: 'images/buttons/volcanobutton.png'
-        });
-
-        Moves.add({
-          name: 'Lightning',
-          attackCss: 'lightning-attack',
-          moveCss: 'lightning-move',
-          src: 'images/buttons/lightningbutton.png'
-        });
-
-        Moves.add({
-          name: 'Water',
-          attackCss: 'water-attack',
-          moveCss: 'water-move',
-          src: 'images/buttons/waterbutton.png'
-        });
-
-        Moves.add({
-          name: 'Shield',
-          attackCss: 'shield-attack',
-          moveCss: 'shield-move',
-          src: 'images/buttons/magneticfieldbutton.png'
-        });
-      }
-    });
-    $scope.games = Games.all();
+    $scope.games = Games.all()
 
     $scope.add = function() {
-      Games.create({
-        title: 'test',
-        description: 'Best game ever',
-      }).then(function (id) {
-        $location.path('/game/' + id);
-      });
+      UserSession.signIn().then(function (user) {
+        Games.create({
+          host: user,
+          title: 'test',
+          description: 'Best game ever',
+        }).then(function (game) {
+          // Don't redeem to invite
+          $location.path('/game/' + game.raw().$id);
+          //game.$redeem(user).then(function () {
+          //})
+        }, function (reason) {
+          alert(reason)
+        });
+      })
     };
 
     $scope.openGame = function (id) {
-      Games.join(id).then(function () {
-        $location.path('/game/' + id);
-      }, function (reason) {
-        alert(reason);
-      });
+      UserSession.signIn().then(function (user) {
+        Games.get(id).then(function (game) {
+          game.$redeem(user).then(function (game) {
+            $location.path('/game/' + game.raw().$id);
+          }, function (reason) {
+            alert(reason);
+          });
+        })
+      })
     }
   });

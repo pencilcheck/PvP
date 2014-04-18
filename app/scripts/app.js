@@ -50,14 +50,16 @@ angular.module('PvP', [
         templateUrl: '/views/game.html',
         controller: 'GameCtrl',
         resolve: {
-          gameConfig: function (Game, UserSession, $route) {
-            return Game($route.current.params.gameId, UserSession.currentUser().uid);
+          currentUser: function (UserSession) {
+            return UserSession.currentUser()
+          },
+          game: function ($route, Games) {
+            return Games.get($route.current.params.gameId)
+          },
+          rematchRequests: function (pvpSync) {
+            return pvpSync('/rematchRequests').$promise
           }
         }
-      })
-      .when('/moves', {
-        templateUrl: 'views/moves.html',
-        controller: 'MovesCtrl'
       })
       .otherwise({
         redirectTo: '/'

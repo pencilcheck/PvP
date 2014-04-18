@@ -1,264 +1,92 @@
 'user strict'
 
 angular.module('PvP')
-  .factory('Game', function ($window, $location, $rootScope, $routeParams, $q, Games, Moves, Channel, $firebase, firebaseUrl, convertFirebase, UserSession) {
-    var games = Games.all(),
-        meta = Games.get(),
-        log = [],
-        requestsReq = $firebase(new Firebase(firebaseUrl + 'rematchRequests'))
+  .factory('GameStates', function () {
+    return {
+      opened: 0,
+      invitesSent: 1,
+      started: 2,
+      movesPicked: 3,
+      finished: 4
+    }
+  })
 
-    function getOpponentId(players, userId) {
-      var opponentId = null
-      Object.keys(players).forEach(function (id) {
-        if (userId != id) {
-          opponentId = id
-        }
-      })
-      return opponentId
+  .factory('Game', function ($q, GameStates) {
+
+    var Game = function (game) {
+      this._game = game
+      this._limit = 2
     }
 
-    function getCurrentRound(game) {
-      return convertFirebase(game.$child('rounds')).$then(function (rounds) {
-        var index = rounds.$getIndex().slice(-1)[0]
+    Game.prototype.raw = function () {
+      return this._game
+    }
 
-        if (index && rounds[index] && rounds[index].move && Object.keys(rounds[index].move).length < Object.keys(game.players).length) {
-          return convertFirebase(rounds.$child(index)).$then(function (round) {
-            round.$id = index
-            return round
-          })
-        } else {
-          return rounds.$add({move: {}, log: ''}).then(function (round) {
-            var r = $firebase(round)
-            r.$id = round.name()
-            return r
-          })
+    Game.prototype.opponentOf = function (userId) {
+      // We assume there are only two participants
+      for (var id in this._game.participants) {
+        if (this._game.participants.hasOwnProperty(id)) {
+          if (id != userId)
+            return this._game.participants[id]
         }
+      }
+    }
+
+    Game.prototype.player = function (id) {
+      return this._game.participants[id]
+    }
+
+    Game.prototype.$redeem = function (user) {
+      this._game.participants = this._game.participants || {}
+
+      if (!this._game.invitations && this._game.state < GameStates.started) {
+        // Open game, accept everyone
+      } else if ((this._game.invitations && this._game.invitations.indexOf(user.uid) == -1) || this._game.state >= GameStates.started) {
+        return $q.reject('Not invited or Game started')
+      }
+
+      this._game.participants[user.uid] = {
+        selectedMoves: {},
+        health: 10,
+        name: user.displayName,
+        uid: user.uid,
+      }
+      
+      var self = this
+      return this._game.$save().then(function () {
+        return self
       })
     }
 
-    return function (gameId, userId) {
-      return Games.get(gameId).$then(function (game) {
-        var o = {
-          onChange: function (attr, cb) {
-            game.$child(attr).$on('change', function () {
-              cb(game[attr])
-            })
-          },
-          game: game,
-          rounds: game.$child('rounds'),
-          players: game.players,
-          opponentPlayer: function () {
-            var opponentId = null
-            Object.keys(game.players).forEach(function (id) {
-              if (userId != id) {
-                opponentId = id
-              }
-            })
-            return game.players[opponentId]
-          },
-          currentPlayer: function () {
-            return game.players[userId]
-          },
-          turnOffListeners: function () {
-            requestsReq.$off()
-          },
-          state: game.state,
-          rounds: game.$child('rounds'),
-          acceptRematchRequest: function (request) {
-            console.log('accept request', request)
-            if (request) {
-              request.response = 'accept'
-              request.$save().then(function () {
-                request.$on('change', function () {
-                  if (request.gameId) {
-                    request.$off()
-                    requestsReq.$off()
-                    console.log('requester has created a new game', request.gameId)
-                    // joins the game
-                    Games.join(request.gameId).then(function () {
-                      console.log('joins the game')
-                      request.$remove().then(function () {
-                        // Have to force it
-                        $window.location.href = '/#/game/' + request.gameId
-                      })
-                    })
-                  }
-                })
-              })
-            }
-          },
-          rejectRematchRequest: function (request) {
-            console.log('reject', request)
-            if (request) {
-              console.log('reject rematch request', request)
-              // FIXME: request has no $update method
-              request.response = 'reject'
-              request.$save()
-            }
-          },
-          requestRematch: function () {
-            console.log('requesting rematch')
-            var self = this,
-                opponentId = getOpponentId(game.players, userId)
+    Game.prototype.$save = function () {
+      return this._game.$save()
+    }
 
-            requestsReq.$add({
-              requester: userId,
-              userToRematch: opponentId,
-              fromGameId: gameId,
-              response: null
-            })
-          },
-          listenOnRematchRequests: function (callbacks) {
-            console.log('listenOnRematchRequests')
-            var self = this,
-                opponentId = getOpponentId(game.players, userId)
-            
-            function onChange() {
-              convertFirebase(requestsReq).$then(function (requests) {
-                console.log('onChange')
-                requests.$getIndex().forEach(function (key) {
+    Game.prototype.$invite = function (users) {
+      this._game.invitations = this._game.invitations || []
 
-                  // Responded
-                  if (requests[key].requester == userId && requests[key].userToRematch == opponentId && requests[key].fromGameId == gameId && requests[key].response && !requests[key].gameId) { // No gameId
-                    console.log('hasResponse', requests[key])
-                    convertFirebase(requests.$child(key)).$then(function (request) {
-                        callbacks.hasResponse(request)
-                    })
-                  }
+      if (users.length + this._game.invitations.length > this._limit) {
+        return $q.reject("Can't invite over the limit (" + this._limit + ")")
+      }
 
-                  // Request
-                  if (requests[key].requester == opponentId && requests[key].userToRematch == userId && requests[key].fromGameId == gameId && !requests[key].response) {
-                    console.log('hasRequest', requests[key])
-                    convertFirebase(requests.$child(key)).$then(function (request) {
-                        callbacks.hasRequest(request)
-                    })
-                  }
-                })
-              })
-            }
-            onChange()
+      if (users.length == 0) {
+        return $q.reject("Has to invite users")
+      }
 
-            requestsReq.$on('change', function () {
-              console.log('requestsReq onChange')
-              onChange()
-            })
-          },
-          uncommitMove: function (move) {
-            convertFirebase(game.$child('players').$child(userId)).$then(function (player) {
-              var moves = player.selectedMoves || {}
-              delete moves[move.name]
-              player.selectedMoves = moves
-              player.$save()
-              return player
-            })
-          },
-          commitMove: function (move) {
-            convertFirebase(game.$child('players').$child(userId)).$then(function (player) {
-              var moves = player.selectedMoves || {}
-              moves[move.name] = move
-              player.selectedMoves = moves
-              player.$save()
-              return player
-            })
-          },
-          doneCommitMoves: function () {
-            // FIXME: update game.state from firebase before checking
-            if (game.state.name == 'waiting_pick') {
-              if (game.state.detail == 'both') {
-                game.state = {
-                  name: 'waiting_pick',
-                  detail: userId
-                }
-              } else if (game.state.detail != userId) {
-                game.state = {
-                  name: 'waiting_move',
-                  detail: 'both'
-                }
-              }
-            }
-            game.$save('state')
-
-            this.currentPlayer().movesCommitted = true;
-            game.$save('players')
-          },
-          commitAttack: function (move, smackTalk) {
-            var self = this
-
-            getCurrentRound(game).then(function (round) {
-              if (round.move && !round.move[userId] || !round.move) {
-                round.move = round.move || {}
-                round.smackTalk = round.smackTalk || {}
-
-                round.move[userId] = move
-                round.smackTalk[userId] = smackTalk
-
-                game.players[userId].lastRoundId = round.$id
-
-                if (Object.keys(round.move).length < Object.keys(game.players).length) {
-                  game.state = {
-                    name: "waiting_other_move",
-                    detail: userId
-                  }
-                } else if (Object.keys(round.move).length == Object.keys(game.players).length) {
-                  var opponentId = getOpponentId(game.players, userId),
-                      result = Moves.damageMatrix(round.move[userId].name, round.move[opponentId].name)
-                  console.log('result of damage', result);
-
-                  round.log = Moves.textualizeAttack(game.players[userId].name, game.players[opponentId].name, round.move[userId].name, round.move[opponentId].name, result[0], result[1])
-
-                  game.players[userId].health -= result[0]
-                  game.players[opponentId].health -= result[1]
-
-                  game.players[userId].notSeenAnimation = true
-                  game.players[opponentId].notSeenAnimation = true
-
-                  if (game.players[userId].health <= 0 || game.players[opponentId].health <= 0) {
-                    game.state = {
-                      name: "game_ended"
-                    }
-
-                    var winnerId
-                    if (game.players[userId].health > 0) {
-                      winnerId = userId
-                    } else if (game.players[opponentId].health > 0) {
-                      winnerId = opponentId
-                    } else {
-                      // Both players have negative health
-                      if (Math.abs(result[0]) > Math.abs(result[1])) {
-                        winnerId = opponentId
-                      } else if (Math.abs(result[0]) < Math.abs(result[1])) {
-                        winnerId = userId
-                      }
-                    }
-
-                    game.state.detail = game.players[winnerId]
-                  } else {
-                    game.state = {
-                      name: "waiting_move"
-                    }
-                  }
-                }
-
-                round.$save()
-                game.$save('state')
-                game.$save('players')
-              }
-            })
-          }
+      var self = this
+      users.forEach(function (user) {
+        console.log('inviting', user)
+        if (self._game.invitations.indexOf(user.uid) == -1) {
+          self._game.invitations.push(user.uid)
         }
+      })
 
+      this._game.state = GameStates.invitesSent
 
-        o.watch('game', function (id, oldVal, newVal) {
-          // Update to server
-          Games.g.$save(gameId)
-        })
-
-        o.watch('players', function (id, oldVal, newVal) {
-          // Update to server
-          Games.g.$save(gameId)
-        })
-
-        return o
+      return this._game.$save().then(function () {
+        return self
       })
     }
+
+    return Game
   })

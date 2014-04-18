@@ -49,32 +49,33 @@
 </div>
 
 <h2 class="well" id="topDialogBox">{{dialog}}</h2>
-<div class="start-animation-btn"></div>
 <div class="row">
   <div class="col-md-6">
-    <div ng-show="currentPlayer().notSeenAnimation">
-      This is suppose to be showing the animation of the round stored in notSeenAnimation
-      <button ng-click="replayAnimation()">Replay Animation</button>
-      <button ng-click="skipAnimation()">Skip Animation</button>
+    <div ng-show="notSeenAnimation">
+      <div ng-click="skipAnimation()" class="start-animation-btn"></div>
     </div>
-
 
     <div id="maincanvas">
       <div id="planetscanvas">
         <div class="bubble">
           <p>
-            <input type="text" placeholder='Smack Talk' ng-hide="attackCommitted" ng-model="smackTalk" />
-            <a ng-repeat="(key, move) in currentPlayer().selectedMoves" ng-click="fight(move, smackTalk)" ng-class="[move.attackCss]" tooltip="{{move.name}}" ng-hide="attackCommitted"></a>
-            <a ng-click="dice(smackTalk)" class="dice-attack" tooltip="Dice" ng-hide="attackCommitted"></a>
-            <div ng-show="attackCommitted" ng-class="[lastAttack.attackCss]" tooltip="{{lastAttack.name}}"></div>
-            <p ng-show="attackCommitted">{{lastSmackTalk}}</p>
+            <div ng-hide="attackCommitted()">
+              <input type="text" placeholder='Smack Talk' ng-model="smackTalk" />
+              <a ng-repeat="(key, move) in selectedMoves" ng-click="fight(key)" ng-class="[move.attackCss]" tooltip="{{move.name}}"></a>
+              <a ng-click="dice()" class="dice-attack" tooltip="Dice"></a>
+            </div>
+
+            <div ng-show="attackCommitted()">
+              <div ng-class="[attack.attackCss]" tooltip="{{attack.name}}"></div>
+              <p>{{smackTalk}}</p>
+            </div>
           </p>
         </div>
 
         <img src="images/planets/player1.png" id="player1planet"></img>
         <a id="player1life" class="normalTip" tooltip="Your Life Points">
           <img id="player1heart" src="images/misc/life.png"></img>
-          <span id="player1score">x {{currentPlayer().health}}</span>
+          <span id="player1score">x {{health}}</span>
           <!-- @Penn, class="fadeOutDown animated" : if you add this to the heart, then it will fade down. We can do some more cool things with it, but we need you to add this to jquery as soon as you get hurt (so maybe x amount of hearts fade down?
           http://daneden.github.io/animate.css/ for more info
           -->
@@ -88,7 +89,7 @@
         <img src="images/planets/player1.png" id="player2planet"></img>
         <a id="player2life" class="normalTip" tooltip="Your Life Points">
           <img id="player2heart" src="images/misc/life.png"></img>
-          <span id="player2score">x {{opponentPlayer().health}}</span>
+          <span id="player2score">x {{opponentHealth}}</span>
         </a>
         <div class="bubbleSecondPlayer">
           <p>i am going to murder you twice sdfsdf sdfasfdas dfasf asddf asdf asdf sdf</p>
@@ -101,7 +102,7 @@
   <div class="col-md-5" id="console-log" style="display: none">
     <ul>
       <li ng-repeat="round in rounds">
-      {{round.log}}
+        {{round.log}}
       </li>
     </ul>
   </div>
