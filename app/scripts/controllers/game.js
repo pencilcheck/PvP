@@ -54,8 +54,8 @@ angular.module('PvP')
 
       if (game.raw().state == GameStates.started && allMovesCommitted()) {
         game.raw().state = GameStates.movesPicked
+        game.$save()
       }
-      game.$save()
     }
 
     // This watcher looks at the participants, if it is a open game and full, it
