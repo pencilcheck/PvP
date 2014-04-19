@@ -1,7 +1,7 @@
 'use strict'
 
 angular.module('PvP')
-  .controller('GameCtrl', function ($scope, $rootScope, $timeout, $location, $routeParams, $modal, currentUser, Games, GameStates, game, Moves, rematchRequests, Facebook) {
+  .controller('GameCtrl', function ($scope, $rootScope, $timeout, $location, $routeParams, $modal, currentUser, Games, GameStates, game, Moves, rematchRequests, Facebook, pvpSync) {
 
     $rootScope.$on('$routeChangeError', function () {
       $location.path('/')
@@ -30,9 +30,12 @@ angular.module('PvP')
           setupFightScene()
           break
         case GameStates.finished:
-          console.log('Someone died: to endGame')
-          $scope.viewUrl = 'views/game/endGame.html'
-          setupEndGame()
+          // The first time loading
+          if (!$scope.viewUrl) {
+            console.log('Someone died: to endGame')
+            $scope.viewUrl = 'views/game/endGame.html'
+            setupEndGame()
+          }
           break
         default:
           break
@@ -119,23 +122,23 @@ angular.module('PvP')
       }
     }
 
+    // Don't save game here
     function determineWinner(health, opponentHealth, damageToCurrentUser, damageToOpponent) {
       if (health <= 0 || opponentHealth <= 0) {
         if (health > 0) {
-          game.raw().winner = currentUser
+          game.raw().winner = currentUser.uid
         } else if (opponentHealth > 0) {
-          game.raw().winner = game.opponentOf(currentUser.uid)
+          game.raw().winner = game.opponentOf(currentUser.uid).uid
         } else {
           // Both players have negative health
           if (Math.abs(damageToCurrentUser) > Math.abs(damageToOpponent)) {
-            game.raw().winner = game.opponentOf(currentUser.uid)
+            game.raw().winner = game.opponentOf(currentUser.uid).uid
           } else if (Math.abs(damageToCurrentUser) < Math.abs(damageToOpponent)) {
-            game.raw().winner = currentUser
+            game.raw().winner = currentUser.uid
           } else {
             // TODO: Draw
           }
         }
-        game.$save()
       }
     }
 
@@ -148,10 +151,30 @@ angular.module('PvP')
 
         // If there is a winner jump to final screen
         if (game.raw().winner) {
-          if (game.raw().state == GameStates.movesPicked) {
-            game.raw().state = GameStates.finished
-            game.$save()
-          }
+          game.raw().state = GameStates.finished
+          game.$save()
+
+          console.log('Someone died: to endGame')
+          $scope.viewUrl = 'views/game/endGame.html'
+          setupEndGame()
+
+          var winner = pvpSync('/players/' + game.raw().winner)
+          winner.$promise.then(function () {
+            winner.wins = winner.wins || []
+            if (winner.wins.indexOf(game.raw().$id)) {
+              winner.wins.push(game.raw().$id)
+              winner.$save()
+            }
+          })
+
+          var loser = pvpSync('/players/' + game.opponentOf(game.raw().winner).uid)
+          loser.$promise.then(function () {
+            loser.loses = loser.loses || []
+            if (loser.loses.indexOf(game.raw().$id)) {
+              loser.loses.push(game.raw().$id)
+              loser.$save()
+            }
+          })
         }
       }
     })
@@ -283,10 +306,6 @@ angular.module('PvP')
         console.log('getIndex', requests.$getIndex())
         requests.$getIndex().forEach(function (key) {
           var request = requests[key]
-
-          console.log(request)
-          console.log('currentUser', currentUser.uid)
-          console.log('opponent', game.opponentOf(currentUser.uid).uid)
 
           if (request.from == currentUser.uid && 
                 request.to == game.opponentOf(currentUser.uid).uid && 

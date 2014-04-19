@@ -24,6 +24,8 @@ angular.module('PvP')
     };
 
     $scope.openGame = function (id) {
-      $location.path('/game/' + id)
+      UserSession.signIn().then(function (user) {
+        $location.path('/game/' + id)
+      })
     }
   });

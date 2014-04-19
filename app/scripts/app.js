@@ -60,7 +60,9 @@ angular.module('PvP', [
         controller: 'GameCtrl',
         resolve: {
           currentUser: function (UserSession) {
-            return UserSession.currentUser()
+            return UserSession.signIn().then(function (user) {
+              return UserSession.currentUser()
+            })
           },
           game: function ($route, Games, UserSession) {
             return Games.get($route.current.params.gameId).then(function (game) {
