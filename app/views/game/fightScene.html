@@ -60,14 +60,14 @@
         <div class="bubble">
           <p>
             <div ng-hide="attackCommitted()">
-              <input type="text" placeholder='Smack Talk' ng-model="smackTalk" id="smackTalk" />
-              <a ng-repeat="(key, move) in selectedMoves" ng-click="fight(key, smackTalk)" ng-class="[move.attackCss]" tooltip="{{move.name}}"></a>
+              <input type="text" placeholder='Smack Talk' ng-model="form.smackTalk" id="smackTalk" />
+              <a ng-repeat="(key, move) in selectedMoves" ng-click="fight(key, form.smackTalk)" ng-class="[move.attackCss]" tooltip="{{move.name}}"></a>
               <a ng-click="dice()" class="dice-attack" tooltip="Dice"></a>
             </div>
 
             <div ng-show="attackCommitted()">
               <div ng-class="[attack.attackCss]" tooltip="{{attack.name}}"></div>
-              <p>{{smackTalk}}</p>
+              <p>{{form.smackTalk}}</p>
             </div>
           </p>
         </div>

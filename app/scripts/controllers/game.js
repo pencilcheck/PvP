@@ -116,7 +116,7 @@ angular.module('PvP')
           } else if (Math.abs(damageToCurrentUser) < Math.abs(damageToOpponent)) {
             game.raw().winner = currentUser
           } else {
-            // Draw
+            // TODO: Draw
           }
         }
         game.$save()
@@ -126,7 +126,8 @@ angular.module('PvP')
     $scope.$watch('notSeenAnimation', function (newVal, oldVal) {
       if (!newVal && oldVal) {
         console.log('Reset smackTalk, and opponent')
-        $scope.smackTalk = $scope.opponentSmackTalk = ''
+        $scope.form = {}
+        $scope.opponentSmackTalk = ''
         $scope.attack = $scope.opponentAttack = null
 
         // If there is a winner jump to final screen
@@ -218,10 +219,11 @@ angular.module('PvP')
 
       $scope.notSeenAnimation = false
 
-      $scope.smackTalk = $scope.opponentSmackTalk = ''
+      $scope.form = {}
+      $scope.opponentSmackTalk = ''
       $scope.attack = $scope.opponentAttack = null
       if (game.raw().currentRound[currentUser.uid]) {
-        $scope.smackTalk = game.raw().currentRound[currentUser.uid].smackTalk
+        $scope.form.smackTalk = game.raw().currentRound[currentUser.uid].smackTalk
         $scope.attack = Moves.moves[game.raw().currentRound[currentUser.uid].moveKey]
       }
 
@@ -250,9 +252,9 @@ angular.module('PvP')
           smackTalk: smackTalk
         }
         game.$save()
-        $scope.smackTalk = angular.copy(smackTalk)
+        $scope.form.smackTalk = angular.copy(smackTalk)
         $scope.attack = angular.copy(Moves.moves[key])
-        console.log('attacking with attack and smackTalk', $scope.attack, $scope.smackTalk)
+        console.log('attacking with attack and smackTalk', $scope.attack, $scope.form.smackTalk)
       }
 
       $scope.dice = function () {
