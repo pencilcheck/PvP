@@ -98,7 +98,7 @@ angular.module('PvP')
 
       $scope.commitSelectedMoves = function () {
         if ($scope.selectedMovesCount() == 3) {
-          game.player(currentUser.uid).movesCommitted = true
+          $scope.movesCommitted = game.player(currentUser.uid).movesCommitted = true
           game.player(currentUser.uid).selectedMoves = $scope.selectedMoves
           game.$save()
         }
