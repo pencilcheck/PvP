@@ -4,16 +4,38 @@ angular.module('PvP')
 
 .factory('pvpSync', function (firebaseUrl, $interval, $timeout, $q) {
 
-  function _cleanDollarProps(raw) {
+  function _handleUndefined(obj) {
+    if (typeof obj == 'object' && obj != null) {
+      _.keys(obj).forEach(function (key) {
+        console.log('cleaning prop', key, obj[key])
+        if (!obj[key]) {
+          console.log('cleaning prop', key)
+          obj[key] = {}
+        } else {
+          obj[key] = _handleUndefined(obj[key])
+        }
+      })
+      return obj
+    } else {
+      if (obj == null) {
+        return {}
+      }
+      return obj
+    }
+  }
+
+  function _clean(raw) {
     // Recusion (stack too long)
     //_.keys(raw).forEach(function (key) {
       //if (typeof raw[key] === 'object')
-        //raw[key] = _cleanDollarProps(raw[key])
+        //raw[key] = _clean(raw[key])
     //})
 
-    return _.omit(raw, Object.keys(raw).filter(function (key) {
+    console.log('_clean')
+    var cleaned = _.omit(raw, Object.keys(raw).filter(function (key) {
       return key.startsWith('$')
     }))
+    return _handleUndefined(cleaned)
   }
 
   var PvpSync = function (pathOrRef) {
@@ -37,7 +59,7 @@ angular.module('PvP')
       },
       $push: function (obj) {
         var deferred = $q.defer()
-        var ref = firebaseRef.push(_cleanDollarProps(obj), function () {
+        var ref = firebaseRef.push(_clean(obj), function () {
           PvpSync(ref).$promise.then(function (sync) {
             deferred.resolve(sync)
           })
@@ -46,7 +68,7 @@ angular.module('PvP')
       },
       $save: function () {
         var deferred = $q.defer()
-        firebaseRef.set(_cleanDollarProps(this), function () {
+        firebaseRef.set(_clean(this), function () {
           deferred.resolve(this)
         }.bind(this))
         return deferred.promise
