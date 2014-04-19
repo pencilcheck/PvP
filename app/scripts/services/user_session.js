@@ -15,10 +15,10 @@ angular.module('PvP')
 
     function updatePlayer(user) {
       if (players[user.uid]) {
-        players[user.uid] = user
+        players[user.uid].profile = user
         players.$save()
       } else {
-        players.$child(user.uid).$set(user)
+        players.$child(user.uid).$child('profile').$set(user)
       }
     }
 

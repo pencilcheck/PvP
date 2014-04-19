@@ -8,7 +8,7 @@ angular.module('PvP')
     $scope.add = function() {
       UserSession.signIn().then(function (user) {
         Games.create({
-          host: user,
+          host: user.uid,
           title: 'test',
           description: 'Best game ever',
         }).then(function (game) {

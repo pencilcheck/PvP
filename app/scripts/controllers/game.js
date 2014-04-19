@@ -295,7 +295,7 @@ angular.module('PvP')
             if (request.response == 'accept') {
               var opponent = game.opponentOf(currentUser.uid)
               Games.create({
-                host: currentUser,
+                host: currentUser.uid,
                 title: 'A Rematch from ' + currentUser.name + ' to ' + opponent.name,
                 description: 'Best game ever',
               }).then(function (newGame) {
