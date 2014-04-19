@@ -7,9 +7,8 @@ angular.module('PvP')
   function _handleUndefined(obj) {
     if (typeof obj == 'object' && obj != null) {
       _.keys(obj).forEach(function (key) {
-        console.log('cleaning prop', key, obj[key])
-        if (!obj[key]) {
-          console.log('cleaning prop', key)
+        if (typeof obj[key] == 'undefined' || obj[key] == null) {
+          console.log('undefined property', key, obj[key])
           obj[key] = {}
         } else {
           obj[key] = _handleUndefined(obj[key])
