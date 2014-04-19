@@ -844,10 +844,14 @@ left: 150px;
 
 input:focus {
 border: 0px transparent !important;
-color:#CCC !important;
+outline: none !important;
+
 }
 
 input#smackTalk {
-    margin-top: 10px;
+    margin-top: 15px;
+    margin-bottom: 6px;
+    border-radius: 6px;
+    line-height: 20px;
 }
 
