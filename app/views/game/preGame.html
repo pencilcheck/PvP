@@ -1,10 +1,21 @@
 <link href="styles/minigame.css" rel="stylesheet" type="text/css">
 
+<script>
+  $('button#copy-to-clipboard').zclip({
+    path: 'bower_components/jquery-zclip/ZeroClipboard.swf',
+    copy: function() {return $('input#shareLink').val();},
+    afterCopy: function () {}
+  });
+
+  $('input#shareLink').val(window.location.href);
+  $('input#shareLink').attr('size', $('input#shareLink').val().length);
+</script>
+
 <div class="shareLinkDiv">
   <h2>Remember to share this link:</h2>
   <div class="shareLink">
-  <input class="sharableLink"/>
-  <button type="button" class="btn btn-default btn-lg">
+  <input id="shareLink" class="sharableLink" disabled=disabled value="" />
+  <button id="copy-to-clipboard" type="button" class="btn btn-default btn-lg">
   <span class="glyphicon glyphicon-file"></span> Copy
   </button>
   </div>
