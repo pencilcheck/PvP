@@ -41,8 +41,7 @@ angular.module('PvP')
 
       this._game.participants = this._game.participants || {}
 
-      if (this._game.participants && this._game.participants[user.uid] && 
-            this._game.invitations && this._game.invitations.indexOf(user.uid) != -1) {
+      if (this._game.participants && this._game.participants[user.uid]) {
         // Already redeemed and is on the list
         return self
       }
