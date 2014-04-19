@@ -15,7 +15,7 @@ angular.module('PvP')
     })
     list = list.filter(function (game) {
       var invited = game.state >= GameStates.invitesSent && Array.isArray(game.invitations) && game.invitations.indexOf(UserSession.currentUser().uid) != -1
-      var gamePublic = game.state >= GameStates.invitesSent && _.keys(game.participants).length > 0
+      var gamePublic = game.state >= GameStates.invitesSent && _.keys(game.participants).length > 0 && !_.has(game, 'invitations')
       var yourthehost = game.host && game.host.uid == UserSession.currentUser().uid
       return gamePublic || invited || yourthehost
     })
