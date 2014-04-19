@@ -146,8 +146,11 @@ angular.module('PvP')
           // Take damage
           var result = Moves.damageMatrix(Moves.moves[currentRound[currentUser.uid].moveKey].name, Moves.moves[currentRound[game.opponentOf(currentUser.uid).uid].moveKey].name)
 
-          //game.player(currentUser.uid).health -= result[0]
-          //game.opponentOf(currentUser.uid).health -= result[1]
+          if (result[0] > 0)
+            game.player(currentUser.uid).health -= result[0]
+
+          if (result[1] > 0)
+            game.opponentOf(currentUser.uid).health -= result[1]
 
           console.log('move damage results', result)
 
