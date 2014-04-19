@@ -855,3 +855,16 @@ input#smackTalk {
     line-height: 20px;
 }
 
+input.sharableLink {
+    width: 400px;
+    border: 0px transparent !important;
+    outline: none !important;
+    color: transparent;
+}
+
+.shareLinkDiv {
+    padding-bottom: 10px;
+    position: relative;
+    text-align: center;
+}
+
