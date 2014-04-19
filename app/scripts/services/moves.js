@@ -33,7 +33,7 @@ angular.module('PvP')
     function initials(name) {
       var words = name.split(' ')
       if (words.length == 3) // Remove middle name
-        words.splice(1, 0)
+        words.splice(1, 1)
       return words.map(function (word, index) {
         if (words.length-1 == index)
           return word[0] + '.'
