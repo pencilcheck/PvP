@@ -105,27 +105,18 @@ angular.module('PvP')
 
     function determineWinner(health, opponentHealth, damageToCurrentUser, damageToOpponent) {
       if (health <= 0 || opponentHealth <= 0) {
-        if (game.raw().state == GameStates.movesPicked) {
-          game.raw().state = GameStates.finished
-        }
-
         if (health > 0) {
           game.raw().winner = currentUser
         } else if (opponentHealth > 0) {
           game.raw().winner = game.opponentOf(currentUser.uid)
         } else {
-          if (damageToCurrentUser && damageToOpponent) {
-            // Both players have negative health
-            if (Math.abs(damageToCurrentUser) > Math.abs(damageToOpponent)) {
-              game.raw().winner = game.opponentOf(currentUser.uid)
-            } else if (Math.abs(damageToCurrentUser) < Math.abs(damageToOpponent)) {
-              game.raw().winner = currentUser
-            }
+          // Both players have negative health
+          if (Math.abs(damageToCurrentUser) > Math.abs(damageToOpponent)) {
+            game.raw().winner = game.opponentOf(currentUser.uid)
+          } else if (Math.abs(damageToCurrentUser) < Math.abs(damageToOpponent)) {
+            game.raw().winner = currentUser
           } else {
-            if (Math.abs(health) > Math.abs(opponentHealth))
-              game.raw().winner = game.opponentOf(currentUser.uid)
-            else
-              game.raw().winner = currentUser
+            // Draw
           }
         }
         game.$save()
@@ -137,6 +128,14 @@ angular.module('PvP')
         console.log('Reset smackTalk, and opponent')
         $scope.smackTalk = $scope.opponentSmackTalk = ''
         $scope.attack = $scope.opponentAttack = null
+
+        // If there is a winner jump to final screen
+        if (game.raw().winner) {
+          if (game.raw().state == GameStates.movesPicked) {
+            game.raw().state = GameStates.finished
+            game.$save()
+          }
+        }
       }
     })
 
@@ -199,8 +198,6 @@ angular.module('PvP')
         $scope.health = game.player(currentUser.uid).health
         $scope.opponentHealth = game.opponentOf(currentUser.uid).health
         console.log('update health', $scope.health, $scope.opponentHealth)
-
-        determineWinner(game.player(currentUser.uid).health, game.opponentOf(currentUser.uid).health)
       }
     }
 
