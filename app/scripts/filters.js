@@ -10,22 +10,22 @@ angular.module('PvP')
 
 .filter('emptyOrInvited', function (GameStates, UserSession, Game) {
   return function (games) {
-    var list = _.clone(games.$getIndex()).map(function (index) {
-      return games[index]
-    })
-    list = list.filter(function (game) {
+    var filtered = {}
+
+    function visible(game) {
       var Gameinfo = new Game()
       var invited = game.state >= GameStates.invitesSent && Array.isArray(game.invitations) && game.invitations.indexOf(UserSession.currentUser().uid) != -1
       var gamePublic = game.state >= GameStates.invitesSent && _.keys(game.participants).length < Gameinfo._limit && !_.has(game, 'invitations')
       var yourthehost = game.host && game.host.uid == UserSession.currentUser().uid
       return gamePublic || invited || yourthehost
+    }
+
+    games.$getIndex().forEach(function (index) {
+      if (visible(games[index])) {
+        filtered[index] = games[index]
+      }
     })
 
-    var maps = {}
-    list.forEach(function (game, index) {
-      maps[games.$getIndex()[index]] = game
-    })
-
-    return maps
+    return filtered
   }
 })
