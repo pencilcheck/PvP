@@ -2,7 +2,6 @@
 
 angular.module('PvP')
   .service('FacebookBase', function ($rootScope, $q, Facebook) {
-    // AngularJS will instantiate a singleton by calling "new" on this function
     return {
       openLogin: function() {
         console.log('openLogin');

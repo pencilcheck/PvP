@@ -9,11 +9,21 @@ function getFromStorage(name) {
 }
 
 angular.module('PvP')
-  .service('UserSession', function (FacebookBase, $timeout, $q) {
-    // AngularJS will instantiate a singleton by calling "new" on this function
-    var deferred;
+  .service('UserSession', function (FacebookBase, $timeout, $q, pvpSync) {
+    var deferred,
+        players = pvpSync('/players')
+
+    function updatePlayer(user) {
+      if (players[user.uid]) {
+        players[user.uid] = user
+        players.$save()
+      } else {
+        players.$child(user.uid).$set(user)
+      }
+    }
 
     var _completeAuth = function(user) {
+      updatePlayer(user)
       deferred.resolve(user);
       return user;
     };

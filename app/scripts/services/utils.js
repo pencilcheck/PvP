@@ -56,6 +56,13 @@ angular.module('PvP')
       $child: function (path) {
         return PvpSync(firebaseRef.child(path))
       },
+      $set: function (obj) {
+        var deferred = $q.defer()
+        firebaseRef.set(_clean(obj), function () {
+          deferred.resolve(this)
+        }.bind(this))
+        return deferred.promise
+      },
       $push: function (obj) {
         var deferred = $q.defer()
         var ref = firebaseRef.push(_clean(obj), function () {
