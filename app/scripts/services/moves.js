@@ -34,12 +34,12 @@ angular.module('PvP')
     };
 
     function shieldProb(reverse) {
-      var chance = Math.floor(Math.random()*2);
-      if (chance == 0) {
+      var chance = Math.floor(Math.random()*100);
+      if (chance <= 60) {
         return reverse ? [2, 0] : [0, 2]; // Fails
       } else {
-        var chance = Math.floor(Math.random()*5);
-        if (chance < 2) {
+        var chance = Math.floor(Math.random()*40);
+        if (chance <= 30) {
           return [0, 0];
         } else {
           return reverse ? [0, 2] : [2, 0];
