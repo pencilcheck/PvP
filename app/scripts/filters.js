@@ -14,7 +14,11 @@ angular.module('PvP')
       return games[index]
     })
     list = list.filter(function (game) {
-      return (game.state >= GameStates.invitesSent || (Array.isArray(game.invitations) && game.invitations.indexOf(UserSession.currentUser().uid) != -1)) || (game.host && game.host.uid == UserSession.currentUser().uid)
+      var invited = (Array.isArray(game.invitations) && game.invitations.indexOf(UserSession.currentUser().uid) != -1)
+      var gameInvited = game.state >= GameStates.invitesSent
+      var yourthehost = game.host && game.host.uid == UserSession.currentUser().uid
+      var notthehost = gameInvited || invited
+      return notthehost || yourthehost
     })
 
     var maps = {}
