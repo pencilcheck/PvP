@@ -91,7 +91,7 @@
           <img id="player2heart" src="images/misc/life.png"></img>
           <span id="player2score">x {{opponentHealth}}</span>
         </a>
-        <div ng-show="attackCommitted()">
+        <div ng-show="notSeenAnimation">
           <div class="bubbleSecondPlayer">
             <div ng-class="[opponentAttack.attackCss]" tooltip="{{opponentAttack.name}}"></div>
             <p>{{opponentSmackTalk}}</p>

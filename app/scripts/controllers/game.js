@@ -134,7 +134,7 @@ angular.module('PvP')
 
     $scope.$watch('notSeenAnimation', function (newVal, oldVal) {
       if (!newVal && oldVal) {
-        // Reset smackTalk, and opponent
+        console.log('Reset smackTalk, and opponent')
         $scope.smackTalk = $scope.opponentSmackTalk = ''
         $scope.attack = $scope.opponentAttack = null
       }
@@ -221,8 +221,8 @@ angular.module('PvP')
 
       $scope.notSeenAnimation = false
 
-      $scope.smackTalk = ''
-      $scope.attack = null
+      $scope.smackTalk = $scope.opponentSmackTalk = ''
+      $scope.attack = $scope.opponentAttack = null
       if (game.raw().currentRound[currentUser.uid]) {
         $scope.smackTalk = game.raw().currentRound[currentUser.uid].smackTalk
         $scope.attack = Moves.moves[game.raw().currentRound[currentUser.uid].moveKey]
