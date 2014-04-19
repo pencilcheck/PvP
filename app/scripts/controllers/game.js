@@ -132,6 +132,14 @@ angular.module('PvP')
       }
     }
 
+    $scope.$watch('notSeenAnimation', function (newVal, oldVal) {
+      if (!newVal && oldVal) {
+        // Reset smackTalk, and opponent
+        $scope.smackTalk = $scope.opponentSmackTalk = ''
+        $scope.attack = $scope.opponentAttack = null
+      }
+    })
+
     function currentRoundHandler(currentRound) {
       console.log('currentRound onChange')
       function allAttackCommitted() {
