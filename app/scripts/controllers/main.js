@@ -12,6 +12,7 @@ angular.module('PvP')
           title: 'test',
           description: 'Best game ever',
         }).then(function (game) {
+          console.log('created game with id', game.raw().$id)
           // Don't redeem to invite
           $location.path('/game/' + game.raw().$id);
           //game.$redeem(user).then(function () {

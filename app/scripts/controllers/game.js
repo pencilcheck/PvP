@@ -128,6 +128,7 @@ angular.module('PvP')
               game.raw().winner = currentUser
           }
         }
+        game.$save()
       }
     }
 
@@ -142,15 +143,15 @@ angular.module('PvP')
           console.log('all committed')
           $scope.notSeenAnimation = true
 
-          // TODO: Take damage
-          console.log(game.opponentOf(currentUser.uid))
+          // Take damage
           var result = Moves.damageMatrix(Moves.moves[currentRound[currentUser.uid].moveKey].name, Moves.moves[currentRound[game.opponentOf(currentUser.uid).uid].moveKey].name)
 
-          game.player(currentUser.uid).health -= result[0]
-          game.opponentOf(currentUser.uid).health -= result[1]
+          //game.player(currentUser.uid).health -= result[0]
+          //game.opponentOf(currentUser.uid).health -= result[1]
+
+          console.log('move damage results', result)
 
           currentRound.log = Moves.textualizeAttack(game.player(currentUser.uid).name, game.opponentOf(currentUser.uid).name, Moves.moves[currentRound[currentUser.uid].moveKey].name, Moves.moves[currentRound[game.opponentOf(currentUser.uid).uid].moveKey].name, result[0], result[1])
-
 
           determineWinner(game.player(currentUser.uid).health, game.opponentOf(currentUser.uid).health, result[0], result[1])
 
@@ -169,8 +170,10 @@ angular.module('PvP')
     function roundsHandler(rounds) {
       // This one is only for display purposes
       // Angular ng-repeat will add $$hashKey which firebase don't like
-      $scope.rounds = angular.copy(rounds)
-      console.log('rounds', $scope.rounds)
+      $timeout(function () {
+        $scope.rounds = angular.copy(rounds)
+        console.log('rounds', $scope.rounds)
+      })
     }
 
     game.raw().$onChange('rounds', roundsHandler)
@@ -180,9 +183,9 @@ angular.module('PvP')
       if (game.raw().state >= GameStates.movesPicked) {
         $scope.health = game.player(currentUser.uid).health
         $scope.opponentHealth = game.opponentOf(currentUser.uid).health
+        console.log('update health', $scope.health, $scope.opponentHealth)
 
         determineWinner(game.player(currentUser.uid).health, game.opponentOf(currentUser.uid).health)
-        game.$save()
       }
     }
 

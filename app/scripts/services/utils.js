@@ -37,7 +37,6 @@ angular.module('PvP')
       },
       $push: function (obj) {
         var deferred = $q.defer()
-        console.log('$push', _cleanDollarProps(obj))
         var ref = firebaseRef.push(_cleanDollarProps(obj), function () {
           PvpSync(ref).$promise.then(function (sync) {
             deferred.resolve(sync)
@@ -47,7 +46,6 @@ angular.module('PvP')
       },
       $save: function () {
         var deferred = $q.defer()
-        console.log('$save', _cleanDollarProps(this))
         firebaseRef.set(_cleanDollarProps(this), function () {
           deferred.resolve(this)
         }.bind(this))
