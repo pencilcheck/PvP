@@ -265,7 +265,7 @@ angular.module('PvP')
         game.raw().currentRound = game.raw().currentRound || {}
         game.raw().currentRound[currentUser.uid] = {
           moveKey: key,
-          smackTalk: smackTalk
+          smackTalk: smackTalk || ''
         }
         game.$save()
         $scope.form.smackTalk = angular.copy(smackTalk)
