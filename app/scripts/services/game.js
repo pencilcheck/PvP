@@ -58,6 +58,10 @@ angular.module('PvP')
         name: user.displayName,
         uid: user.uid,
       }
+
+      if (_.keys(this._game.participants).length == this._limit) {
+        this._game.state = GameStates.started
+      }
       
       return this._game.$save().then(function () {
         return self

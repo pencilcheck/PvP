@@ -52,17 +52,10 @@ angular.module('PvP')
         return ret
       }
 
-      if (_.keys(participants).length == game._limit) {
-        if (game.raw().state < GameStates.started) {
-          game.raw().state = GameStates.started
-          game.$save()
-        }
-
-        if (game.raw().state == GameStates.started && allMovesCommitted()) {
-          game.raw().state = GameStates.movesPicked
-          game.$save()
-        }
+      if (game.raw().state == GameStates.started && allMovesCommitted()) {
+        game.raw().state = GameStates.movesPicked
       }
+      game.$save()
     }
 
     // This watcher looks at the participants, if it is a open game and full, it
