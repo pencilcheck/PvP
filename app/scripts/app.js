@@ -53,8 +53,10 @@ angular.module('PvP', [
           currentUser: function (UserSession) {
             return UserSession.currentUser()
           },
-          game: function ($route, Games) {
-            return Games.get($route.current.params.gameId)
+          game: function ($route, Games, UserSession) {
+            return Games.get($route.current.params.gameId).then(function (game) {
+              return game.$redeem(UserSession.currentUser())
+            })
           },
           rematchRequests: function (pvpSync) {
             return pvpSync('/rematchRequests').$promise

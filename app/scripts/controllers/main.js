@@ -23,14 +23,6 @@ angular.module('PvP')
     };
 
     $scope.openGame = function (id) {
-      UserSession.signIn().then(function (user) {
-        Games.get(id).then(function (game) {
-          game.$redeem(user).then(function (game) {
-            $location.path('/game/' + game.raw().$id);
-          }, function (reason) {
-            alert(reason);
-          });
-        })
-      })
+      $location.path('/game/' + id)
     }
   });

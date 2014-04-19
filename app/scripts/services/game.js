@@ -37,7 +37,14 @@ angular.module('PvP')
     }
 
     Game.prototype.$redeem = function (user) {
+      var self = this
+
       this._game.participants = this._game.participants || {}
+
+      if (this._game.participants[user.uid] && this._game.invitations.indexOf(user.uid) != -1) {
+        // Already redeemed and is on the list
+        return self
+      }
 
       if (!this._game.invitations && this._game.state < GameStates.started) {
         // Open game, accept everyone
@@ -52,7 +59,6 @@ angular.module('PvP')
         uid: user.uid,
       }
       
-      var self = this
       return this._game.$save().then(function () {
         return self
       })

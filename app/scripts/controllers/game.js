@@ -1,7 +1,12 @@
 'use strict'
 
 angular.module('PvP')
-  .controller('GameCtrl', function ($scope, $timeout, $location, $routeParams, $modal, currentUser, Games, GameStates, game, Moves, rematchRequests) {
+  .controller('GameCtrl', function ($scope, $rootScope, $timeout, $location, $routeParams, $modal, currentUser, Games, GameStates, game, Moves, rematchRequests) {
+
+    $rootScope.$on('$routeChangeError', function () {
+      $location.path('/')
+    })
+
     function stateHandler(state) {
       $scope.safeApply(function () {
         switch (state) {

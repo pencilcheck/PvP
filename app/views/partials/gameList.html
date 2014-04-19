@@ -1,5 +1,5 @@
 <link href="styles/lobby.css" rel="stylesheet" type="text/css">
-<div class="panel panel-default" ng-repeat="(key, game) in games" ng-click="openGame(key)">
+<div class="panel panel-default" ng-repeat="(key, game) in games | emptyOrInvited" ng-click="openGame(key)">
   <div class="panel-heading">
     <h3 class="panel-title">
       {{game.title}} ({{game.$id}})
