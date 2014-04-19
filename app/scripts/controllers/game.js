@@ -143,6 +143,10 @@ angular.module('PvP')
           console.log('all committed')
           $scope.notSeenAnimation = true
 
+          var opponentUid = game.opponentOf(currentUser.uid).uid
+          $scope.opponentAttack = Moves.moves[game.raw().currentRound[opponentUid].moveKey]
+          $scope.opponentSmackTalk = game.raw().currentRound[opponentUid].smackTalk
+
           // Take damage
           var result = Moves.damageMatrix(Moves.moves[currentRound[currentUser.uid].moveKey].name, Moves.moves[currentRound[game.opponentOf(currentUser.uid).uid].moveKey].name)
 
@@ -211,7 +215,6 @@ angular.module('PvP')
 
       $scope.smackTalk = ''
       $scope.attack = null
-
       if (game.raw().currentRound[currentUser.uid]) {
         $scope.smackTalk = game.raw().currentRound[currentUser.uid].smackTalk
         $scope.attack = Moves.moves[game.raw().currentRound[currentUser.uid].moveKey]
@@ -235,14 +238,16 @@ angular.module('PvP')
       $scope.health = game.player(currentUser.uid).health
       $scope.opponentHealth = game.opponentOf(currentUser.uid).health
 
-      $scope.fight = function (key) {
+      $scope.fight = function (key, smackTalk) {
         game.raw().currentRound = game.raw().currentRound || {}
         game.raw().currentRound[currentUser.uid] = {
           moveKey: key,
-          smackTalk: $scope.smackTalk || ''
+          smackTalk: smackTalk
         }
         game.$save()
-        $scope.attack = Moves.moves[key]
+        $scope.smackTalk = angular.copy(smackTalk)
+        $scope.attack = angular.copy(Moves.moves[key])
+        console.log('attacking with attack and smackTalk', $scope.attack, $scope.smackTalk)
       }
 
       $scope.dice = function () {

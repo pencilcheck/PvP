@@ -61,7 +61,7 @@
           <p>
             <div ng-hide="attackCommitted()">
               <input type="text" placeholder='Smack Talk' ng-model="smackTalk" id="smackTalk" />
-              <a ng-repeat="(key, move) in selectedMoves" ng-click="fight(key)" ng-class="[move.attackCss]" tooltip="{{move.name}}"></a>
+              <a ng-repeat="(key, move) in selectedMoves" ng-click="fight(key, smackTalk)" ng-class="[move.attackCss]" tooltip="{{move.name}}"></a>
               <a ng-click="dice()" class="dice-attack" tooltip="Dice"></a>
             </div>
 
@@ -91,8 +91,11 @@
           <img id="player2heart" src="images/misc/life.png"></img>
           <span id="player2score">x {{opponentHealth}}</span>
         </a>
-        <div class="bubbleSecondPlayer">
-          <p>i am going to murder you twice sdfsdf sdfasfdas dfasf asddf asdf asdf sdf</p>
+        <div ng-show="attackCommitted()">
+          <div class="bubbleSecondPlayer">
+            <div ng-class="[opponentAttack.attackCss]" tooltip="{{opponentAttack.name}}"></div>
+            <p>{{opponentSmackTalk}}</p>
+          </div>
         </div>
       </div>
     </div>
