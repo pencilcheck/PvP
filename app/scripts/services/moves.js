@@ -29,8 +29,14 @@ angular.module('PvP')
       }
     }
 
+    function initials(name) {
+      return name.split(' ').map(function (word) {
+        return word[0] + '.'
+      }).join(' ')
+    }
+
     function textualizeAttack(playerA, playerB, moveA, moveB, damageA, damageB) {
-      return playerA + ' has taken ' + damageA + ' from ' + moveB + ' :: ' + playerB + ' has taken ' + damageB + ' from ' + moveA + '.';
+      return initials(playerA) + ' has taken ' + damageA + ' from ' + moveB + ' :: ' + initials(playerB) + ' has taken ' + damageB + ' from ' + moveA + '.';
     };
 
     function shieldProb(reverse) {
