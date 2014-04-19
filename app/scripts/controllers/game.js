@@ -65,10 +65,8 @@ angular.module('PvP')
 
     // Skip invitation and make the game public
     $scope.inviteNoop = function () {
-      if (game.raw().state < GameStates.invitesSent) {
-        game.raw().state = GameStates.invitesSent
-        game.$save()
-      }
+      game.raw().state = GameStates.invitesSent
+      game.$save()
     }
 
     function setupSelectMoves() {
