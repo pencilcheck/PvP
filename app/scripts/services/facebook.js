@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('PvP')
-  .service('Facebook', function Facebook($rootScope, $q) {
+  .service('FacebookBase', function ($rootScope, $q, Facebook) {
     // AngularJS will instantiate a singleton by calling "new" on this function
     return {
       openLogin: function() {
@@ -12,7 +12,7 @@ angular.module('PvP')
           console.log('FirebaseSimpleLogin', error, user);
           if (error) {
             // an error occurred while attempting login
-            console.log(error);
+            console.error(error);
           } else if (user) {
             // user authenticated with Firebase
             console.log('User ID: ' + user.id + ', Provider: ' + user.provider);
@@ -28,7 +28,7 @@ angular.module('PvP')
         auth.login('facebook', {
           rememberMe: true,
           preferRedirect: true,
-          scope: 'email,user_likes'
+          scope: 'email,user_likes,basic_info,user_friends'
         });
 
         return deferred.promise;

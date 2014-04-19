@@ -6,8 +6,15 @@ angular.module('PvP', [
   'ngSanitize',
   'ngRoute',
   'ui.bootstrap',
-  'firebase'
+  'firebase',
+  'facebook',
+  'wu.masonry'
 ])
+
+  .config(function(FacebookProvider) {
+    FacebookProvider.init('1440880659476523');
+  })
+
   .run(function ($rootScope, $location, UserSession) {
     $rootScope.$on('$locationChangeStart', function (event, currLocation, prevLocation) {
       if (!UserSession.signedIn() && currLocation.indexOf('login') < 0) {
@@ -19,7 +26,9 @@ angular.module('PvP', [
         });
       }
     });
-  }).run(function($rootScope) {
+  })
+  
+  .run(function($rootScope) {
     $rootScope.safeApply = function(fn) {
       var phase = this.$root.$$phase;
       if(phase == '$apply' || phase == '$digest') {

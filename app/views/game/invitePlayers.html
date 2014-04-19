@@ -1,3 +1,14 @@
-<p>Can't create private games at the moment, please press the link below to proceed.</p>
+<h1>Invite:</h1>
 
-<button ng-click="inviteNoop()">PUBLIC GAME, PROCEED</button>
+<div style="overflow: scroll; height: 500px;">
+    <div load-images="false" masonry masonry-options="{ gutter: 10 }">
+        <div style="width: 70px;" class="masonry-brick" ng-repeat="friend in friends">
+            <span>{{friend.name}}</span>
+            <img ng-src="{{friend.picture.data.url}}"></img>
+        </div>
+    </div>
+</div>
+
+<p>
+  <button class="btn btn-success" ng-click="inviteNoop()">Or Create a PUBLIC game</button>
+</p>

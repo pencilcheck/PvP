@@ -9,7 +9,7 @@ function getFromStorage(name) {
 }
 
 angular.module('PvP')
-  .service('UserSession', function (Facebook, $timeout, $q) {
+  .service('UserSession', function (FacebookBase, $timeout, $q) {
     // AngularJS will instantiate a singleton by calling "new" on this function
     var deferred;
 
@@ -32,7 +32,7 @@ angular.module('PvP')
       if(getFromStorage('user'))
         _completeAuth(getFromStorage('user'));
       else
-        Facebook.openLogin().then(completeSignIn, _failAuth);
+        FacebookBase.openLogin().then(completeSignIn, _failAuth);
     };
 
     var signIn = function() {

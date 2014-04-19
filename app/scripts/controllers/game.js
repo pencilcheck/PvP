@@ -1,7 +1,7 @@
 'use strict'
 
 angular.module('PvP')
-  .controller('GameCtrl', function ($scope, $rootScope, $timeout, $location, $routeParams, $modal, currentUser, Games, GameStates, game, Moves, rematchRequests) {
+  .controller('GameCtrl', function ($scope, $rootScope, $timeout, $location, $routeParams, $modal, currentUser, Games, GameStates, game, Moves, rematchRequests, Facebook) {
 
     $rootScope.$on('$routeChangeError', function () {
       $location.path('/')
@@ -13,6 +13,7 @@ angular.module('PvP')
         case GameStates.opened:
           console.log('Just opened the game, need to invite people: to invitePlayers')
           $scope.viewUrl = 'views/game/invitePlayers.html'
+          setupInvitePlayers()
           break
         case GameStates.invitesSent:
           console.log('Just sent all invitations, waiting to others to redeem: to preGame')
@@ -36,6 +37,21 @@ angular.module('PvP')
         default:
           break
         }
+      })
+    }
+
+    function setupInvitePlayers() {
+      Facebook.api('/me/friends', 'get', {
+        fields: 'id, name, picture',
+        access_token: currentUser.accessToken
+      }, function (response) {
+        $scope.friends = response.data
+        //$scope.friends.map(function (friend, index) {
+          //Facebook.api('/' + friend.id + '/picture', function (response) {
+            //$scope.friends[index].picture = response.data
+          //})
+          //return friend
+        //})
       })
     }
 
