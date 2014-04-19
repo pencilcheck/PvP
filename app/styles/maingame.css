@@ -842,6 +842,12 @@ top: -20px;
 left: 150px;
 }
 
+input {
+background-color:transparent;
+border: 0px solid;
+color:#CCC;
+}
+
 input#smackTalk {
     margin-top: 10px;
 }
