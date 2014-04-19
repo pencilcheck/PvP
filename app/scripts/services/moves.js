@@ -29,9 +29,14 @@ angular.module('PvP')
       }
     }
 
+    // Assuming names are real names
     function initials(name) {
-      return name.split(' ').map(function (word) {
-        return word[0] + '.'
+      var words = name.split(' ')
+      return words.map(function (word, index) {
+        if (words.length-1 == index)
+          return word[0] + '.'
+        else
+          return word
       }).join(' ')
     }
 
