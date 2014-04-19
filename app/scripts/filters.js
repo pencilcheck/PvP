@@ -10,7 +10,7 @@ angular.module('PvP')
 
 .filter('emptyOrInvited', function (GameStates, UserSession, Game) {
   return function (games) {
-    var list = games.$getIndex().map(function (index) {
+    var list = _.clone(games.$getIndex()).map(function (index) {
       return games[index]
     })
     list = list.filter(function (game) {
