@@ -2,7 +2,7 @@
 <div class="panel panel-default" ng-repeat="(key, game) in games | emptyOrInvited" ng-click="openGame(key)">
   <div class="panel-heading">
     <h3 class="panel-title">
-      {{game.title}} ({{game.$id}})
+      {{game.title}} ({{key}})
     </h3>
   </div>
   <div class="panel-body">
