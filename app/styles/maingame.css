@@ -842,10 +842,9 @@ top: -20px;
 left: 150px;
 }
 
-input {
-background-color:transparent;
-border: 0px solid;
-color:#CCC;
+input:focus {
+border: 0px transparent !important;
+color:#CCC !important;
 }
 
 input#smackTalk {
