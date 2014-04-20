@@ -234,6 +234,7 @@ angular.module('PvP')
             opacity: 0,
             duration: 100
           })
+          $('#player1heart').addClass('hinge animated')
         }
         determineDialog()
       }
