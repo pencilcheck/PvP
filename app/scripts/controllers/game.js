@@ -223,6 +223,11 @@ angular.module('PvP')
           else
             $('#heart').html('')
 
+          if (result[1] > 0)
+            $('#heart2').html('-' + result[1] + ' &hearts;')
+          else
+            $('#heart2').html('')
+
           //var world = anima.world()
           //var heart = world.add($('#heart')[0])
           //heart.animate({
@@ -236,6 +241,7 @@ angular.module('PvP')
           //})
           //$('#player1heart').addClass('hinge animated')
           $('#heart').addClass('hinge animated')
+          $('#heart2').addClass('hinge animated')
         }
         determineDialog()
       }
