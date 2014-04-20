@@ -391,7 +391,7 @@ angular.module('PvP')
     rematchHandler(rematchRequests)
 
     function setupEndGame() {
-      $scope.winner = game.raw().winner
+      $scope.winner = game.player(game.raw().winner)
       $scope.rematch = function () {
         var requestObj = {
           from: currentUser.uid,
