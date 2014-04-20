@@ -867,3 +867,10 @@ input.sharableLink {
     text-align: center;
 }
 
+span.damageSpan {
+position: absolute;
+top: 550px;
+left: 50px;
+font-size: 20px;
+color: rgb(151, 0, 0);
+}
