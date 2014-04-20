@@ -119,7 +119,6 @@ angular.module('PvP')
     function _processChild(snapshot, prevChildName) {
       // Trigger $apply, $digest
       $timeout(function () {
-        console.log('processChild', snapshot.name(), snapshot.val())
         if (wrapper.$index.indexOf(snapshot.name()) != -1)
           wrapper.$index.splice(wrapper.$index.indexOf(snapshot.name()), 1)
 
