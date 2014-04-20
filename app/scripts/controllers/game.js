@@ -410,10 +410,10 @@ angular.module('PvP')
       }
     }
 
-    rematchRequests.$onChange('', rematchHandler)
-    rematchHandler(rematchRequests)
-
     function setupEndGame() {
+      rematchRequests.$onChange('', rematchHandler)
+      rematchHandler(rematchRequests)
+
       $scope.winner = game.player(game.raw().winner)
       $scope.rematch = function () {
         var requestObj = {
