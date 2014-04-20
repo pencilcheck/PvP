@@ -868,9 +868,17 @@ input.sharableLink {
 }
 
 span.damageSpan {
-position: absolute;
-top: 550px;
-left: 50px;
-font-size: 20px;
-color: rgb(151, 0, 0);
+    position: absolute; 
+    top: 550px;
+    left: 85px;
+    font-size: 20px;
+    color: rgb(151, 0, 0);
+}
+
+#heart {
+    color: #FF0000; 
+    font-size:30px;
+    font-family:'arial unicode MS', arial, geneva, sans-serif; 
+   -webkit-text-stroke-width: 1px;
+   -webkit-text-stroke-color: black;
 }
