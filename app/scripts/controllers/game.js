@@ -380,7 +380,7 @@ angular.module('PvP')
               keyboard: false,
               templateUrl: 'views/game/modal/requestRematch.html',
               controller: function ($scope, $modalInstance) {
-                $scope.requester = request.from
+                $scope.requester = game.player(request.from)
 
                 $scope.accept = function () {
                   console.log('[MODAL] accepting request', request)
