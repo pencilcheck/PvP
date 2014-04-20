@@ -197,6 +197,9 @@ angular.module('PvP')
           // Take damage
           var result = Moves.damageMatrix(Moves.moves[currentRound[currentUser.uid].moveKey].name, Moves.moves[currentRound[game.opponentOf(currentUser.uid).uid].moveKey].name)
 
+          currentRound[currentUser.uid].doneDamage = result[1]
+          currentRound[game.opponentOf(currentUser.uid).uid].doneDamage = result[0]
+
           if (result[0] > 0)
             game.player(currentUser.uid).health -= result[0]
 
@@ -213,6 +216,13 @@ angular.module('PvP')
           game.raw().currentRound = {}
           game.$save()
           // Doesn't really matter to reset the smackTalk or not
+
+          // Experimental: Animation
+          if (result[0] > 0)
+            $('#heart').html('-' + result[0] + ' &hearts;')
+          else
+            $('#heart').html('')
+          $('#heart').addClass('fadeOutDown animated')
         }
         determineDialog()
       }
