@@ -875,6 +875,18 @@ span.damageSpan {
     color: rgb(151, 0, 0);
 }
 
+span#heart2 {
+position: absolute;
+right: 55px;
+z-index: 10;
+top: 80px;
+color: #FF0000;
+font-size:30px;
+    font-family:'arial unicode MS', arial, geneva, sans-serif; 
+   -webkit-text-stroke-width: 1px;
+   -webkit-text-stroke-color: black;
+}
+
 #heart {
     color: #FF0000; 
     font-size:30px;
