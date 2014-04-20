@@ -223,18 +223,19 @@ angular.module('PvP')
           else
             $('#heart').html('')
 
-          var world = anima.world()
-          var heart = world.add($('#heart')[0])
-          heart.animate({
-            translate: [0, 20, 0],
-            duration: 200,
-            ease: 'ease-in-out-quad',
-            delay: 400
-          }).animate({
-            opacity: 0,
-            duration: 100
-          })
-          $('#player1heart').addClass('hinge animated')
+          //var world = anima.world()
+          //var heart = world.add($('#heart')[0])
+          //heart.animate({
+            //translate: [0, 20, 0],
+            //duration: 200,
+            //ease: 'ease-in-out-quad',
+            //delay: 400
+          //}).animate({
+            //opacity: 0,
+            //duration: 100
+          //})
+          //$('#player1heart').addClass('hinge animated')
+          $('#heart').addClass('hinge animated')
         }
         determineDialog()
       }
