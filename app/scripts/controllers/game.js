@@ -222,7 +222,18 @@ angular.module('PvP')
             $('#heart').html('-' + result[0] + ' &hearts;')
           else
             $('#heart').html('')
-          $('#heart').addClass('fadeOutDown animated')
+
+          var world = anima.world()
+          var heart = world.add($('#heart')[0])
+          heart.animate({
+            translate: [0, 20, 0],
+            duration: 200,
+            ease: 'ease-in-out-quad',
+            delay: 400
+          }).animate({
+            opacity: 0,
+            duration: 100
+          })
         }
         determineDialog()
       }
