@@ -218,6 +218,9 @@ angular.module('PvP')
           // Doesn't really matter to reset the smackTalk or not
 
           // Experimental: Animation
+          $('#heart').removeClass('hinge animated')
+          $('#heart2').removeClass('hinge animated')
+
           if (result[0] > 0)
             $('#heart').html('-' + result[0] + ' &hearts;')
           else
