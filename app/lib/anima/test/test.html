@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Matrix tests</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width">
+</head>
+<body>
+  <script src="../src/math/vector.js"></script>
+  <script src="../src/math/matrix.js"></script>
+  <script>
+  Matrix.toTestString = function (m) {
+    function clamp(n) {
+     return n.toFixed(6)
+    }
+    function isAffine(m) {
+      return m[2] === 0 &&
+        m[3] === 0 &&
+        m[6] === 0 &&
+        m[7] === 0 &&
+        m[8] === 0 &&
+        m[9] === 0 &&
+        m[10] === 1 &&
+        m[11] === 0 &&
+        m[14] === 0 &&
+        m[15] === 1
+    }
+    function filterAffine(_, i) {
+      return [0,1,4,5,12,13].indexOf(i) !== -1
+    }
+    if (isAffine(m)) {
+      return 'matrix(' + m.filter(filterAffine).map(clamp).join(', ') + ')'
+    }
+    return 'matrix3d(' + m.map(clamp).join(', ') + ')'
+  }
+
+  function transform(s) {
+    return new WebKitCSSMatrix(s).toString()
+  }
+
+  function check(name, a, b) {
+    if (a !== b) {
+      console.log(name +'\n'+ a +'\n'+ b)
+      return false
+    } else {
+      return true
+    }
+  }
+
+  var tests = [
+    // rotate
+    check('rotateX', Matrix.toTestString(Matrix.rotate(90)), transform('rotateX(90deg)')),
+    check('rotateX(3d)', Matrix.toTestString(Matrix.rotate3d(1,0,0, 90)), transform('rotate3d(1,0,0, 90deg)')),
+    check('-rotateX(3d)', Matrix.toTestString(Matrix.rotate3d(-1,0,0, 90)), transform('rotate3d(-1,0,0, 90deg)')),
+    check('rotateY', Matrix.toTestString(Matrix.rotate(0, 90)), transform('rotateY(90deg)')),
+    check('rotateY(3d)', Matrix.toTestString(Matrix.rotate3d(0,1,0, 90)), transform('rotate3d(0,1,0, 90deg)')),
+    check('-rotateY(3d)', Matrix.toTestString(Matrix.rotate3d(0,-1,0, 90)), transform('rotate3d(0,-1,0, 90deg)')),
+    check('rotateZ', Matrix.toTestString(Matrix.rotate(0, 0, 90)), transform('rotateZ(90deg)')),
+    check('rotateZ(3d)', Matrix.toTestString(Matrix.rotate3d(0,0,1, 90)), transform('rotate3d(0,0,1, 90deg)')),
+    check('-rotateZ(3d)', Matrix.toTestString(Matrix.rotate3d(0,0,-1, 90)), transform('rotate3d(0,0,-1, 90deg)')),
+    check('rotateXY', Matrix.toTestString(Matrix.rotate(90, 90)), transform('rotateX(90deg) rotateY(90deg)')),
+    check('rotateXY(3d)', Matrix.toTestString(Matrix.rotate3d(1,1,0, 90)), transform('rotate3d(1,1,0, 90deg)')),
+    check('rotateXYZ', Matrix.toTestString(Matrix.rotate(90, 90, 90)), transform('rotateX(90deg) rotateY(90deg) rotateZ(90deg)')),
+    check('rotateXYZ(3d)', Matrix.toTestString(Matrix.rotate3d(1,1,1, 90)), transform('rotate3d(1,1,1, 90deg)')),
+
+    // translate
+    check('translate', Matrix.toTestString(Matrix.translate(10, 20)), transform('translate(10px, 20px)')),
+    check('translate3d', Matrix.toTestString(Matrix.translate(10, 20, 50)), transform('translate3d(10px, 20px, 50px)')),
+
+    // skew
+    check('skewX', Matrix.toTestString(Matrix.skew(10)), transform('skewX(10deg)')),
+    check('skewY', Matrix.toTestString(Matrix.skew(0, 20)), transform('skewY(20deg)')),
+    check('skew', Matrix.toTestString(Matrix.skew(10, 20)), transform('skew(10deg, 20deg)')),
+
+    // scale
+    check('scaleX', Matrix.toTestString(Matrix.scale(10)), transform('scaleX(10)')),
+    check('scaleY', Matrix.toTestString(Matrix.scale(0, 20)), transform('scaleY(20)')),
+    check('scale', Matrix.toTestString(Matrix.scale(10, 20)), transform('scale(10, 20)')),
+
+    // perspective
+    check('perspective', Matrix.toTestString(Matrix.perspective(100)), transform('perspective(100)')),
+
+    // multiply
+    check('multiply', Matrix.toTestString(Matrix.multiply(Matrix.translate(10, 20), Matrix.rotate(90))), transform('rotateX(90deg) translate(10px, 20px)')),
+
+    check('inverse', Matrix.multiply(Matrix.rotate(10,15,20), Matrix.inverse(Matrix.rotate(10,15,20))).join(), '1,-4.85722573273506e-17,-5.551115123125783e-17,0,-4.163336342344337e-17,1,0,0,0,2.7755575615628914e-17,1,0,0,0,0,1'),
+
+    check('decompose', JSON.stringify(Matrix.decompose(Matrix.multiply(Matrix.scale(1, 2, 3), Matrix.rotate(90, 45, 3), Matrix.translate(10, 20, 50)))), '{"translate":[10,20,50],"rotate":[90,44.99999999999999,3.0000000000000004],"scale":[0.9999999999999999,1.9999999999999998,3]}'),
+    check('decompose/compose', JSON.stringify(Matrix.decompose(Matrix.compose([10,20,50],[90,45,3],[1,2,3]))), '{"translate":[10,20,50],"rotate":[90,44.99999999999999,3.0000000000000004],"scale":[0.9999999999999999,1.9999999999999998,3]}'),
+    check('decompose CSS', JSON.stringify(Matrix.decompose(Matrix.parse(transform('translate3d(10px, 20px, 50px) rotateX(90deg) rotateY(45deg) rotateZ(3deg) scale3d(1,2,3)')))), '{"translate":["10.000000","20.000000","50.000000"],"rotate":[90,45.00000000000001,2.999991266516938],"scale":[1.0000004034919185,1.999999914368248,2.9999995141332936]}')
+  ]
+
+  var failed = tests.filter(function(t) { return !t }).length
+  if (failed) {
+    console.warn(failed +' test'+ (failed !== 1 ? 's' : '') +' failed')
+  } else {
+    console.log('OK')
+  }
+  </script>
+</body>
+</html>

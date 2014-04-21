@@ -1,0 +1,22 @@
+html, body {
+  height: 100%;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+.viewport {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-perspective: 400px;
+  -moz-perspective: 400px;
+  -ms-perspective: 400px;
+  -o-perspective: 400px;
+  perspective: 400px;
+  -webkit-transform: translateZ(-99999px);
+  -moz-transform: translateZ(-99999px);
+  -ms-transform: translateZ(-99999px);
+  -o-transform: translateZ(-99999px);
+  transform: translateZ(-99999px);
+}

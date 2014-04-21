@@ -6,28 +6,29 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title></title>
+    <title>PvP</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
     <!-- build:css styles/vendor.css -->
     <!-- bower:css -->
-    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
-    <link rel="stylesheet" href="bower_components/todc-bootstrap/dist/todc-bootstrap.css" />
+    <link rel="stylesheet" href="lib/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="lib/todc-bootstrap/dist/todc-bootstrap.css" />
     <!-- endbower -->
     <!-- endbuild -->
+
     <!-- build:css({.tmp,app}) styles/main.css -->
-    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/main.css" />
+    <link rel="stylesheet" href="styles/maingame.css" />
+    <link rel="stylesheet" href="styles/style3.css" />
     <!-- endbuild -->
-    
-    <link rel="stylesheet" href="styles/maingame.css">  
-    <link href="styles/style3.css" rel="stylesheet" type="text/css" />
 
   </head>
-  <body ng-app="PvP" class="container">
+  <body class="container">
 
     <!-- Add your site or application content here -->
-    <div class="mainContainer" ng-view=""></div>
+    <div class="mainContainer" ng-view></div>
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
      <script>
@@ -46,57 +47,31 @@
     <![endif]-->
 
     <!-- build:js scripts/vendor.js -->
-    <!-- bower:js -->
-    <script src="bower_components/jquery/dist/jquery.js"></script>
-    <script src="bower_components/angular/angular.js"></script>
-    <script src="bower_components/angular-resource/angular-resource.js"></script>
-    <script src="bower_components/angular-cookies/angular-cookies.js"></script>
-    <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
-    <script src="bower_components/angular-route/angular-route.js"></script>
-    <script src="bower_components/firebase/firebase.js"></script>
-    <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
-    <script src="bower_components/underscore/underscore.js"></script>
-    <script src="bower_components/firebase-simple-login/firebase-simple-login.js"></script>
-    <script src="bower_components/angularfire/angularfire.js"></script>
-    <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
-    <script src="bower_components/momentjs/moment.js"></script>
-    <script src="bower_components/get-style-property/get-style-property.js"></script>
-    <script src="bower_components/get-size/get-size.js"></script>
-    <script src="bower_components/eventie/eventie.js"></script>
-    <script src="bower_components/doc-ready/doc-ready.js"></script>
-    <script src="bower_components/eventEmitter/EventEmitter.js"></script>
-    <script src="bower_components/jquery-bridget/jquery.bridget.js"></script>
-    <script src="bower_components/matches-selector/matches-selector.js"></script>
-    <script src="bower_components/outlayer/item.js"></script>
-    <script src="bower_components/outlayer/outlayer.js"></script>
-    <script src="bower_components/masonry/masonry.js"></script>
-    <script src="bower_components/imagesloaded/imagesloaded.js"></script>
-    <script src="bower_components/angular-masonry/angular-masonry.js"></script>
-    <script src="bower_components/es6-shim/es6-shim.js"></script>
-    <script src="bower_components/angular-facebook/lib/angular-facebook.js"></script>
-    <script src="bower_components/jquery-zclip/jquery.zclip.js"></script>
-    <script src="bower_components/anima/anima.js"></script>
-    <!-- endbower -->
-    <!-- endbuild -->
-    <script src="bower_components/javascript-state-machine/state-machine.js"></script>
-    <script src="https://cdn.firebase.com/libs/angularfire/0.6.0/angularfire.min.js"></script>
     <script src="scripts/object-watch.js"></script>
+    <script type="text/javascript" src="lib/famous-polyfills/functionPrototypeBind.js"></script>
+    <script type="text/javascript" src="lib/famous-polyfills/classList.js"></script>
+    <script type="text/javascript" src="lib/famous-polyfills/requestAnimationFrame.js"></script>
+    <!-- endbuild -->
+
+    <script type="text/javascript" src="lib/requirejs/require.js" data-main="scripts/requireConfig"></script>
+
 
         <!-- build:js({.tmp,app}) scripts/scripts.js -->
-        <script src="scripts/app.js"></script>
-        <script src="scripts/controllers/main.js"></script>
-        <script src="scripts/controllers/login.js"></script>
-        <script src="scripts/controllers/lobby.js"></script>
-        <script src="scripts/controllers/game.js"></script>
-        <script src="scripts/directives.js"></script>
-        <script src="scripts/filters.js"></script>
-        <script src="scripts/services/utils.js"></script>
-        <script src="scripts/services/user_session.js"></script>
-        <script src="scripts/services/facebook.js"></script>
-        <script src="scripts/services/moves.js"></script>
-        <script src="scripts/services/game.js"></script>
-        <script src="scripts/services/games.js"></script>
-        <script src="scripts/services/rematch.js"></script>
+        <!--<script src="scripts/app.js"></script>-->
+        <!--<script src="scripts/controllers/main.js"></script>-->
+        <!--<script src="scripts/controllers/login.js"></script>-->
+        <!--<script src="scripts/controllers/lobby.js"></script>-->
+        <!--<script src="scripts/controllers/game.js"></script>-->
+        <!--<script src="scripts/directives.js"></script>-->
+        <!--<script src="scripts/filters.js"></script>-->
+        <!--<script src="scripts/services/utils.js"></script>-->
+        <!--<script src="scripts/services/user_session.js"></script>-->
+        <!--<script src="scripts/services/facebook.js"></script>-->
+        <!--<script src="scripts/services/moves.js"></script>-->
+        <!--<script src="scripts/services/game.js"></script>-->
+        <!--<script src="scripts/services/games.js"></script>-->
+        <!--<script src="scripts/services/rematch.js"></script>-->
         <!-- endbuild -->
+
 </body>
 </html>

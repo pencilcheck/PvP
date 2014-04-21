@@ -12,22 +12,25 @@
     "angular-route": "1.2.6",
     "firebase": "~1.0.2",
     "todc-bootstrap": "*",
-    "javascript-state-machine": "~2.2.0",
     "underscore": "~1.6.0",
-    "angularfire": "0.7.0",
     "angular-bootstrap": "~0.10.0",
-    "momentjs": "~2.5.1",
     "angular-masonry": "~0.8.1",
     "es6-shim": "~0.10.1",
     "angular-facebook": "~0.2.2",
     "jquery-zclip": "~1.1.4",
-    "anima": "~0.3.5"
+    "anima": "~0.3.5",
+    "requirejs": "~2.1.11",
+    "almond": "~0.2.9",
+    "famous-polyfills": "git+https://github.com/Famous/polyfills.git#0.1.1",
+    "famous": "git+https://github.com/Famous/famous.git#flat0.1.1",
+    "moment": "~2.6.0"
   },
   "devDependencies": {
     "angular-mocks": "1.2.6",
     "angular-scenario": "1.2.6"
   },
   "resolutions": {
-    "jquery": "~2.1.0"
+    "jquery": "~2.1.0",
+    "imagesloaded": "~3.0.1"
   }
 }
