@@ -30,7 +30,6 @@
     "angular-scenario": "1.2.6"
   },
   "resolutions": {
-    "jquery": "~2.1.0",
-    "imagesloaded": "~3.0.1"
+    "jquery": "~2.1.0"
   }
 }

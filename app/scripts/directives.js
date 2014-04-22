@@ -11,6 +11,7 @@ define(function (require) {
         link: function(scope, element) {
           // import dependencies
           var Engine = require('famous/core/Engine');
+          var Surface = require('famous/core/Surface');
           var ImageSurface = require('famous/surfaces/ImageSurface');
           var StateModifier = require('famous/modifiers/StateModifier');
           var Draggable = require('famous/modifiers/Draggable');
@@ -21,7 +22,11 @@ define(function (require) {
           // create the main context
           var mainContext = Engine.createContext(element[0]);
 
-          // your app here
+          var explosion = new Surface({
+              size: [500, 500],
+              classes: ['explosion']
+          });
+
           var player1 = new ImageSurface({
               content: 'images/planets/player1.png'
           });
@@ -40,6 +45,7 @@ define(function (require) {
           });
 
           mainContext.add(player1Modifier).add(player1);
+          mainContext.add(new Modifier({origin: [.2, .3]})).add(explosion);
 
           mainContext.add(new Modifier({origin: [.8, .5]})).add(smackTalk1);
         }

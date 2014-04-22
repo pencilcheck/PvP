@@ -42,7 +42,9 @@ require.config({
         underscore: {
             exports: '_'
         },
-        'jquery-zclip': ['jquery'],
+        'jquery-zclip': [
+            'jquery'
+        ]
     },
     paths: {
         famous: '../lib/famous',
