@@ -22,44 +22,26 @@ define(function (require) {
           var mainContext = Engine.createContext(element[0]);
 
           // your app here
-          var logo = new ImageSurface({
+          var player1 = new ImageSurface({
               content: 'images/planets/player1.png'
           });
 
-          var logoModifier = new StateModifier({
-              size: [200, 200],
-              origin: [0.5, 0.5]
+          var player1Modifier = new StateModifier({
+              size: [300, 300],
+              origin: [0.2, 0.7]
           });
 
-          var input = new InputSurface({
-              size: [200, 200],
-              name: 'inputSurface',
-              placeholder: 'Type text here',
-              value: 'images/planets/player1.png',
+          var smackTalk1 = new InputSurface({
+              size: [200, 40],
+              name: 'smackTalk1',
+              placeholder: 'Smack Talk',
+              value: '',
               type: 'text'
           });
 
-          var dragModifier = new Draggable();
+          mainContext.add(player1Modifier).add(player1);
 
-          mainContext.add(logoModifier).add(dragModifier).add(logo);
-
-          mainContext.add(new Modifier({origin: [.8, .5]})).add(input);
-
-          logo.on('dragstart', function(data) {
-              window.console.log('dragstart', data);
-          });
-
-          logo.on('dragmove', function(data) {
-              window.console.log('dragmove', data);
-          });
-
-          logo.on('dragend', function(data) {
-              window.console.log('dragend', data);
-              window.console.log('sizing', logoModifier.getSize());
-
-              var easeTransition = { duration: 500, curve: Easing.inOutCubic };
-              dragModifier.setRelativePosition([data.offsetX - logoModifier.getSize()[0]/2, data.offsetY - logoModifier.getSize()[1]/2, 0], easeTransition);
-          });
+          mainContext.add(new Modifier({origin: [.8, .5]})).add(smackTalk1);
         }
       }
     });
