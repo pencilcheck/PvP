@@ -1,7 +1,7 @@
 'use strict'
 
 angular.module('PvP')
-  .controller('GameCtrl', function ($scope, $rootScope, $timeout, $location, $routeParams, $modal, currentUser, Games, GameStates, game, Moves, rematchRequests, Facebook, pvpSync) {
+  .controller('GameCtrl', function ($scope, $rootScope, $timeout, $location, $routeParams, $modal, currentUser, Games, GameStates, game, Moves, Rematch, rematchRequests, Facebook, pvpSync) {
 
     $rootScope.$on('$routeChangeError', function () {
       $location.path('/')
@@ -332,96 +332,8 @@ angular.module('PvP')
       }
     }
 
-    function rematchHandler(requests) {
-      if (game.raw().state >= GameStates.finished) {
-        console.log('rematchRequests $onChange', requests)
-        console.log('getIndex', requests.$getIndex())
-        requests.$getIndex().forEach(function (key) {
-          var request = requests[key]
-
-          if (request.from == currentUser.uid && 
-                request.to == game.opponentOf(currentUser.uid).uid && 
-                request.response && 
-                !request.gameId) {
-            if (request.response == 'accept') {
-              var opponent = game.opponentOf(currentUser.uid)
-              Games.create({
-                host: currentUser.uid,
-                title: 'A Rematch from ' + currentUser.name + ' to ' + opponent.name,
-                description: 'Best game ever',
-              }).then(function (newGame) {
-                // Has to invite host itself too
-                newGame.$invite([currentUser, opponent]).then(function () {
-                  newGame.$redeem(currentUser).then(function () {
-                    request.gameId = newGame.raw().$id
-                    rematchRequests.$save().then(function () {
-                      $location.path('/game/' + newGame.raw().$id);
-                      //$window.location.href = '/#/game/' + newGame.raw().$id
-                    })
-                  }, function (reason) {
-                    alert(reason);
-                  })
-                }, function (reason) {
-                  alert(reason);
-                })
-              }, function (reason) {
-                alert(reason)
-              });
-            } else if (request.response == 'reject') {
-              delete requests[key]
-              rematchRequests.$save()
-            }
-          } else if (request.to == currentUser.uid && 
-                request.from == game.opponentOf(currentUser.uid).uid &&
-                !_.has(request, 'response')) {
-            console.log('Received a rematch request!')
-            $modal.open({
-              backdrop: 'static',
-              keyboard: false,
-              templateUrl: 'views/game/modal/requestRematch.html',
-              controller: function ($scope, $modalInstance) {
-                $scope.requester = game.player(request.from)
-
-                $scope.accept = function () {
-                  console.log('[MODAL] accepting request', request)
-                  request.response = 'accept'
-                  rematchRequests.$save()
-                  $modalInstance.close()
-                }
-
-                $scope.reject = function () {
-                  console.log('[MODAL] rejecting request', request)
-                  request.response = 'reject'
-                  rematchRequests.$save()
-                  $modalInstance.close()
-                }
-              }
-            })
-          } else if (request.to == currentUser.uid && 
-                request.from == game.opponentOf(currentUser.uid).uid &&
-                _.has(request, 'response') && 
-                request.response == 'accept' && 
-                _.has(request, 'gameId')) {
-            // Listening on gameId
-            delete requests[key]
-            rematchRequests.$save().then(function () {
-              Games.get(request.gameId).then(function (game) {
-                game.$redeem(currentUser).then(function (game) {
-                  $location.path('/game/' + game.raw().$id);
-                  //$window.location.href = '/#/game/' + game.raw().$id
-                }, function (reason) {
-                  alert(reason);
-                });
-              })
-            })
-          }
-        })
-      }
-    }
-
     function setupEndGame() {
-      rematchRequests.$onChange('', rematchHandler)
-      rematchHandler(rematchRequests)
+      Rematch.listen(game)
 
       $scope.winner = game.player(game.raw().winner)
       $scope.rematch = function () {

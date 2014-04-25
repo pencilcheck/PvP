@@ -1,9 +1,10 @@
 'use strict';
 
 angular.module('PvP')
-  .controller('MainCtrl', function ($scope, $location, $filter, Games, UserSession) {
+  .controller('MainCtrl', function ($scope, $location, $filter, Games, Rematch, UserSession) {
 
     $scope.games = Games.all()
+    Rematch.listenAll()
 
     $scope.add = function() {
       UserSession.signIn().then(function (user) {
