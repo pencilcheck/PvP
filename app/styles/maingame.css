@@ -894,3 +894,39 @@ font-size:30px;
    -webkit-text-stroke-width: 1px;
    -webkit-text-stroke-color: black;
 }
+
+.explosion {
+    width: 500px;
+    height: 500px;
+    background-image: url(/images/attacks/explosion-anim.png);
+    -webkit-animation: explosion 1s steps(48) 1;
+       -moz-animation: explosion 1s steps(48) 1;
+        -ms-animation: explosion 1s steps(48) 1;
+         -o-animation: explosion 1s steps(48) 1;
+            animation: explosion 1s steps(48) 1;
+}
+
+@-webkit-keyframes explosion {
+   from { background-position:    0px; }
+     to { background-position: -24000px; }
+}
+
+@-moz-keyframes explosion {
+   from { background-position:    0px; }
+     to { background-position: -24000px; }
+}
+
+@-ms-keyframes explosion {
+   from { background-position:    0px; }
+     to { background-position: -24000px; }
+}
+
+@-o-keyframes explosion {
+   from { background-position:    0px; }
+     to { background-position: -24000px; }
+}
+
+@keyframes explosion {
+   from { background-position:    0px; }
+     to { background-position: -24000px; }
+}

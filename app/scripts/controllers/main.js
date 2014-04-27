@@ -1,32 +1,27 @@
-'use strict';
+define(['angular', 'services/index'], function (angular) {
+  'use strict';
 
-angular.module('PvP')
-  .controller('MainCtrl', function ($scope, $location, $filter, Games, Rematch, UserSession) {
+  return angular.module('PvP.controllers.main', [])
+    .controller('MainCtrl', function ($scope, $location, $filter, Games, Rematch, UserSession) {
+      $scope.games = Games.all()
+      Rematch.listenAll()
 
-    $scope.games = Games.all()
-    Rematch.listenAll()
+      $scope.add = function() {
+        UserSession.signIn().then(function (user) {
+          Games.create({
+            host: user.uid,
+            title: 'test',
+            description: 'Best game ever',
+          }).then(function (game) {
+            $location.path('/game/' + game.raw().$id);
+          }, function (reason) {
+            alert(reason)
+          });
+        })
+      };
 
-    $scope.add = function() {
-      UserSession.signIn().then(function (user) {
-        Games.create({
-          host: user.uid,
-          title: 'test',
-          description: 'Best game ever',
-        }).then(function (game) {
-          console.log('created game with id', game.raw().$id)
-          // Don't redeem to invite
-          $location.path('/game/' + game.raw().$id);
-          //game.$redeem(user).then(function () {
-          //})
-        }, function (reason) {
-          alert(reason)
-        });
-      })
-    };
-
-    $scope.openGame = function (id) {
-      UserSession.signIn().then(function (user) {
+      $scope.openGame = function (id) {
         $location.path('/game/' + id)
-      })
-    }
-  });
+      }
+    });
+});

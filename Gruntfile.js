@@ -147,8 +147,11 @@ module.exports = function (grunt) {
       }
     },
 
-
-
+    bower: {
+      all: {
+        rjsConfig: '<%= yeoman.app %>/scripts/requireConfig.js'
+      }
+    },
 
     // Compiles Sass to CSS and generates necessary files if requested
     compass: {
@@ -159,7 +162,7 @@ module.exports = function (grunt) {
         imagesDir: '<%= yeoman.app %>/images',
         javascriptsDir: '<%= yeoman.app %>/scripts',
         fontsDir: '<%= yeoman.app %>/styles/fonts',
-        importPath: '<%= yeoman.app %>/bower_components',
+        importPath: '<%= yeoman.app %>/lib',
         httpImagesPath: '/images',
         httpGeneratedImagesPath: '/images/generated',
         httpFontsPath: '/styles/fonts',
@@ -283,7 +286,7 @@ module.exports = function (grunt) {
             '.htaccess',
             '*.html',
             'views/{,*/}*.html',
-            'bower_components/**/*',
+            'lib/**/*',
             'images/{,*/}*.{webp}',
             'fonts/*'
           ]

@@ -13,6 +13,20 @@ body {
     padding-bottom: 20px;
 }
 
+body {
+  color: #404040;
+  background-color: #f2f2f0;
+}
+
+.red-outline {
+  border: 2px solid #fa5c4f;
+}
+
+.red-bg {
+  color: white;
+  background-color: #fa5c4f;
+}
+
 /* Everything but the jumbotron gets side spacing for mobile first views */
 .header,
 .marketing,

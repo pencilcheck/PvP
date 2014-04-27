@@ -1,16 +1,5 @@
 <link href="styles/minigame.css" rel="stylesheet" type="text/css">
 
-<script>
-  $('button#copy-to-clipboard').zclip({
-    path: 'bower_components/jquery-zclip/ZeroClipboard.swf',
-    copy: function() {return $('input#shareLink').val();},
-    afterCopy: function () {}
-  });
-
-  $('input#shareLink').val(window.location.href);
-  $('input#shareLink').attr('size', $('input#shareLink').val().length);
-</script>
-
 <div class="shareLinkDiv">
   <h2>Remember to share this link:</h2>
   <div class="shareLink">
@@ -97,26 +86,33 @@
 </div>
 </div>
 
-  <script src="scripts/minigame/bind_polyfill.js"></script>
-  <script src="scripts/minigame/classlist_polyfill.js"></script>
-  <script src="scripts/minigame/animframe_polyfill.js"></script>
-  <script src="scripts/minigame/keyboard_input_manager.js"></script>
-  <script src="scripts/minigame/html_actuator.js"></script>
-  <script src="scripts/minigame/grid.js"></script>
-  <script src="scripts/minigame/tile.js"></script>
-  <script src="scripts/minigame/local_storage_manager.js"></script>
-  <script src="scripts/minigame/game_manager.js"></script>
-  <script src="scripts/minigame/application.js"></script>
-  <script type="text/javascript">
-  console.log("ilovepenn");
-	$(function() {
-		console.log("ilovepenn");
-		$("#wholegame").hide();
-	    $('h2 a.button-next').click(function() {
-	        $("#wholegame").show();
-	        console.log("ilovepenn");
-	    });
-	});
+<script src="scripts/minigame/bind_polyfill.js"></script>
+<script src="scripts/minigame/classlist_polyfill.js"></script>
+<script src="scripts/minigame/animframe_polyfill.js"></script>
+<script src="scripts/minigame/keyboard_input_manager.js"></script>
+<script src="scripts/minigame/html_actuator.js"></script>
+<script src="scripts/minigame/grid.js"></script>
+<script src="scripts/minigame/tile.js"></script>
+<script src="scripts/minigame/local_storage_manager.js"></script>
+<script src="scripts/minigame/game_manager.js"></script>
+<script src="scripts/minigame/application.js"></script>
+<script type="text/javascript">
+  require(['jquery', 'jquery-zclip'], function ($) {
+    // Minigame
+    $("#wholegame").hide();
+    $('h2 a.button-next').click(function() {
+        $("#wholegame").show();
+    });
 
-  </script>
+    // Shareable link
+    $('button#copy-to-clipboard').zclip({
+      path: 'lib/jquery-zclip/ZeroClipboard.swf',
+      copy: function() {return $('input#shareLink').val();},
+      afterCopy: function () {}
+    });
+
+    $('input#shareLink').val(window.location.href);
+    $('input#shareLink').attr('size', $('input#shareLink').val().length);
+  });
+</script>
 
