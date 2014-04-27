@@ -31,6 +31,9 @@ define(function (require) {
             var Timer = require('famous/utilities/Timer');
             var GridLayout = require("famous/views/GridLayout");
             var SequentialLayout = require("famous/views/SequentialLayout");
+            var Scrollview = require("famous/views/Scrollview");
+            var ContainerSurface = require("famous/surfaces/ContainerSurface");
+            var RenderController = require("famous/views/RenderController");
 
             // create the main context
             var mainContext = Engine.createContext(element[0])
@@ -49,6 +52,82 @@ define(function (require) {
                 textAlign: "center",
                 fontSize: "xx-large",
               }
+            })
+
+
+
+            var actionLogModifier = new StateModifier({
+              transform: Transform.inFront,
+              origin: [.5, 1]
+            })
+            var actionLogRenderController = new RenderController()
+            var actionLogContainer = new ContainerSurface({
+              size: [undefined, 100],
+              properties: {
+                  overflow: 'hidden'
+              },
+              classes: ['console-log-famous'],
+            })
+
+            var actionLogEmptySurface = new Surface({
+              size: [undefined, 100],
+            })
+            var actionLogTriggerSurface = new Surface({
+              size: [undefined, 100],
+              properties: {
+                lineHeight: "100px",
+                textAlign: "center"
+              },
+              content: 'CLICK ME',
+            })
+            actionLogRenderController.show(actionLogTriggerSurface)
+
+            var actionLog = new Scrollview()
+            var logs = []
+            actionLog.sequenceFrom(logs)
+
+            // Test data
+            /*
+            _.range(100).forEach(function (i) {
+              var temp = new Surface({
+                properties: {
+                  backgroundColor: "hsl(" + (i * 360 / 40) + ", 100%, 50%)",
+                  lineHeight: "50px",
+                  textAlign: "center"
+                },
+                size: [undefined, 50],
+                content: 'log ' + i
+              })
+              temp.pipe(actionLog)
+              logs.push(temp)
+            })
+            */
+
+            actionLogContainer.add(actionLog)
+
+            actionLogTriggerSurface.on('click', function () {
+              actionLogRenderController.show(actionLogContainer)
+            })
+            actionLogContainer.on('click', function () {
+              actionLogRenderController.show(actionLogTriggerSurface)
+            })
+
+            scope.$watch('rounds', function (newVal) {
+              logs.length = 0
+              newVal.forEach(function (round, i) {
+                var temp = new Surface({
+                  properties: {
+                    backgroundColor: "hsl(" + (i * 360 / 40) + ", 100%, 50%)",
+                    lineHeight: "200px",
+                    textAlign: "center"
+                  },
+                  size: [200, 50],
+                  content: round.log
+                })
+                temp.pipe(actionLog);
+                logs.push(temp)
+              })
+              console.log(logs)
             })
 
 
@@ -335,6 +414,7 @@ define(function (require) {
             })
 
 
+
             // Do the cube demo
             /*
             var front = new Surface({
@@ -418,6 +498,7 @@ define(function (require) {
 
             mainContext.add(dialogModifier).add(dialog)
             mainContext.add(explosionModifier).add(explosion)
+            mainContext.add(actionLogModifier).add(actionLogRenderController)
           }, 500)
         }
       }
