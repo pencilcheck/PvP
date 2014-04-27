@@ -6,7 +6,9 @@ define(['angular', 'require', 'jquery', 'masonry', 'angular-masonry', 'services/
   });
 
   return angular.module('PvP.controllers.game', ['PvP.services', 'PvP.directives'])
-    .controller('GameCtrl', function ($scope, $rootScope, $timeout, $location, $routeParams, $modal, currentUser, Games, GameStates, game, Moves, Rematch, rematchRequests, Facebook, pvpSync) {
+    .controller('GameCtrl', function ($scope, $rootScope, $timeout, $location, $routeParams, $modal, Games, GameStates, game, Moves, Rematch, rematchRequests, pvpSync, UserSession, Facebook) {
+      var currentUser = UserSession.currentUser()
+
       $rootScope.$on('$routeChangeError', function () {
         $location.path('/')
       })
@@ -30,8 +32,8 @@ define(['angular', 'require', 'jquery', 'masonry', 'angular-masonry', 'services/
             break
           case GameStates.movesPicked:
             console.log('All players have selected moves, fight: to fightScene')
-            //$scope.viewUrl = 'views/game/fightScene.html'
-            $scope.viewUrl = 'views/game/fightSceneFamous.html'
+            $scope.viewUrl = 'views/game/fightScene.html'
+            //$scope.viewUrl = 'views/game/fightSceneFamous.html'
             setupFightScene()
             break
           case GameStates.finished:
@@ -54,12 +56,6 @@ define(['angular', 'require', 'jquery', 'masonry', 'angular-masonry', 'services/
           access_token: currentUser.accessToken
         }, function (response) {
           $scope.friends = response.data
-          //$scope.friends.map(function (friend, index) {
-            //Facebook.api('/' + friend.id + '/picture', function (response) {
-              //$scope.friends[index].picture = response.data
-            //})
-            //return friend
-          //})
         })
       }
 

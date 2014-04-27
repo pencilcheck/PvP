@@ -78,12 +78,7 @@ define([
           templateUrl: '/views/game.html',
           controller: 'GameCtrl',
           resolve: {
-            currentUser: function (UserSession) {
-              return UserSession.signIn().then(function (user) {
-                return user
-              })
-            },
-            game: function ($route, Games, UserSession) {
+            game: function ($q, $route, Games, UserSession) {
               return Games.get($route.current.params.gameId).then(function (game) {
                 return UserSession.signIn().then(function (user) {
                   return game.$redeem(UserSession.currentUser())

@@ -2,7 +2,7 @@ define(['angular'], function (angular) {
   'use strict';
 
   return angular.module('PvP.services.facebook', [])
-    .service('FacebookBase', function ($rootScope, $q, Facebook) {
+    .service('FacebookBase', function ($rootScope, $q) {
       return {
         openLogin: function() {
           console.log('openLogin');
@@ -27,7 +27,7 @@ define(['angular'], function (angular) {
 
           auth.login('facebook', {
             rememberMe: true,
-            preferRedirect: true,
+            preferRedirect: false,
             scope: 'email,user_likes,basic_info,user_friends'
           });
 

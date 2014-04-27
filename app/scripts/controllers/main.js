@@ -2,7 +2,7 @@ define(['angular', 'services/index'], function (angular) {
   'use strict';
 
   return angular.module('PvP.controllers.main', [])
-    .controller('MainCtrl', function ($scope, $location, $filter, Games, Rematch, UserSession) {
+    .controller('MainCtrl', function ($scope, $window, $location, $filter, Games, Rematch, UserSession) {
       $scope.games = Games.all()
       Rematch.listenAll()
 
@@ -13,7 +13,7 @@ define(['angular', 'services/index'], function (angular) {
             title: 'test',
             description: 'Best game ever',
           }).then(function (game) {
-            $location.path('/game/' + game.raw().$id);
+            $window.location.href = '/#/game/' + game.raw().$id
           }, function (reason) {
             alert(reason)
           });
@@ -21,7 +21,7 @@ define(['angular', 'services/index'], function (angular) {
       };
 
       $scope.openGame = function (id) {
-        $location.path('/game/' + id)
+        $window.location.href = '/#/game/' + id
       }
     });
 });
