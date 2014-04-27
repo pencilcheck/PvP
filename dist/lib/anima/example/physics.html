@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Physics</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width">
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+  <div class="ball ball1" style="left: 100px;top: 25px"></div>
+  <div class="ball ball2" style="left: 100px;top: 250px"></div>
+  <div class="ball ball3" style="left: 100px;top: 475px"></div>
+</body>
+<script src="../anima.js"></script>
+<script>
+setTimeout(function(){
+  var world = anima.world(),
+      item1 = world.add(document.querySelector('.ball1'))
+      item2 = world.add(document.querySelector('.ball2'), {
+        mass: 1,
+        viscosity: 0.1,
+        edge: {
+          max: [500, 0, 0]
+        }
+      }),
+      item3 = world.add(document.querySelector('.ball3'), {
+        mass: 1,
+        viscosity: 0.1
+      })
+
+  item1
+    .animate({
+      translate: [500, 0, 0]
+    }, 200)
+
+  item2
+    .animate({
+      translate: [500, 0, 0]
+    }, 200)
+
+  item3
+    .animate({
+      translate: [500, 0, 0]
+    }, 200)
+}, 500)
+
+</script>
+</html>
