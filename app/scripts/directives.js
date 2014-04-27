@@ -112,24 +112,6 @@ define(function (require) {
               actionLogRenderController.show(actionLogTriggerSurface)
             })
 
-            scope.$watch('rounds', function (newVal) {
-              logs.length = 0
-              newVal.forEach(function (round, i) {
-                var temp = new Surface({
-                  properties: {
-                    backgroundColor: "hsl(" + (i * 360 / 40) + ", 100%, 50%)",
-                    lineHeight: "200px",
-                    textAlign: "center"
-                  },
-                  size: [200, 50],
-                  content: round.log
-                })
-                temp.pipe(actionLog);
-                logs.push(temp)
-              })
-              console.log(logs)
-            })
-
 
 
             var explosionModifier = new StateModifier({
@@ -407,12 +389,44 @@ define(function (require) {
 
 
             // angular binding
-            scope.$watch('notSeenAnimation', function funciton () {
+            scope.$watch('dialog', function (newVal) {
+              dialog.setContent(newVal)
             })
 
-            scope.$watch('attackCommitted()', function funciton () {
+            scope.$watch('notSeenAnimation', function (newVal) {
+              if (newVal) {
+                // Show start animation button
+
+                // Show heart drop or attacked animation 
+
+                // Show enemy attack and smack talk
+              } else {
+                // Show start animation button
+
+                // Hide enemy attack and smack talk
+              }
             })
 
+            scope.$watch('attackCommitted()', function () {
+            })
+
+            scope.$watch('rounds', function (newVal) {
+              logs.length = 0
+              newVal.forEach(function (round, i) {
+                var temp = new Surface({
+                  properties: {
+                    backgroundColor: "hsl(" + (i * 360 / 40) + ", 100%, 50%)",
+                    lineHeight: "200px",
+                    textAlign: "center"
+                  },
+                  size: [200, 50],
+                  content: round.log
+                })
+                temp.pipe(actionLog);
+                logs.push(temp)
+              })
+              console.log(logs)
+            })
 
 
             // Do the cube demo
