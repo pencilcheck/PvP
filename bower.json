@@ -11,6 +11,7 @@
     "angular-sanitize": "1.2.6",
     "angular-route": "1.2.6",
     "firebase": "~1.0.2",
+    "firebase-simple-login": "~1.4.0",
     "todc-bootstrap": "*",
     "javascript-state-machine": "~2.2.0",
     "underscore": "~1.6.0",
