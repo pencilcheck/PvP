@@ -61,6 +61,7 @@ define([
       };
     })
     .config(function($routeProvider, $locationProvider) {
+      //$locationProvider.html5Mode(true); // TODO: later
       $routeProvider
         .when('/', {
           templateUrl: '/views/main.html',

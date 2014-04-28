@@ -32,8 +32,10 @@ define(['angular', 'require', 'jquery', 'masonry', 'angular-masonry', 'services/
             break
           case GameStates.movesPicked:
             console.log('All players have selected moves, fight: to fightScene')
-            $scope.viewUrl = 'views/game/fightScene.html'
-            //$scope.viewUrl = 'views/game/fightSceneFamous.html'
+            if ($location.search().mode == 'famous')
+              $scope.viewUrl = 'views/game/fightSceneFamous.html'
+            else
+              $scope.viewUrl = 'views/game/fightScene.html'
             setupFightScene()
             break
           case GameStates.finished:
@@ -187,6 +189,9 @@ define(['angular', 'require', 'jquery', 'masonry', 'angular-masonry', 'services/
         }
 
         if (game.raw().state == GameStates.movesPicked) {
+          if (game.raw().winner) {
+            $scope.notSeenAnimation = true
+          }
           if (allAttackCommitted()) {
             console.log('all committed')
             $scope.notSeenAnimation = true

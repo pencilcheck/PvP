@@ -44,7 +44,7 @@ define(['angular'], function (angular) {
       }
 
       function textualizeAttack(playerA, playerB, moveA, moveB, damageA, damageB) {
-        return initials(playerA) + ' has taken ' + damageA + ' from ' + moveB + ' :: ' + initials(playerB) + ' has taken ' + damageB + ' from ' + moveA + '.';
+        return initials(playerA) + ' has taken ' + damageA + ' damage from ' + moveB + ' :: ' + initials(playerB) + ' has taken ' + damageB + ' damage from ' + moveA + '.';
       };
 
       function shieldProb(reverse) {
