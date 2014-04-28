@@ -86,23 +86,6 @@ define(function (require) {
             var logs = []
             actionLog.sequenceFrom(logs)
 
-            // Test data
-            /*
-            _.range(100).forEach(function (i) {
-              var temp = new Surface({
-                properties: {
-                  backgroundColor: "hsl(" + (i * 360 / 40) + ", 100%, 50%)",
-                  lineHeight: "50px",
-                  textAlign: "center"
-                },
-                size: [undefined, 50],
-                content: 'log ' + i
-              })
-              temp.pipe(actionLog)
-              logs.push(temp)
-            })
-            */
-
             actionLogContainer.add(actionLog)
 
             actionLogTriggerSurface.on('click', function () {
@@ -133,7 +116,7 @@ define(function (require) {
                 playerData = {
                   bubbleSurfaceClasses: ['bubble-famous'],
                   heartIndex: 0,
-                  chainOfHeartsOutputFunction: function (input, offset, index) {
+                  heartRingOutputFunction: function (input, offset, index) {
                     var ringTransform = Transform.translate(-25 + 200, -25 + 200, 0)
 
                     ringTransform = Transform.multiply(Transform.aboutOrigin([200, 0, 200], Transform.rotateY(360 * index / 10 * Math.PI / 180 + this.heartIndex)), ringTransform)
@@ -155,7 +138,7 @@ define(function (require) {
                 playerData = {
                   bubbleSurfaceClasses: ['bubble2-famous'],
                   heartIndex: 0,
-                  chainOfHeartsOutputFunction: function (input, offset, index) {
+                  heartRingOutputFunction: function (input, offset, index) {
                     var ringTransform = Transform.translate(-25 + 200, -25 + 200, 0)
 
                     ringTransform = Transform.multiply(Transform.aboutOrigin([200, 0, 200], Transform.rotateY(360 * index / 10 * Math.PI / 180 + this.heartIndex)), ringTransform)
@@ -189,17 +172,17 @@ define(function (require) {
 
                   var planetModifier = new StateModifier({ origin: [.5, .5] })
 
-                  function setupChainOfHearts() {
-                    var chainOfHearts = new SequentialLayout()
+                  function setupHeartRing() {
+                    var heartRing = new SequentialLayout()
                     var hearts = []
 
-                    chainOfHearts.setOutputFunction(playerData.chainOfHeartsOutputFunction.bind(playerData))
-                    chainOfHearts.sequenceFrom(hearts)
+                    heartRing.setOutputFunction(playerData.heartRingOutputFunction.bind(playerData))
+                    heartRing.sequenceFrom(hearts)
 
                     var rerender = function (health, oldHealth) {
                       if (health != oldHealth) {
                         if (health == 0) {
-                          chainOfHearts.sequenceFrom([new Surface()])
+                          heartRing.sequenceFrom([new Surface()])
                         } else {
                           hearts.length = 0
                           _.range(health).forEach(function (index) {
@@ -211,7 +194,7 @@ define(function (require) {
                           })
                         }
 
-                        chainOfHearts.render()
+                        heartRing.render()
                       }
 
                       var prefix = opponent ? 'blue' : 'pink'
@@ -225,10 +208,10 @@ define(function (require) {
                     }
 
                     function rotateHealthRing() {
-                      chainOfHearts.render()
+                      heartRing.render()
                       playerData.heartIndex += 0.01
                     }
-                    registerPlanetHoverEffects(planetSurface, [rotateHealthRing])
+                    Engine.on('prerender', rotateHealthRing)
 
                     if (!opponent) {
                       rerender(scope.health)
@@ -238,7 +221,7 @@ define(function (require) {
                       scope.$watch('opponentHealth', rerender)
                     }
 
-                    return chainOfHearts
+                    return heartRing
                   }
 
                   function registerPlanetHoverEffects(surface, fns) {
@@ -271,7 +254,7 @@ define(function (require) {
                   }
                   registerPlanetHoverEffects(planetSurface, [wigglePlanets])
 
-                  node.add(setupChainOfHearts())
+                  node.add(setupHeartRing())
                   node.add(planetModifier).add(planetSurface)
 
                   return node
@@ -546,83 +529,6 @@ define(function (require) {
               }
             })
 
-
-            // Do the cube demo
-            /*
-            var front = new Surface({
-              size: [200, 200],
-              content: 1,
-              properties: {
-                backgroundColor: "hsl(0, 100%, 50%)",
-                 lineHeight: 200 + "px",
-                 textAlign: "center"
-              }
-            })
-            var back = new Surface({
-              size: [200, 200],
-              content: 6,
-              properties: {
-                backgroundColor: "hsl(60, 100%, 50%)",
-                 lineHeight: 200 + "px",
-                 textAlign: "center"
-              }
-            })
-            var right = new Surface({
-              size: [200, 200],
-              content: 2,
-              properties: {
-                backgroundColor: "hsl(120, 100%, 50%)",
-                 lineHeight: 200 + "px",
-                 textAlign: "center"
-              }
-            })
-            var left = new Surface({
-              size: [200, 200],
-              content: 3,
-              properties: {
-                backgroundColor: "hsl(180, 100%, 50%)",
-                 lineHeight: 200 + "px",
-                 textAlign: "center"
-              }
-            })
-            var top = new Surface({
-              size: [200, 200],
-              content: 4,
-              properties: {
-                backgroundColor: "hsl(240, 100%, 50%)",
-                 lineHeight: 200 + "px",
-                 textAlign: "center"
-              }
-            })
-            var bottom = new Surface({
-              size: [200, 200],
-              content: 5,
-              properties: {
-                backgroundColor: "hsl(300, 100%, 50%)",
-                 lineHeight: 200 + "px",
-                 textAlign: "center"
-              }
-            })
-            var cube = mainContext.add(new StateModifier({origin: [.5, .5]}))
-            cube.add(new StateModifier({
-              transform: Transform.translate(0, 0, 100)
-            })).add(front)
-            cube.add(new StateModifier({
-              transform: Transform.multiply(Transform.translate(0, 0, 100), Transform.rotateX(180 * Math.PI / 180))
-            })).add(back)
-            cube.add(new StateModifier({
-              transform: Transform.multiply(Transform.translate(0, 0, 100), Transform.rotateY(90 * Math.PI / 180))
-            })).add(right)
-            cube.add(new StateModifier({
-              transform: Transform.multiply(Transform.translate(0, 0, 100), Transform.rotateY(-90 * Math.PI / 180))
-            })).add(left)
-            cube.add(new StateModifier({
-              transform: Transform.multiply(Transform.translate(0, 0, 100), Transform.rotateX(90 * Math.PI / 180))
-            })).add(top)
-            cube.add(new StateModifier({
-              transform: Transform.multiply(Transform.translate(0, 0, 100), Transform.rotateX(-90 * Math.PI / 180))
-            })).add(bottom)
-            */
 
 
             // setup context
