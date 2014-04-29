@@ -1,12 +1,10 @@
 body {
-    background-image:url("/images/bg.jpg");
-    background-repeat:no-repeat;
-    background-size:100%;
+    /*background-image:url("/images/bg.jpg");*/
+    /*background-repeat:no-repeat;*/
+    background-image:url("/images/bg2.jpg");
     width: auto;
     padding:0px;
     color:#ACD6E5;
-
-
 }
 
 ::selection {background-color:rgba(0,0,0,0);

@@ -117,11 +117,12 @@ define(function (require) {
                   bubbleSurfaceClasses: ['bubble-famous'],
                   heartIndex: 0,
                   heartRingOutputFunction: function (input, offset, index) {
-                    var ringTransform = Transform.translate(-25 + 200, -25 + 200, 0)
+                    var ringTransform = Transform.translate(250, 180, 0)
 
-                    ringTransform = Transform.multiply(Transform.aboutOrigin([200, 0, 200], Transform.rotateY(360 * index / 10 * Math.PI / 180 + this.heartIndex)), ringTransform)
-                    ringTransform = Transform.multiply(Transform.rotateX(20 * Math.PI / 180), ringTransform)
-                    ringTransform = Transform.multiply(Transform.rotateZ(20 * Math.PI / 180), ringTransform)
+                    // Origin stays the same even if it is translated, therefore x and y needs to match, z is there to let it rotate tagent to its rotation curve
+                    ringTransform = Transform.multiply(Transform.aboutOrigin([250, 180, 240], Transform.rotateY(360 * index / 10 * Math.PI / 180 + this.heartIndex)), ringTransform)
+                    ringTransform = Transform.multiply(Transform.rotateX(30 * Math.PI / 180), ringTransform)
+                    ringTransform = Transform.multiply(Transform.rotateZ(25 * Math.PI / 180), ringTransform)
 
                     return {
                       transform: ringTransform,
@@ -139,11 +140,12 @@ define(function (require) {
                   bubbleSurfaceClasses: ['bubble2-famous'],
                   heartIndex: 0,
                   heartRingOutputFunction: function (input, offset, index) {
-                    var ringTransform = Transform.translate(-25 + 200, -25 + 200, 0)
+                    var ringTransform = Transform.translate(0, 325, 0)
 
-                    ringTransform = Transform.multiply(Transform.aboutOrigin([200, 0, 200], Transform.rotateY(360 * index / 10 * Math.PI / 180 + this.heartIndex)), ringTransform)
-                    ringTransform = Transform.multiply(Transform.rotateX(20 * Math.PI / 180), ringTransform)
-                    ringTransform = Transform.multiply(Transform.rotateZ(20 * Math.PI / 180), ringTransform)
+                    // Origin stays the same even if it is translated, therefore x and y needs to match, z is there to let it rotate tagent to its rotation curve
+                    ringTransform = Transform.multiply(Transform.aboutOrigin([0, 325, 240], Transform.rotateY(360 * index / 10 * Math.PI / 180 + this.heartIndex)), ringTransform)
+                    ringTransform = Transform.multiply(Transform.rotateX(25 * Math.PI / 180), ringTransform)
+                    ringTransform = Transform.multiply(Transform.rotateZ(-25 * Math.PI / 180), ringTransform)
 
                     return {
                       transform: ringTransform,
@@ -170,6 +172,16 @@ define(function (require) {
                     size: [300, 300],
                   })
 
+                  var planetOrbitSurface = new ImageSurface({
+                    size: [500, 300],
+                  })
+
+                  if (opponent) {
+                    planetOrbitSurface.setContent('images/misc/orbit.png')
+                  } else {
+                    planetOrbitSurface.setContent('images/misc/orbit-flip.png')
+                  }
+
                   var planetModifier = new StateModifier({ origin: [.5, .5] })
 
                   function setupHeartRing() {
@@ -188,7 +200,8 @@ define(function (require) {
                           _.range(health).forEach(function (index) {
                             var heart = new ImageSurface({
                               size: [50, 50],
-                              content: 'images/misc/life.png',
+                              //content: 'images/misc/life.png',
+                              content: 'images/misc/heart.png',
                             })
                             hearts.push(heart)
                           })
@@ -255,7 +268,9 @@ define(function (require) {
                   registerPlanetHoverEffects(planetSurface, [wigglePlanets])
 
                   node.add(setupHeartRing())
-                  node.add(planetModifier).add(planetSurface)
+                  var t = node.add(planetModifier)
+                  t.add(planetSurface)
+                  t.add(new StateModifier({transform: Transform.translate(0, 50, 0)})).add(planetOrbitSurface)
 
                   return node
                 }
