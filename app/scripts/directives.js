@@ -108,6 +108,7 @@ define(function (require) {
 
 
             // Shared
+            var rerender
             function scaffoldPlayer(opponent) {
               var playerData, playerNode
 
@@ -186,29 +187,35 @@ define(function (require) {
 
                   function setupHeartRing() {
                     var heartRing = new SequentialLayout()
-                    var hearts = []
+                    var hearts = [new Surface()]
 
                     heartRing.setOutputFunction(playerData.heartRingOutputFunction.bind(playerData))
                     heartRing.sequenceFrom(hearts)
 
-                    var rerender = function (health, oldHealth) {
-                      if (health != oldHealth) {
-                        if (health == 0) {
-                          heartRing.sequenceFrom([new Surface()])
-                        } else {
-                          hearts.length = 0
-                          _.range(health).forEach(function (index) {
-                            var heart = new ImageSurface({
-                              size: [50, 50],
-                              //content: 'images/misc/life.png',
-                              content: 'images/misc/heart.png',
-                            })
-                            hearts.push(heart)
-                          })
-                        }
-
-                        heartRing.render()
+                    // Update visuals, should only be called when scope.notSeenAnimation is false
+                    rerender = function () {
+                      var health
+                      if (!opponent) {
+                        health = scope.health
+                      } else {
+                        health = scope.opponentHealth
                       }
+
+                      if (health == 0) {
+                        heartRing.sequenceFrom([new Surface()])
+                      } else {
+                        hearts.length = 0
+                        _.range(health).forEach(function (index) {
+                          var heart = new ImageSurface({
+                            size: [50, 50],
+                            //content: 'images/misc/life.png',
+                            content: 'images/misc/heart.png',
+                          })
+                          hearts.push(heart)
+                        })
+                      }
+
+                      heartRing.render()
 
                       var prefix = opponent ? 'blue' : 'pink'
                       if (health == 10) {
@@ -219,6 +226,7 @@ define(function (require) {
                         planetSurface.setContent('images/planets/' + prefix + '-state3.png')
                       }
                     }
+                    rerender()
 
                     function rotateHealthRing() {
                       heartRing.render()
@@ -226,13 +234,13 @@ define(function (require) {
                     }
                     Engine.on('prerender', rotateHealthRing)
 
-                    if (!opponent) {
-                      rerender(scope.health)
-                      scope.$watch('health', rerender)
-                    } else {
-                      rerender(scope.opponentHealth)
-                      scope.$watch('opponentHealth', rerender)
-                    }
+                    //if (!opponent) {
+                      //rerender(scope.health)
+                      //scope.$watch('health', rerender)
+                    //} else {
+                      //rerender(scope.opponentHealth)
+                      //scope.$watch('opponentHealth', rerender)
+                    //}
 
                     return heartRing
                   }
@@ -508,12 +516,14 @@ define(function (require) {
 
             scope.$watch('notSeenAnimation', function (newVal) {
               console.log('famous notSeenAniatmion watch', newVal)
+
               if (newVal) {
                 // Show start animation button
                 overlayRenderController.show(overlayNode)
               } else {
                 // Hide start animation button
                 overlayRenderController.show(overlayEmptySurface)
+                rerender()
               }
             })
 
