@@ -7,6 +7,7 @@ define(function(require, exports, module) {
     var ContainerSurface = require("famous/surfaces/ContainerSurface");
     var OptionsManager = require('famous/core/OptionsManager');
     var Scrollview = require('famous/views/Scrollview');
+    var EventHandler = require('famous/core/EventHandler');
 
     /*
      * @name ActionLogView
@@ -15,12 +16,16 @@ define(function(require, exports, module) {
      */
 
     function ActionLog(options) {
-        RenderController.apply(this, arguments)
-        this.options = Object.create(ActionLog.DEFAULT_OPTIONS);
-        this._optionsManager = new OptionsManager(this.options);
-        if (options) this.setOptions(options);
+        this._logs = [];
+        this._state = 0;
+        this._currentTarget = null;
 
-        this.trigger = new Surface({
+        this._controller = new RenderController();
+
+        this._eventInput = new EventHandler();
+        EventHandler.setInputHandler(this, this._eventInput);
+
+        this._trigger = new Surface({
           size: [undefined, 100],
           properties: {
             lineHeight: "100px",
@@ -29,36 +34,71 @@ define(function(require, exports, module) {
           content: 'CLICK ME TO TOGGLE AWESOMESAUCE',
         });
 
-        this.actionLog = new Scrollview();
+        this._scroll = new Scrollview();
 
-        this.logContainer = new ContainerSurface({
+        this._container = new ContainerSurface({
           size: [undefined, 200],
           properties: {
               overflow: 'hidden'
           },
           classes: ['console-log-famous'],
-        });
+        })
 
-        this.logContainer.add(this.actionLog);
+        this._container.add(this._scroll);
 
-        this.trigger.on('click', function () {
-          this.show(this.logContainer);
-        });
+        this.hide();
 
-        this.logContainer.on('click', function () {
-          this.show(this.trigger);
-        });
-
-        this.show(this.trigger);
+        if (options) this.setOptions(options);
     }
-    ActionLog.prototype = Object.create(RenderController.prototype);
-    ActionLog.prototype.constructor = ActionLog;
 
-    ActionLog.DEFAULT_OPTIONS = OptionsManager.patch(RenderController.DEFAULT_OPTIONS, {
-    });
+    function _pipe(target) {
+        // stop sending input to old target
+        if (this._currentTarget) this._eventInput.unpipe(this._currentTarget);
+
+        this._currentTarget = target;
+
+        // start sending input to new target
+        if (this._currentTarget && this._currentTarget.trigger) this._eventInput.pipe(this._currentTarget);
+
+        this._currentTarget.on('click', function () {
+          this._state = this._state ? 0: 1;
+          if (this._state) {
+              this.show();
+          } else {
+              this.hide();
+          }
+        }.bind(this));
+    }
+
+    ActionLog.prototype.setOptions = function setOptions(options) {
+        this._controller.setOptions(options);
+    };
+
+    ActionLog.prototype.show = function () {
+        _pipe.call(this, this._container);
+
+        this._controller.show(this._currentTarget);
+    };
+
+    ActionLog.prototype.hide = function () {
+        _pipe.call(this, this._trigger);
+
+        this._controller.show(this._currentTarget);
+    };
 
     ActionLog.prototype.sequenceFrom = function (logs) {
-        this.actionLog.sequenceFrom(logs);
+        this._logs = logs;
+        this._scroll.sequenceFrom(logs);
+    };
+
+    ActionLog.prototype.render = function () {
+        this._logs.forEach(function (log) {
+          log.pipe(this._scroll);
+        }, this);
+
+        return {
+          target: this._controller.render()
+        }
     };
 
     module.exports = ActionLog;

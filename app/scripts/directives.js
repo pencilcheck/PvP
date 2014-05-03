@@ -41,8 +41,17 @@ define(function (require) {
               id: 'fightScene',
               target: [
                 {
-                  id: 'dialog',
-                  origin: [.5, 0]
+                  origin: [.5, 0],
+                  target: {
+                    id: 'dialog'
+                  }
+                },
+                {
+                  transform: Transform.inFront,
+                  origin: [.5, 1],
+                  target: {
+                    id: 'actionLog'
+                  }
                 }
               ]
             });
@@ -58,47 +67,9 @@ define(function (require) {
               }
             })
 
-
-
-            var actionLogModifier = new StateModifier({
-              transform: Transform.inFront,
-              origin: [.5, 1]
-            })
-            var actionLogRenderController = new RenderController()
-            var actionLogContainer = new ContainerSurface({
-              size: [undefined, 200],
-              properties: {
-                  overflow: 'hidden'
-              },
-              classes: ['console-log-famous'],
-            })
-
-            var actionLogEmptySurface = new Surface({
-              size: [undefined, 100],
-            })
-            var actionLogTriggerSurface = new Surface({
-              size: [undefined, 100],
-              properties: {
-                lineHeight: "100px",
-                textAlign: "center"
-              },
-              content: 'CLICK ME TO TOGGLE AWESOMESAUCE',
-            })
-            actionLogRenderController.show(actionLogTriggerSurface)
-
-            var actionLog = new Scrollview()
             var logs = []
+            var actionLog = new ActionLog()
             actionLog.sequenceFrom(logs)
-
-            actionLogContainer.add(actionLog)
-
-            actionLogTriggerSurface.on('click', function () {
-              actionLogRenderController.show(actionLogContainer)
-            })
-            actionLogContainer.on('click', function () {
-              actionLogRenderController.show(actionLogTriggerSurface)
-            })
-
 
 
             var explosionModifier = new StateModifier({
@@ -553,7 +524,6 @@ define(function (require) {
                     size: [undefined, 50],
                     content: round.log
                   })
-                  temp.pipe(actionLog);
                   logs.push(temp)
                 })
                 console.log(logs)
@@ -566,10 +536,10 @@ define(function (require) {
             mainContext.setPerspective(2400);
 
             fightScene.id['dialog'].add(dialog);
+            fightScene.id['actionLog'].add(actionLog);
             mainContext.add(fightScene)
 
             mainContext.add(explosionModifier).add(explosion)
-            mainContext.add(actionLogModifier).add(actionLogRenderController)
             mainContext.add(overlayRenderController)
 
             mainContext.add(scaffoldPlayer())
