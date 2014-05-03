@@ -52,6 +52,13 @@ define(function (require) {
                   target: {
                     id: 'actionLog'
                   }
+                },
+                {
+                  size: [500, 500],
+                  origin: [.5, .5],
+                  target: {
+                    id: 'animationArea'
+                  }
                 }
               ]
             });
@@ -71,15 +78,9 @@ define(function (require) {
             var actionLog = new ActionLog()
             actionLog.sequenceFrom(logs)
 
-
-            var explosionModifier = new StateModifier({
-              origin: [.5, .5]
-            })
             var explosion = new Surface({
-              size: [500, 500],
               classes: ['explosion']
             })
-
 
 
             // Shared
@@ -537,9 +538,9 @@ define(function (require) {
 
             fightScene.id['dialog'].add(dialog);
             fightScene.id['actionLog'].add(actionLog);
+            fightScene.id['animationArea'].add(explosion);
             mainContext.add(fightScene)
 
-            mainContext.add(explosionModifier).add(explosion)
             mainContext.add(overlayRenderController)
 
             mainContext.add(scaffoldPlayer())
