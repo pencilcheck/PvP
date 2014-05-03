@@ -59,6 +59,13 @@ define(function (require) {
                   target: {
                     id: 'animationArea'
                   }
+                },
+                {
+                  size: [undefined, undefined],
+                  origin: [.5, .5],
+                  target: {
+                    id: 'animationOverlay'
+                  }
                 }
               ]
             });
@@ -80,8 +87,32 @@ define(function (require) {
 
             var explosion = new Surface({
               classes: ['explosion']
+            });
+
+            var animationButton = new Surface({
+              size: [170, 120],
+              classes: ['start-animation-btn-famous']
             })
 
+            var skipAnimation = new Surface({
+              size: [170, true],
+              content: 'Skip animation',
+              properties: {
+                lineHeight: "25px",
+                textAlign: "center",
+                color: "white",
+                cursor: "pointer"
+              }
+            })
+
+            var animationOverlay = new AnimationOverlay();
+
+            var test = new RenderNode();
+            test.add(animationButton);
+            test.add(new StateModifier({
+              transform: Transform.translate(0, 70, 2)
+            })).add(skipAnimation);
+            animationOverlay.setNode(test);
 
             // Shared
             var rerender
@@ -438,47 +469,10 @@ define(function (require) {
             }
 
 
-            var overlayRenderController = new RenderController()
 
-            var overlayNode = new RenderNode()
-
-            var overlayEmptySurface = new Surface()
-
-            var animationOverlayModifier = new StateModifier({
-              origin: [0, 0]
-            })
-
-            var animationOverlay = new Surface({
-              size: [undefined, undefined],
-              classes: ['overlay']
-            })
-
-            var animationContainerModifier = new StateModifier({
-              origin: [.5, .5],
-            })
-
-            var animationButton = new Surface({
-              size: [170, 120],
-              classes: ['start-animation-btn-famous']
-            })
 
             animationButton.on('click', function () {
                 // Show heart drop and attack animation 
-            })
-
-            var skipAnimationModifier = new StateModifier({
-              transform: Transform.translate(0, 70, 2)
-            })
-
-            var skipAnimation = new Surface({
-              size: [170, true],
-              content: 'Skip animation',
-              properties: {
-                lineHeight: "25px",
-                textAlign: "center",
-                color: "white",
-                cursor: "pointer"
-              }
             })
 
             skipAnimation.on('click', function () {
@@ -487,26 +481,19 @@ define(function (require) {
               })
             })
 
-            overlayNode.add(animationOverlayModifier).add(animationOverlay)
-            var test = overlayNode.add(animationContainerModifier)
-            test.add(animationButton)
-            test.add(skipAnimationModifier).add(skipAnimation)
 
             scope.$watch('notSeenAnimation', function (newVal) {
               console.log('famous notSeenAniatmion watch', newVal)
 
               if (newVal) {
                 // Show start animation button
-                overlayRenderController.show(overlayNode)
+                animationOverlay.show()
               } else {
                 // Hide start animation button
-                overlayRenderController.show(overlayEmptySurface)
-                rerender()
+                animationOverlay.hide()
+                //rerender()
               }
             })
-
-            overlayRenderController.show(overlayEmptySurface)
-
 
             scope.$watch('dialog', function (newVal) {
               dialog.setContent(newVal)
@@ -539,9 +526,8 @@ define(function (require) {
             fightScene.id['dialog'].add(dialog);
             fightScene.id['actionLog'].add(actionLog);
             fightScene.id['animationArea'].add(explosion);
+            fightScene.id['animationOverlay'].add(animationOverlay);
             mainContext.add(fightScene)
-
-            mainContext.add(overlayRenderController)
 
             mainContext.add(scaffoldPlayer())
             mainContext.add(scaffoldPlayer(true))

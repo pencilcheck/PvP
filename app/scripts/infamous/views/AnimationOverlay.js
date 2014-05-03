@@ -2,11 +2,12 @@
 define(function(require, exports, module) {
     var Surface = require('famous/core/Surface');
     var Transform = require('famous/core/Transform');
-    var Transitionable = require('famous/transitions/Transitionable');
     var StateModifier = require('famous/modifiers/StateModifier');
     var ContainerSurface = require("famous/surfaces/ContainerSurface");
     var OptionsManager = require('famous/core/OptionsManager');
     var RenderNode = require('famous/core/RenderNode');
+    var RenderController = require("famous/views/RenderController");
+    var EventHandler = require('famous/core/EventHandler');
 
     /*
      * @name AnimationOverlay
@@ -15,54 +16,47 @@ define(function(require, exports, module) {
      */
 
     function AnimationOverlay(options) {
-        this.options = Object.create(AnimationOverlay.DEFAULT_OPTIONS);
-        this._optionsManager = new OptionsManager(this.options);
+        this._controller = new RenderController();
+
+        this._empty = new Surface();
+        this._overlay = new RenderNode();
+        this._node = new RenderNode();
+
+        this._overlay.add(new Surface({
+            size: [undefined, undefined],
+            classes: ['overlay']
+        }));
+        this._overlay.add(new StateModifier({ origin: [.5, .5] })).add(this._node);
+
+        this._eventInput = new EventHandler();
+        EventHandler.setInputHandler(this, this._eventInput);
+
+        this.hide();
+
         if (options) this.setOptions(options);
-
-        this.state = new Transitionable(0);
-
-        this.node = new RenderNode();
-
-        this.overlay = new Surface({
-          size: [undefined, undefined],
-          classes: ['overlay']
-        });
     }
 
-    AnimationOverlay.DEFAULT_OPTIONS = {
-    };
-
     AnimationOverlay.prototype.setOptions = function setOptions(options) {
-        return this._optionsManager.setOptions(options);
+        this._controller.setOptions(options);
     };
 
     AnimationOverlay.prototype.setNode = function setNode(obj) {
-        return this.node.set(obj);
+        this._node.set(obj);
     };
 
     AnimationOverlay.prototype.show = function (callback) {
-        this.state.set(1, this, callback);
+        this._controller.show(this._overlay);
     };
 
     AnimationOverlay.prototype.hide = function (callback) {
-        this.state.set(0, true, callback);
+        this._controller.show(this._empty);
     };
 
     AnimationOverlay.prototype.render = function render() {
-        var opacity = this.state.get();
-
-        return [
-            {
-                target: this.overlay.render()
-            },
-            {
-                transform: {
-                  origin: [.5, .5]
-                },
-                opacity: opacity,
-                target: this.node.render()
-            }
-        ]
+        return {
+            origin: [.5, .5],
+            target: this._controller.render()
+        };
     };
 
     module.exports = AnimationOverlay;
