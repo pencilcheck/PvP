@@ -15,8 +15,6 @@ define(function (require) {
             var Surface = require('famous/core/Surface')
             var ImageSurface = require('famous/surfaces/ImageSurface')
             var StateModifier = require('famous/modifiers/StateModifier')
-            var Draggable = require('famous/modifiers/Draggable')
-            var Easing = require('famous/transitions/Easing')
             var Modifier = require('famous/core/Modifier')
             var InputSurface = require("famous/surfaces/InputSurface")
             var SequentialLayout = require("famous/views/SequentialLayout")
@@ -27,22 +25,28 @@ define(function (require) {
             var Spring = require("famous/physics/forces/Spring")
             var RenderNode = require('famous/core/RenderNode')
             var Transform = require('famous/core/Transform')
-            var Transitionable = require("famous/transitions/Transitionable");
             var Timer = require('famous/utilities/Timer');
-            var GridLayout = require("famous/views/GridLayout");
-            var SequentialLayout = require("famous/views/SequentialLayout");
             var Scrollview = require("famous/views/Scrollview");
             var ContainerSurface = require("famous/surfaces/ContainerSurface");
             var RenderController = require("famous/views/RenderController");
+            var Scene = require("famous/core/Scene");
+
+            var ActionLog = require("infamous/views/ActionLog");
+            var AnimationOverlay = require("infamous/views/AnimationOverlay");
 
             // create the main context
             var mainContext = Engine.createContext(element[0])
-            var PE = new PhysicsEngine()
 
-            // elements
-            var dialogModifier = new StateModifier({
-              origin: [.5, 0]
-            })
+            var fightScene = new Scene({
+              id: 'fightScene',
+              target: [
+                {
+                  id: 'dialog',
+                  origin: [.5, 0]
+                }
+              ]
+            });
+
             var dialog = new Surface({
               size: [undefined, 100],
               classes: ['red-bg'],
@@ -346,6 +350,8 @@ define(function (require) {
                     var buttons = []
                     attackButtonsLayout.sequenceFrom(buttons);
 
+                    var PE = new PhysicsEngine()
+
                     _.keys(scope.selectedMoves).forEach(function (key, offset) {
                       var info = scope.selectedMoves[key]
                       var attackButton = new Surface({
@@ -559,7 +565,9 @@ define(function (require) {
             // setup context
             mainContext.setPerspective(2400);
 
-            mainContext.add(dialogModifier).add(dialog)
+            fightScene.id['dialog'].add(dialog);
+            mainContext.add(fightScene)
+
             mainContext.add(explosionModifier).add(explosion)
             mainContext.add(actionLogModifier).add(actionLogRenderController)
             mainContext.add(overlayRenderController)
