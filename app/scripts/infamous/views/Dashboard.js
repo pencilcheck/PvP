@@ -181,40 +181,16 @@ define(function(require, exports, module) {
 
         if (this._committed) {
             this._controller.show(this._committedRenderNode);
-            /*
-            contentSpec.push({
-                transform: Transform.translate(0, 30, 0),
-                target: this._chosenAttack.render()
-            });
-            */
             this._bubble.setContent(this._smackTalk);
         } else {
             if (this.options.input) {
                 this._controller.show(this._inputRenderNode);
-                // Shows input
-                /*
-                contentSpec.push({
-                    transform: Transform.translate(0, -30, 0),
-                    target: this._input.render()
-                });
-                */
-
-                // Attack buttons
-                /*
-                contentSpec.push({
-                    transform: Transform.translate(0, 30, 0),
-                    target: this._attackButtons.render()
-                });
-                */
                 this._bubble.setContent('');
             } else {
-                // Shows ...
                 this._bubble.setContent('...');
                 this._controller.hide();
             }
         }
-
-        //contentSpec.push(this._bubble.render());
 
         return [
             {
@@ -229,7 +205,6 @@ define(function(require, exports, module) {
                         this._bubble.render(),
                         this._controller.render()
                     ]
-                    //target: contentSpec
                 }
             },
         ]
