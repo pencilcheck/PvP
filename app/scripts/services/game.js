@@ -12,7 +12,7 @@ define(['angular'], function (angular) {
       }
     })
 
-    .factory('Game', function ($q, GameStates) {
+    .factory('Game', function ($q, GameStates, Moves) {
 
       var Game = function (game) {
         this._game = game
@@ -37,6 +37,66 @@ define(['angular'], function (angular) {
         return this._game.participants[id]
       }
 
+      Game.prototype.randomlySelectThreeMoves = function () {
+        var selectedMoves = {}
+        var moveKeys = Object.keys(Moves.moves)
+        var select = Math.floor(Math.random()*moveKeys.length)
+        while (!(moveKeys[select] in selectedMoves) && Object.keys(selectedMoves).length < 3) {
+          selectedMoves[moveKeys[select]] = Moves.moves[moveKeys[select]]
+        }
+        return selectedMoves
+      }
+
+      Game.prototype.selectAttack = function (uid, moveKey, smackTalk) {
+        this.raw().currentRound = this.raw().currentRound || {}
+        this.raw().currentRound[uid] = {
+          moveKey: moveKey,
+          smackTalk: smackTalk
+        }
+        return this.$save()
+      }
+
+      Game.prototype.selectAttackAI = function () {
+        var user = this.player('AI')
+        var moveKeys = Object.keys(user.selectedMoves)
+        var smackTalks = [
+          "I don't want people to love me. It makes for obligations.",
+          "The best way to save face is to keep the lower part shut.",
+          "I firmly believe there is more to life than money, beer, and sex. I just don't know what it is.",
+          "If you look like your passport picture, you probably need the trip! ",
+          "How do you say constipated in German? ... Farfrumpoopen. ",
+          "I'll give you a definite maybe.",
+          "The greatest griefs are those we cause ourselves.",
+          "Once you've tried to change the world you find it's a whole bunch easier to change your mind. ",
+          "Spies cannot be usefully employed without a certain intuitive sagacity.",
+          "If fighting is sure to result in victory, then you must fight, even though the ruler forbid it; if fighting will not result in victory, then you must not fight even at the ruler's bidding."
+        ]
+
+        return this.selectAttack(user.uid, moveKeys[Math.floor(Math.random()*moveKeys.length)], smackTalks[Math.floor(Math.random()*smackTalks.length)])
+      }
+
+      Game.prototype.initiateAI = function () {
+        var user = {
+          uid: 'AI',
+          displayName: 'AI'
+        }
+
+        this._game.participants = this._game.participants || {}
+
+        this._game.participants[user.uid] = {
+          selectedMoves: this.randomlySelectThreeMoves(),
+          health: 10,
+          name: user.displayName,
+          uid: user.uid,
+        }
+
+        this._game.mode = 'AI'
+
+        this._game.state = GameStates.started
+
+        return this._game.$save()
+      }
+
       Game.prototype.$redeem = function (user) {
         var self = this
 
@@ -47,10 +107,14 @@ define(['angular'], function (angular) {
           return self
         }
 
-        if (!this._game.invitations && this._game.state < GameStates.started) {
-          // Open game, accept everyone
-        } else if ((this._game.invitations && this._game.invitations.indexOf(user.uid) == -1) || this._game.state >= GameStates.started) {
-          return $q.reject('Not invited or Game started')
+        if (this._game.mode == 'AI') {
+          // AI mode, AI player already initiated
+        } else {
+          if (!this._game.invitations && this._game.state < GameStates.started) {
+            // Open game, accept everyone
+          } else if ((this._game.invitations && this._game.invitations.indexOf(user.uid) == -1) || this._game.state >= GameStates.started) {
+            return $q.reject('Not invited or Game started')
+          }
         }
 
         this._game.participants[user.uid] = {
