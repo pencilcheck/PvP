@@ -124,7 +124,7 @@ define(function (require) {
               size: [170, true],
               content: 'Skip animation',
               properties: {
-                lineHeight: "25px",
+                lineHeight: "30px", // 25px is too small on safari to click on
                 textAlign: "center",
                 color: "white",
                 cursor: "pointer"
@@ -135,7 +135,7 @@ define(function (require) {
             var test = new RenderNode();
             test.add(animationButton);
             test.add(new StateModifier({
-              transform: Transform.translate(0, 70, 2)
+              transform: Transform.translate(0, 70, 10)
             })).add(skipAnimation);
             animationOverlay.setNode(test);
 
