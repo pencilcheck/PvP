@@ -70,8 +70,6 @@ define(function(require, exports, module) {
             transform: Transform.translate(0, 30, 0),
         })).add(this._attackButtons);
 
-        this._emptyRenderNode = new RenderNode();
-
         this._input.pipe(this._eventOutput);
 
         this._input.on('keyup', function () {
@@ -212,7 +210,7 @@ define(function(require, exports, module) {
             } else {
                 // Shows ...
                 this._bubble.setContent('...');
-                this._controller.show(this._emptyRenderNode);
+                this._controller.hide();
             }
         }
 
