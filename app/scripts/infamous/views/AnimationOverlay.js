@@ -12,7 +12,6 @@ define(function(require, exports, module) {
     function AnimationOverlay(options) {
         this._controller = new RenderController();
 
-        this._empty = new Surface();
         this._overlay = new RenderNode();
         this._node = new RenderNode();
 
@@ -43,7 +42,7 @@ define(function(require, exports, module) {
     };
 
     AnimationOverlay.prototype.hide = function (callback) {
-        this._controller.show(this._empty);
+        this._controller.hide();
     };
 
     AnimationOverlay.prototype.render = function render() {
