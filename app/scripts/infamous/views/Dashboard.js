@@ -14,6 +14,7 @@ define(function(require, exports, module) {
     var Particle = require("famous/physics/bodies/Particle");
     var Spring = require("famous/physics/forces/Spring");
     var RenderNode = require('famous/core/RenderNode');
+    var RenderController = require("famous/views/RenderController");
 
     function Dashboard(options) {
         this.options = Object.create(Dashboard.DEFAULT_OPTIONS);
@@ -27,6 +28,8 @@ define(function(require, exports, module) {
 
         this._smackTalk = ''; // For none input
         this._committed = false;
+
+        this._controller = new RenderController();
 
         this._bubble = new Surface({
             properties: {
@@ -53,6 +56,21 @@ define(function(require, exports, module) {
         this._chosenAttack = new Surface({
             size: [60, 60],
         });
+
+        this._committedRenderNode = new RenderNode();
+        this._committedRenderNode.add(new StateModifier({
+            transform: Transform.translate(0, 30, 0),
+        })).add(this._chosenAttack);
+
+        this._inputRenderNode = new RenderNode();
+        this._inputRenderNode.add(new StateModifier({
+            transform: Transform.translate(0, -30, 0),
+        })).add(this._input);
+        this._inputRenderNode.add(new StateModifier({
+            transform: Transform.translate(0, 30, 0),
+        })).add(this._attackButtons);
+
+        this._emptyRenderNode = new RenderNode();
 
         this._input.pipe(this._eventOutput);
     }
@@ -89,7 +107,7 @@ define(function(require, exports, module) {
 
           var spring = new Spring({
             anchor: [0, 0, 0],
-            period: 400, 
+            period: 200, 
             dampingRatio: 0.2,
           })
 
@@ -159,31 +177,40 @@ define(function(require, exports, module) {
         var contentSpec = [];
 
         if (this._committed) {
+            this._controller.show(this._committedRenderNode);
+            /*
             contentSpec.push({
                 transform: Transform.translate(0, 30, 0),
                 target: this._chosenAttack.render()
             });
+            */
             this._bubble.setContent(this.options.input ? this._input.getValue() : this._smackTalk);
         } else {
             if (this.options.input) {
+                this._controller.show(this._inputRenderNode);
                 // Shows input
+                /*
                 contentSpec.push({
                     transform: Transform.translate(0, -30, 0),
                     target: this._input.render()
                 });
+                */
 
                 // Attack buttons
+                /*
                 contentSpec.push({
                     transform: Transform.translate(0, 30, 0),
                     target: this._attackButtons.render()
                 });
+                */
             } else {
                 // Shows ...
                 this._bubble.setContent('...');
+                this._controller.show(this._emptyRenderNode);
             }
         }
 
-        contentSpec.push(this._bubble.render());
+        //contentSpec.push(this._bubble.render());
 
         return [
             {
@@ -194,7 +221,11 @@ define(function(require, exports, module) {
                 target: {
                     origin: [.5, .5],
                     transform: transform,
-                    target: contentSpec
+                    target: [
+                        this._bubble.render(),
+                        this._controller.render()
+                    ]
+                    //target: contentSpec
                 }
             },
         ]

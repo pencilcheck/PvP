@@ -13,22 +13,9 @@ define(function (require) {
             // import dependencies
             var Engine = require('famous/core/Engine')
             var Surface = require('famous/core/Surface')
-            var ImageSurface = require('famous/surfaces/ImageSurface')
             var StateModifier = require('famous/modifiers/StateModifier')
-            var Modifier = require('famous/core/Modifier')
-            var InputSurface = require("famous/surfaces/InputSurface")
-            var SequentialLayout = require("famous/views/SequentialLayout")
-            var Vector = require("famous/math/Vector")
-            var Utility = require("famous/utilities/Utility")
-            var PhysicsEngine = require("famous/physics/PhysicsEngine")
-            var Particle = require("famous/physics/bodies/Particle")
-            var Spring = require("famous/physics/forces/Spring")
             var RenderNode = require('famous/core/RenderNode')
             var Transform = require('famous/core/Transform')
-            var Timer = require('famous/utilities/Timer');
-            var Scrollview = require("famous/views/Scrollview");
-            var ContainerSurface = require("famous/surfaces/ContainerSurface");
-            var RenderController = require("famous/views/RenderController");
             var Scene = require("famous/core/Scene");
 
             var ActionLog = require("infamous/views/ActionLog");
@@ -171,144 +158,6 @@ define(function (require) {
             var opponentDashboard = new Dashboard({
               facing: 'up'
             });
-
-
-            function scaffoldPlayer(opponent) {
-              var playerData, playerNode
-
-              // Data
-              if (!opponent) {
-                playerData = {
-                  bubbleSurfaceClasses: ['bubble-famous'],
-                  bubbleNodeModifierTransform: Transform.translate(-50, -300, 0)
-                }
-              } else {
-                playerData = {
-                  bubbleSurfaceClasses: ['bubble2-famous'],
-                  bubbleNodeModifierTransform: Transform.translate(50, 300, 0)
-                }
-              }
-
-              // Famous scaffolding
-              var setupBubbleNode = function () {
-                var node = new RenderNode()
-
-                var bubbleSurface = new Surface({
-                  classes: playerData.bubbleSurfaceClasses,
-                  properties: {
-                    lineHeight: "100px",
-                    textAlign: "center",
-                    fontSize: '22px',
-                    color: '#ACD6E5',
-                  }
-                })
-
-                var bubbleNodeModifier = new StateModifier({
-                  size: [350, 150],
-                  transform: playerData.bubbleNodeModifierTransform
-                })
-
-                var chosenAttack = new Surface({
-                  size: [60, 60],
-                })
-
-                var toggleBubbleRenderController = new RenderController()
-
-                var bubbleNode = new RenderNode()
-
-                var chosenAttackNode = new RenderNode()
-
-                chosenAttackNode.add(new StateModifier({origin: [.5, .8]})).add(chosenAttack)
-
-                if (!opponent) {
-                  var choosingAttackNode = new RenderNode()
-
-                  var smackTalkSurface = new InputSurface({
-                    size: [undefined, 40],
-                    name: 'smackTalkSurface',
-                    placeholder: 'Smack Talk',
-                    value: '',
-                    type: 'text'
-                  })
-
-                  smackTalkSurface.on('keyup', function () {
-                    scope.safeApply(function () {
-                      scope.$parent.form.smackTalk = smackTalkSurface.getValue()
-                    })
-                  })
-
-                  var attackButtonsLayout = new SequentialLayout({
-                      direction: Utility.Direction.X,
-                      size: [200, 60]
-                  })
-
-                  function setupAttackButtons() {
-                    var buttons = []
-                    attackButtonsLayout.sequenceFrom(buttons);
-
-                    var PE = new PhysicsEngine()
-
-                    _.keys(scope.selectedMoves).forEach(function (key, offset) {
-                      var info = scope.selectedMoves[key]
-                      var attackButton = new Surface({
-                        size: [60, 60],
-                        classes: [info.attackCss],
-                        properties: {
-                          tooltip: info.name
-                          //backgroundColor: "hsl(" + (i * 360 / 10) + ", 100%, 50%)",
-                          //lineHeight: window.innerHeight/10 + "px",
-                          //textAlign: "center"
-                        }
-                      })
-
-                      // spring effect
-                      var particle = new Particle({
-                        position: [0, 0, 0]
-                      })
-
-                      var spring = new Spring({
-                        anchor: [0, 0, 0],
-                        period: 400, 
-                        dampingRatio: 0.2,
-                      })
-
-                      PE.attach(spring, particle)
-                      PE.addBody(particle)
-
-                      attackButton.on("click", function (e) {
-                        particle.applyForce(new Vector(0, 0, -0.005 * 10))
-                        scope.fight(key, scope.form.smackTalk)
-                      });
-
-                      var renderNode = new RenderNode()
-                      renderNode.add(particle).add(attackButton)
-                      buttons.push(renderNode)
-                    })
-                  }
-                  setupAttackButtons()
-
-                  choosingAttackNode.add(new StateModifier({origin: [.5, .8]})).add(attackButtonsLayout)
-                  choosingAttackNode.add(new StateModifier({origin: [.5, .1]})).add(smackTalkSurface)
-                } else {
-                  toggleBubbleRenderController.show(chosenAttackNode)
-
-                }
-
-                bubbleNode.add(new StateModifier({origin: [.5, .5]})).add(bubbleSurface)
-                bubbleNode.add(new StateModifier({origin: [.5, .5]})).add(toggleBubbleRenderController)
-
-                node.add(bubbleNodeModifier).add(bubbleNode)
-
-                return node
-              }
-
-
-              playerNode.add(setupPlanetNode())
-              playerNode.add(setupBubbleNode())
-
-              return playerNode
-            }
-
 
 
 
