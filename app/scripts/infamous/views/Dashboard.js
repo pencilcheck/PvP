@@ -73,6 +73,11 @@ define(function(require, exports, module) {
         this._emptyRenderNode = new RenderNode();
 
         this._input.pipe(this._eventOutput);
+
+        this._input.on('keyup', function () {
+            if (this.options.input)
+                this._smackTalk = this._input.getValue();
+        }.bind(this));
     }
 
     Dashboard.DEFAULT_OPTIONS = {
@@ -107,8 +112,8 @@ define(function(require, exports, module) {
 
           var spring = new Spring({
             anchor: [0, 0, 0],
-            period: 200, 
-            dampingRatio: 0.2,
+            period: 100, 
+            dampingRatio: 0.3,
           })
 
           PE.attach(spring, particle)
@@ -184,7 +189,7 @@ define(function(require, exports, module) {
                 target: this._chosenAttack.render()
             });
             */
-            this._bubble.setContent(this.options.input ? this._input.getValue() : this._smackTalk);
+            this._bubble.setContent(this._smackTalk);
         } else {
             if (this.options.input) {
                 this._controller.show(this._inputRenderNode);
@@ -203,6 +208,7 @@ define(function(require, exports, module) {
                     target: this._attackButtons.render()
                 });
                 */
+                this._bubble.setContent('');
             } else {
                 // Shows ...
                 this._bubble.setContent('...');

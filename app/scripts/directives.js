@@ -181,6 +181,10 @@ define(function (require) {
               playerDashboard.setChosenAttack(newVal);
             });
 
+            scope.$watch('form.smackTalk', function (newVal) {
+              playerDashboard.setSmackTalk(newVal);
+            });
+
             scope.$watch('opponentAttack', function (newVal) {
               opponentDashboard.setChosenAttack(newVal);
             })
