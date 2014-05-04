@@ -35,7 +35,7 @@ define(function(require, exports, module) {
             properties: {
                 lineHeight: "100px",
                 textAlign: "center",
-                fontSize: '22px',
+                fontSize: '13px',
                 color: '#ACD6E5',
             }
         });
@@ -57,6 +57,12 @@ define(function(require, exports, module) {
             size: [60, 60],
         });
 
+        this._warning = new Surface({
+            size: [undefined, true],
+            content: 'Your smacktalk is over the limit (40) of characters allowed!'
+        });
+        this._overLimit = false;
+
         this._committedRenderNode = new RenderNode();
         this._committedRenderNode.add(new StateModifier({
             transform: Transform.translate(0, 30, 0),
@@ -73,6 +79,11 @@ define(function(require, exports, module) {
         this._input.pipe(this._eventOutput);
 
         this._input.on('keyup', function () {
+            if (this._input.getValue().length > this.options.limit) {
+              this._overLimit = true;
+            } else {
+              this._overLimit = false;
+            }
             if (this.options.input)
                 this._smackTalk = this._input.getValue();
         }.bind(this));
@@ -81,6 +92,7 @@ define(function(require, exports, module) {
     Dashboard.DEFAULT_OPTIONS = {
         facing: 'down',
         input: false,
+        limit: 40
     };
 
     Dashboard.prototype.setOptions = function setOptions(options) {
@@ -119,8 +131,10 @@ define(function(require, exports, module) {
 
           attackButton.on("click", function (e) {
             particle.applyForce(new Vector(0, 0, -0.005 * 10))
-            callback(key);
-          });
+            if (!this._overLimit) {
+              callback(key);
+            }
+          }.bind(this));
 
           var renderNode = new RenderNode()
           renderNode.add(particle).add(attackButton)
@@ -177,7 +191,7 @@ define(function(require, exports, module) {
 
         this._bubble.setClasses(bubbleClasses);
 
-        var contentSpec = [];
+        var warning = {}
 
         if (this._committed) {
             this._controller.show(this._committedRenderNode);
@@ -189,6 +203,13 @@ define(function(require, exports, module) {
             } else {
                 this._bubble.setContent('...');
                 this._controller.hide();
+            }
+
+            if (this._overLimit) {
+                warning = {
+                    transform: Transform.translate(0, -70, 0),
+                    target: this._warning.render()
+                }
             }
         }
 
@@ -203,6 +224,7 @@ define(function(require, exports, module) {
                     transform: transform,
                     target: [
                         this._bubble.render(),
+                        warning,
                         this._controller.render()
                     ]
                 }
