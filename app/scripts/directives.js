@@ -33,6 +33,8 @@ define(function (require) {
 
             var ActionLog = require("infamous/views/ActionLog");
             var AnimationOverlay = require("infamous/views/AnimationOverlay");
+            var Planet = require("infamous/views/Planet");
+            var Dashboard = require("infamous/views/Dashboard");
 
             // create the main context
             var mainContext = Engine.createContext(element[0])
@@ -65,6 +67,30 @@ define(function (require) {
                   origin: [.5, .5],
                   target: {
                     id: 'animationOverlay'
+                  }
+                },
+                {
+                  origin: [.2, .8],
+                  target: {
+                    id: 'player'
+                  }
+                },
+                {
+                  origin: [.8, .2],
+                  target: {
+                    id: 'opponent'
+                  }
+                },
+                {
+                  origin: [.2, .5],
+                  target: {
+                    id: 'playerDashboard'
+                  }
+                },
+                {
+                  origin: [.8, .5],
+                  target: {
+                    id: 'opponentDashboard'
                   }
                 }
               ]
@@ -106,7 +132,6 @@ define(function (require) {
             })
 
             var animationOverlay = new AnimationOverlay();
-
             var test = new RenderNode();
             test.add(animationButton);
             test.add(new StateModifier({
@@ -114,7 +139,28 @@ define(function (require) {
             })).add(skipAnimation);
             animationOverlay.setNode(test);
 
-            // Shared
+            var heartPrototype = {
+              size: [50, 50],
+              content: 'images/misc/heart.png',
+            };
+
+            var playerPlanet = new Planet();
+            playerPlanet.setHealth(scope.health);
+            playerPlanet.setHeartSurfacePrototype(heartPrototype);
+
+            var opponentPlanet = new Planet({
+                facing: 'left',
+            });
+            opponentPlanet.setHealth(scope.opponentHealth);
+            opponentPlanet.setHeartSurfacePrototype(heartPrototype);
+
+            var playerDashboard = new Dashboard();
+
+            var opponentDashboard = new Dashboard({
+                facing: 'up'
+            });
+
+
             var rerender
             function scaffoldPlayer(opponent) {
               var playerData, playerNode
@@ -123,180 +169,16 @@ define(function (require) {
               if (!opponent) {
                 playerData = {
                   bubbleSurfaceClasses: ['bubble-famous'],
-                  heartIndex: 0,
-                  heartRingOutputFunction: function (input, offset, index) {
-                    var ringTransform = Transform.translate(250, 180, 0)
-
-                    // Origin stays the same even if it is translated, therefore x and y needs to match, z is there to let it rotate tagent to its rotation curve
-                    ringTransform = Transform.multiply(Transform.aboutOrigin([250, 180, 240], Transform.rotateY(360 * index / 10 * Math.PI / 180 + this.heartIndex)), ringTransform)
-                    ringTransform = Transform.multiply(Transform.rotateX(30 * Math.PI / 180), ringTransform)
-                    ringTransform = Transform.multiply(Transform.rotateZ(25 * Math.PI / 180), ringTransform)
-
-                    return {
-                      transform: ringTransform,
-                      target: input.render()
-                    }
-                  },
-                  planetRotateAngle: 0,
-                  planetRotateDirection: 1,
                   bubbleNodeModifierTransform: Transform.translate(-50, -300, 0)
                 }
-
-                playerNode = mainContext.add(new StateModifier({origin: [.2, .8]}))
               } else {
                 playerData = {
                   bubbleSurfaceClasses: ['bubble2-famous'],
-                  heartIndex: 0,
-                  heartRingOutputFunction: function (input, offset, index) {
-                    var ringTransform = Transform.translate(0, 325, 0)
-
-                    // Origin stays the same even if it is translated, therefore x and y needs to match, z is there to let it rotate tagent to its rotation curve
-                    ringTransform = Transform.multiply(Transform.aboutOrigin([0, 325, 240], Transform.rotateY(360 * index / 10 * Math.PI / 180 + this.heartIndex)), ringTransform)
-                    ringTransform = Transform.multiply(Transform.rotateX(25 * Math.PI / 180), ringTransform)
-                    ringTransform = Transform.multiply(Transform.rotateZ(-25 * Math.PI / 180), ringTransform)
-
-                    return {
-                      transform: ringTransform,
-                      target: input.render()
-                    }
-                  },
-                  planetRotateAngle: 0,
-                  planetRotateDirection: 1,
                   bubbleNodeModifierTransform: Transform.translate(50, 300, 0)
                 }
-
-                playerNode = mainContext.add(new Modifier({origin: [.8, .2]}))
               }
 
               // Famous scaffolding
-              var setupPlanetNode = function () {
-                var node = new RenderNode()
-                var planetNode = new RenderNode()
-
-                function setupPlanet() {
-                  var node = new RenderNode()
-
-                  var planetSurface = new ImageSurface({
-                    size: [300, 300],
-                  })
-
-                  var planetOrbitSurface = new ImageSurface({
-                    size: [500, 300],
-                  })
-
-                  if (opponent) {
-                    planetOrbitSurface.setContent('images/misc/orbit.png')
-                  } else {
-                    planetOrbitSurface.setContent('images/misc/orbit-flip.png')
-                  }
-
-                  var planetModifier = new StateModifier({ origin: [.5, .5] })
-
-                  function setupHeartRing() {
-                    var heartRing = new SequentialLayout()
-                    var hearts = [new Surface()]
-
-                    heartRing.setOutputFunction(playerData.heartRingOutputFunction.bind(playerData))
-                    heartRing.sequenceFrom(hearts)
-
-                    // Update visuals, should only be called when scope.notSeenAnimation is false
-                    rerender = function () {
-                      var health
-                      if (!opponent) {
-                        health = scope.health
-                      } else {
-                        health = scope.opponentHealth
-                      }
-
-                      if (health == 0) {
-                        heartRing.sequenceFrom([new Surface()])
-                      } else {
-                        hearts.length = 0
-                        _.range(health).forEach(function (index) {
-                          var heart = new ImageSurface({
-                            size: [50, 50],
-                            //content: 'images/misc/life.png',
-                            content: 'images/misc/heart.png',
-                          })
-                          hearts.push(heart)
-                        })
-                      }
-
-                      heartRing.render()
-
-                      var prefix = opponent ? 'blue' : 'pink'
-                      if (health == 10) {
-                        planetSurface.setContent('images/planets/' + prefix + '-state1.png')
-                      } else if (health < 10 && health >= 5) {
-                        planetSurface.setContent('images/planets/' + prefix + '-state2.png')
-                      } else if (health < 5) {
-                        planetSurface.setContent('images/planets/' + prefix + '-state3.png')
-                      }
-                    }
-                    rerender()
-
-                    function rotateHealthRing() {
-                      heartRing.render()
-                      playerData.heartIndex += 0.01
-                    }
-                    Engine.on('prerender', rotateHealthRing)
-
-                    //if (!opponent) {
-                      //rerender(scope.health)
-                      //scope.$watch('health', rerender)
-                    //} else {
-                      //rerender(scope.opponentHealth)
-                      //scope.$watch('opponentHealth', rerender)
-                    //}
-
-                    return heartRing
-                  }
-
-                  function registerPlanetHoverEffects(surface, fns) {
-                    surface.on('mouseover', function (e) {
-                      fns.forEach(function (fn) {
-                        Engine.on('prerender', fn)
-                      })
-                    })
-
-                    surface.on('mouseout', function (e) {
-                      fns.forEach(function (fn) {
-                        Timer.clear(fn)
-                      })
-                      planetModifier.setTransform(Transform.rotateZ(0))
-                    })
-                  }
-
-                  function wigglePlanets() {
-                    planetModifier.setTransform(Transform.rotateZ(playerData.planetRotateAngle))
-                    if (playerData.planetRotateDirection) {
-                      playerData.planetRotateAngle += 1 * Math.PI / 180
-                    } else {
-                      playerData.planetRotateAngle -= 1 * Math.PI / 180
-                    }
-                    if (playerData.planetRotateAngle >= Math.PI / 180) {
-                      playerData.planetRotateDirection = 0
-                    } else if (playerData.planetRotateAngle <= -Math.PI / 180) {
-                      playerData.planetRotateDirection = 1
-                    }
-                  }
-                  registerPlanetHoverEffects(planetSurface, [wigglePlanets])
-
-                  node.add(setupHeartRing())
-                  var t = node.add(planetModifier)
-                  t.add(planetSurface)
-                  t.add(new StateModifier({transform: Transform.translate(0, 50, 0)})).add(planetOrbitSurface)
-
-                  return node
-                }
-
-                planetNode.add(setupPlanet())
-
-                node.add(new StateModifier({ size: [300, 300] })).add(planetNode)
-
-                return node
-              }
-
               var setupBubbleNode = function () {
                 var node = new RenderNode()
 
@@ -481,6 +363,9 @@ define(function (require) {
               })
             })
 
+            scope.$watch('dialog', function (newVal) {
+              dialog.setContent(newVal)
+            })
 
             scope.$watch('notSeenAnimation', function (newVal) {
               console.log('famous notSeenAniatmion watch', newVal)
@@ -491,12 +376,10 @@ define(function (require) {
               } else {
                 // Hide start animation button
                 animationOverlay.hide()
-                //rerender()
-              }
-            })
 
-            scope.$watch('dialog', function (newVal) {
-              dialog.setContent(newVal)
+                playerPlanet.setHealth(scope.health);
+                opponentPlanet.setHealth(scope.opponentHealth);
+              }
             })
 
             scope.$watch('rounds', function (newVal) {
@@ -514,23 +397,23 @@ define(function (require) {
                   })
                   logs.push(temp)
                 })
-                console.log(logs)
               }
             })
 
 
 
             // setup context
-            mainContext.setPerspective(2400);
+            mainContext.setPerspective(1000);
 
             fightScene.id['dialog'].add(dialog);
             fightScene.id['actionLog'].add(actionLog);
             fightScene.id['animationArea'].add(explosion);
             fightScene.id['animationOverlay'].add(animationOverlay);
+            fightScene.id['player'].add(playerPlanet);
+            fightScene.id['opponent'].add(opponentPlanet);
+            fightScene.id['playerDashboard'].add(playerDashboard);
+            fightScene.id['opponentDashboard'].add(opponentDashboard);
             mainContext.add(fightScene)
-
-            mainContext.add(scaffoldPlayer())
-            mainContext.add(scaffoldPlayer(true))
           }, 500)
         }
       }
