@@ -28,10 +28,13 @@ define(['angular', 'require', 'masonry-bridget', 'angular-masonry', 'services/in
             break
           case GameStates.movesPicked:
             console.log('All players have selected moves, fight: to fightScene')
-            if ($location.search().mode == 'famous')
-              $scope.viewUrl = 'views/game/fightSceneFamous.html'
-            else
+
+            if ($location.search().mode == 'retro') {
               $scope.viewUrl = 'views/game/fightScene.html'
+            } else {
+              $scope.viewUrl = 'views/game/fightSceneFamous.html'
+            }
+
             setupFightScene()
             break
           case GameStates.finished:
@@ -87,6 +90,10 @@ define(['angular', 'require', 'masonry-bridget', 'angular-masonry', 'services/in
         game.$save()
       }
 
+      $scope.AIgame = function () {
+        game.initiateAI()
+      }
+
       function setupSelectMoves() {
         console.log('setupSelectMoves')
         game.player(currentUser.uid).selectedMoves = game.player(currentUser.uid).selectedMoves || {}
@@ -116,6 +123,9 @@ define(['angular', 'require', 'masonry-bridget', 'angular-masonry', 'services/in
           if ($scope.selectedMovesCount() == 3) {
             $scope.movesCommitted = game.player(currentUser.uid).movesCommitted = true
             game.player(currentUser.uid).selectedMoves = $scope.selectedMoves
+            if (game.raw().mode == 'AI') {
+              game.raw().state = GameStates.movesPicked
+            }
             game.$save()
           }
         }
@@ -319,12 +329,8 @@ define(['angular', 'require', 'masonry-bridget', 'angular-masonry', 'services/in
         $scope.opponentHealth = game.opponentOf(currentUser.uid).health
 
         $scope.fight = function (key, smackTalk) {
-          game.raw().currentRound = game.raw().currentRound || {}
-          game.raw().currentRound[currentUser.uid] = {
-            moveKey: key,
-            smackTalk: smackTalk
-          }
-          game.$save()
+          game.selectAttack(currentUser.uid, key, smackTalk)
+          game.selectAttackAI()
           $scope.form.smackTalk = angular.copy(smackTalk)
           $scope.attack = angular.copy(Moves.moves[key])
           console.log('attacking with attack and smackTalk', $scope.attack, $scope.form.smackTalk)

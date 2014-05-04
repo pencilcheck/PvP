@@ -1,6 +1,6 @@
 {
   "name": "firebase-simple-login",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "Firebase Simple Login Web Client",
   "authors": "Firebase <operations@firebase.com>",
   "homepage": "http://firebase.github.io/firebase-simple-login",
@@ -29,11 +29,11 @@
     "js",
     "lib"
   ],
-  "_release": "1.4.0",
+  "_release": "1.4.1",
   "_resolution": {
     "type": "version",
-    "tag": "v1.4.0",
-    "commit": "cbb61b8a14e9a18ac4c3a31a3e901c92f8c1b703"
+    "tag": "v1.4.1",
+    "commit": "08d7447e34f68d1d2d83723b244cfb7626bbe83a"
   },
   "_source": "git://github.com/firebase/firebase-simple-login.git",
   "_target": "~1.4.0",
