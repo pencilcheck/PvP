@@ -9,12 +9,6 @@ define(function(require, exports, module) {
     var RenderController = require("famous/views/RenderController");
     var EventHandler = require('famous/core/EventHandler');
 
-    /*
-     * @name AnimationOverlay
-     * @constructor
-     * @description
-     */
-
     function AnimationOverlay(options) {
         this._controller = new RenderController();
 

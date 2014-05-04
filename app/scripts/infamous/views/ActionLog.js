@@ -9,12 +9,6 @@ define(function(require, exports, module) {
     var Scrollview = require('famous/views/Scrollview');
     var EventHandler = require('famous/core/EventHandler');
 
-    /*
-     * @name ActionLogView
-     * @constructor
-     * @description
-     */
-
     function ActionLog(options) {
         this._logs = [];
         this._state = 0;
