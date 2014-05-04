@@ -13,6 +13,7 @@ define(function(require, exports, module) {
     var Transform = require('./Transform');
 
     var usePrefix = document.body.style.webkitTransform !== undefined;
+    var devicePixelRatio = window.devicePixelRatio || 1;
 
     /**
      * A base class for viewable content and event
@@ -98,13 +99,13 @@ define(function(require, exports, module) {
      * @method emit
      *
      * @param {string} type event type key (for example, 'click')
-     * @param {Object} event event data
+     * @param {Object} [event] event data
      * @return {EventHandler} this
      */
     Surface.prototype.emit = function emit(type, event) {
         if (event && !event.origin) event.origin = this;
         var handled = this.eventHandler.emit(type, event);
-        if (handled && event.stopPropagation) event.stopPropagation();
+        if (handled && event && event.stopPropagation) event.stopPropagation();
         return handled;
     };
 
@@ -315,6 +316,9 @@ define(function(require, exports, module) {
      * @return {string} matrix3d CSS style representation of the transform
      */
     function _formatCSSTransform(m) {
+        m[12] = Math.round(m[12] * devicePixelRatio) / devicePixelRatio;
+        m[13] = Math.round(m[13] * devicePixelRatio) / devicePixelRatio;
+
         var result = 'matrix3d(';
         for (var i = 0; i < 15; i++) {
             result += (m[i] < 0.000001 && m[i] > -0.000001) ? '0,' : m[i] + ',';
@@ -335,11 +339,23 @@ define(function(require, exports, module) {
      * @param {FamousMatrix} matrix
      */
 
-    var _setMatrix = usePrefix ? function(element, matrix) {
-        element.style.webkitTransform = _formatCSSTransform(matrix);
-    } : function(element, matrix) {
-        element.style.transform = _formatCSSTransform(matrix);
-    };
+    var _setMatrix;
+    if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
+        _setMatrix = function(element, matrix) {
+            element.style.zIndex = (matrix[14] * 1000000) | 0;    // fix for Firefox z-buffer issues
+            element.style.transform = _formatCSSTransform(matrix);
+        };
+    }
+    else if (usePrefix) {
+        _setMatrix = function(element, matrix) {
+            element.style.webkitTransform = _formatCSSTransform(matrix);
+        };
+    }
+    else {
+        _setMatrix = function(element, matrix) {
+            element.style.transform = _formatCSSTransform(matrix);
+        };
+    }
 
     // format origin as CSS percentage string
     function _formatCSSOrigin(origin) {
