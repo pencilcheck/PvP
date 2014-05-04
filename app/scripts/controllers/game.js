@@ -28,10 +28,13 @@ define(['angular', 'require', 'masonry-bridget', 'angular-masonry', 'services/in
             break
           case GameStates.movesPicked:
             console.log('All players have selected moves, fight: to fightScene')
-            if ($location.search().mode == 'famous')
-              $scope.viewUrl = 'views/game/fightSceneFamous.html'
-            else
+
+            if ($location.search().mode == 'retro') {
               $scope.viewUrl = 'views/game/fightScene.html'
+            } else {
+              $scope.viewUrl = 'views/game/fightSceneFamous.html'
+            }
+
             setupFightScene()
             break
           case GameStates.finished:
