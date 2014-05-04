@@ -82,13 +82,13 @@ define(function (require) {
                   }
                 },
                 {
-                  origin: [.2, .5],
+                  origin: [.2, .8],
                   target: {
                     id: 'playerDashboard'
                   }
                 },
                 {
-                  origin: [.8, .5],
+                  origin: [.8, .2],
                   target: {
                     id: 'opponentDashboard'
                   }
@@ -149,19 +149,30 @@ define(function (require) {
             playerPlanet.setHeartSurfacePrototype(heartPrototype);
 
             var opponentPlanet = new Planet({
-                facing: 'left',
+              facing: 'left',
             });
             opponentPlanet.setHealth(scope.opponentHealth);
             opponentPlanet.setHeartSurfacePrototype(heartPrototype);
 
-            var playerDashboard = new Dashboard();
+            var playerDashboard = new Dashboard({
+              input: true
+            });
+            playerDashboard.on('keyup', function (e) {
+              scope.safeApply(function () {
+                scope.$parent.form.smackTalk = playerDashboard.getInputValue();
+              });
+            });
+            playerDashboard.setupButtons(scope.selectedMoves, function (key) {
+              scope.safeApply(function () {
+                scope.fight(key, scope.form.smackTalk);
+              });
+            });
 
             var opponentDashboard = new Dashboard({
-                facing: 'up'
+              facing: 'up'
             });
 
 
-            var rerender
             function scaffoldPlayer(opponent) {
               var playerData, playerNode
 
@@ -276,63 +287,11 @@ define(function (require) {
                   }
                   setupAttackButtons()
 
-                  scope.$watch('attack', function (newVal) {
-                    if (newVal) {
-                      chosenAttack.setClasses([newVal.attackCss])
-                      chosenAttack.setProperties({
-                        tooltip: newVal.name
-                      })
-                    } else {
-                      chosenAttack.setClasses([])
-                      chosenAttack.setProperties({
-                        tooltip: ''
-                      })
-                    }
-                  })
-
-                  scope.$watch('attackCommitted()', function (newVal) {
-                    console.log('attackCommitted', newVal)
-                    // TODO: rendercontroller to ease transition?
-                    if (newVal) {
-                      bubbleSurface.setContent(scope.form.smackTalk || '')
-                      toggleBubbleRenderController.show(chosenAttackNode)
-                    } else {
-                      bubbleSurface.setContent('')
-                      toggleBubbleRenderController.show(choosingAttackNode)
-                    }
-                  })
-
                   choosingAttackNode.add(new StateModifier({origin: [.5, .8]})).add(attackButtonsLayout)
                   choosingAttackNode.add(new StateModifier({origin: [.5, .1]})).add(smackTalkSurface)
                 } else {
                   toggleBubbleRenderController.show(chosenAttackNode)
 
-                  scope.$watch('opponentAttack', function (newVal) {
-                    console.log('opponentAttack', newVal)
-                    if (newVal) {
-                      chosenAttack.setClasses([newVal.attackCss])
-                      chosenAttack.setProperties({
-                        tooltip: newVal.name
-                      })
-                    } else {
-                      chosenAttack.setClasses([])
-                      chosenAttack.setProperties({
-                        tooltip: ''
-                      })
-                    }
-                  })
-
-                  scope.$watch('opponentSmackTalk', function (newVal) {
-                    if (newVal) {
-                      bubbleSurface.setContent(newVal)
-                    } else {
-                      if (scope.notSeenAnimation) {
-                        bubbleSurface.setContent('')
-                      } else {
-                        bubbleSurface.setContent('...')
-                      }
-                    }
-                  })
                 }
 
                 bubbleNode.add(new StateModifier({origin: [.5, .5]})).add(bubbleSurface)
@@ -362,6 +321,24 @@ define(function (require) {
                 scope.$parent.notSeenAnimation = false
               })
             })
+
+            scope.$watch('attackCommitted()', function (newVal) {
+              // TODO: rendercontroller to ease transition?
+              playerDashboard.commit(newVal);
+              opponentDashboard.commit(newVal);
+            })
+
+            scope.$watch('attack', function (newVal) {
+              playerDashboard.setChosenAttack(newVal);
+            });
+
+            scope.$watch('opponentAttack', function (newVal) {
+              opponentDashboard.setChosenAttack(newVal);
+            })
+
+            scope.$watch('opponentSmackTalk', function (newVal) {
+              opponentDashboard.setSmackTalk(newVal);
+            });
 
             scope.$watch('dialog', function (newVal) {
               dialog.setContent(newVal)
