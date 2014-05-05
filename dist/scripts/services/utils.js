@@ -3,7 +3,7 @@ define(['angular', 'underscore', 'es6-shim', 'es5-shim'], function (angular, _) 
 
   return angular.module('PvP.services.utils', [])
 
-  .value('firebaseUrl', 'https://pvp.firebaseio.com/')
+  .value('firebaseUrl', window.FirebaseUrl)
 
   .factory('pvpSync', function (firebaseUrl, $interval, $timeout, $q) {
 
