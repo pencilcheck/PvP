@@ -5,10 +5,6 @@ define(['angular', 'require', 'masonry-bridget', 'angular-masonry', 'services/in
     .controller('GameCtrl', function ($scope, $rootScope, $filter, $timeout, $location, $routeParams, $modal, Games, GameStates, game, Moves, Rematch, rematchRequests, pvpSync, UserSession, Facebook) {
       var currentUser = UserSession.currentUser()
 
-      $rootScope.$on('$routeChangeError', function () {
-        $location.path('/')
-      })
-
       function stateHandler(state) {
         $scope.safeApply(function () {
           switch (state) {
@@ -67,10 +63,11 @@ define(['angular', 'require', 'masonry-bridget', 'angular-masonry', 'services/in
             keyboard: false,
             templateUrl: 'views/game/modal/inviteFriendConfirm.html',
             controller: function ($scope, $modalInstance) {
-              $scope.friend = friend
+              $scope.friend = friend;
 
-              $scope.accept = function () {
-                game.$invite([friend]);
+              $scope.accept = function (user) {
+                user.uid = 'facebook:' + user.id;
+                game.$invite([user]);
                 $modalInstance.close()
               }
 

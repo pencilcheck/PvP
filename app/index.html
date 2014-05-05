@@ -34,6 +34,10 @@
     <script type="text/javascript" src="lib/requirejs/require.js" data-main="scripts/requireConfig"></script>
   </head>
   <body>
+    <div class="alert alert-warning" ng-repeat="flash in flashes">
+      <b>{{flash.type}}</b>
+      <p>{{flash.message}}</p>
+    </div>
     <div class="mainContainer" ng-view></div>
 </body>
 </html>

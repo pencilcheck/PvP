@@ -37,6 +37,16 @@ define([
       FacebookProvider.init('1440880659476523');
     })
 
+    .run(function ($rootScope, $location) {
+      $rootScope.$on('$routeChangeError', function (e, currRoute, prevRoute) {
+        console.log('$routeChangeError', currRoute, prevRoute);
+        if (currRoute.loadedTemplateUrl == '/views/game.html') {
+          $rootScope.flashes = [{type: 'warning', message: "Something went wrong! Most likely you don't have the invitation to the game. Start a new game and invite your friend!"}];
+        }
+        $location.path('/')
+      });
+    })
+
     .run(function($rootScope) {
       $rootScope.safeApply = function(fn) {
         var phase = this.$root.$$phase;
