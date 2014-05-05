@@ -2,13 +2,16 @@ define(['angular'], function (angular) {
   'use strict';
 
   return angular.module('PvP.services.facebook', [])
-    .service('FacebookBase', function ($rootScope, $q) {
+
+    .value('firebaseUrl', window.FirebaseUrl)
+
+    .service('FacebookBase', function ($rootScope, $q, firebaseUrl) {
       var dfds = {
         loginDfd: $q.defer(),
         logoutDfd: $q.defer()
       };
 
-      var gameRef = new Firebase('https://pvp.firebaseio.com');
+      var gameRef = new Firebase(firebaseUrl);
       var auth = new FirebaseSimpleLogin(gameRef, function(error, user) {
         console.log('FirebaseSimpleLogin', error, user);
         $rootScope.safeApply(function() {

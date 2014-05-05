@@ -34,7 +34,7 @@ define([
   ])
 
     .config(function(FacebookProvider) {
-      FacebookProvider.init('1440880659476523');
+      FacebookProvider.init(window.FBAppId);
     })
 
     .run(function ($rootScope, $location) {

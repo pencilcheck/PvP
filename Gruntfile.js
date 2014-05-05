@@ -45,6 +45,10 @@ module.exports = function (grunt) {
       gruntfile: {
         files: ['Gruntfile.js']
       },
+      html: {
+        files: ['<%= yeoman.app %>/{,*/}*.html'],
+        tasks: ['processhtml:dev']
+      },
       livereload: {
         options: {
           livereload: '<%= connect.options.livereload %>'
@@ -182,6 +186,22 @@ module.exports = function (grunt) {
       }
     },
 
+    processhtml: {
+      dev: {
+        files: {
+          '.tmp/index.html': ['<%= yeoman.app %>/index.html']
+        }
+      },
+      dist: {
+        files: {
+          '<%= yeoman.dist %>/index.html': ['<%= yeoman.app %>/index.html']
+        }
+      },
+      options: {
+        commentMarker: 'process'
+      }
+    },
+
     // Renames files for browser caching purposes
     rev: {
       dist: {
@@ -289,7 +309,8 @@ module.exports = function (grunt) {
             'views/**/**.html',
             'lib/**/*',
             'images/{,*/}*.{webp}',
-            'fonts/*'
+            'fonts/*',
+            'productionENV.js'
           ]
         }, {
           expand: true,
@@ -364,6 +385,7 @@ module.exports = function (grunt) {
 
     grunt.task.run([
       'clean:server',
+      'processhtml:dev',
       'bower-install',
       'concurrent:server',
       'autoprefixer',
@@ -394,6 +416,7 @@ module.exports = function (grunt) {
     'concat',
     'ngmin',
     'copy:dist',
+    'processhtml:dist', // Otherwise index.html will be overwritten by copy:dist
     'cdnify',
     'cssmin',
     'uglify',
