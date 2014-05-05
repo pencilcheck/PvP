@@ -74,7 +74,9 @@ require.config({
         moment: '../lib/moment/moment',
         'masonry-bridget': 'masonry-bridget',
         imagesloaded: 'http://imagesloaded.desandro.com/imagesloaded.pkgd',
-        masonry: 'http://masonry.desandro.com/masonry.pkgd'
+        masonry: 'http://masonry.desandro.com/masonry.pkgd',
+        'todc-bootstrap': '../lib/todc-bootstrap/dist/js/todc-bootstrap',
+        bootstrap: '../lib/todc-bootstrap/dist/js/bootstrap'
     },
     priority: [
         'angular'
