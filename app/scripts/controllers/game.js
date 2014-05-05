@@ -2,7 +2,7 @@ define(['angular', 'require', 'masonry-bridget', 'angular-masonry', 'services/in
   'use strict';
 
   return angular.module('PvP.controllers.game', ['PvP.services', 'PvP.directives'])
-    .controller('GameCtrl', function ($scope, $rootScope, $timeout, $location, $routeParams, $modal, Games, GameStates, game, Moves, Rematch, rematchRequests, pvpSync, UserSession, Facebook) {
+    .controller('GameCtrl', function ($scope, $rootScope, $filter, $timeout, $location, $routeParams, $modal, Games, GameStates, game, Moves, Rematch, rematchRequests, pvpSync, UserSession, Facebook) {
       var currentUser = UserSession.currentUser()
 
       $rootScope.$on('$routeChangeError', function () {
@@ -52,13 +52,47 @@ define(['angular', 'require', 'masonry-bridget', 'angular-masonry', 'services/in
       }
 
       function setupInvitePlayers() {
-        console.log(currentUser);
+        $scope.friends = [];
+        $scope.internalFriends = [];
+        $scope.search = {};
+
+        $scope.$watch('search.search', function (newVal) {
+          console.log('changing search');
+          $scope.friends = $filter('filter')($scope.internalFriends, newVal);
+        });
+
+        // For masonry
+        //$scope.$watch(function () {
+          //return $('#friendList .loaded').length > 0;
+        //}, function () {
+          //$('#friendList').show();
+          //$('#friendList').masonry();
+        //});
+
+        //$scope.$watch('friends', function () {
+          //$('#friendList').masonry();
+        //}, true);
+
         Facebook.api('/' + currentUser.id + '/friends', 'get', {
-          fields: 'id, name, picture',
+          fields: 'id,name,picture',
           access_token: currentUser.accessToken
         }, function (response) {
-          console.log('facebook api response', response);
-          $scope.friends = response.data
+          console.log('facebook api response', response.data);
+          $scope.internalFriends = $scope.friends = response.data;
+
+          /*
+          $scope.friends.forEach(function (friend) {
+            Facebook.api('/' + friend.id + '/profile', 'get', {
+              fields: 'name,pic_crop',
+              access_token: currentUser.accessToken
+            }, function (response) {
+              //friend.picture.data.url = response.data[0].pic_crop.uri
+              //console.log('facebook api response', response.data);
+              //$scope.friends = $scope.friends.concat(response.data);
+              $rootScope.$broadcast('masonry.reload');
+            });
+          });
+          */
         })
       }
 

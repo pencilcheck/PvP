@@ -1,19 +1,41 @@
 <h1>Invite:</h1>
 
-<input type="search" ng-model="search" />
-<div style="overflow: scroll; height: 500px;">
-    <div load-images="false" masonry masonry-options="{ gutter: 10 }">
-        <div style="width: 70px;" class="masonry-brick" ng-repeat="friend in friends | filter:search">
-            <span>{{friend.name}}</span>
-            <img ng-src="{{friend.picture.data.url}}"></img>
-        </div>
-    </div>
+<style>
+#friendList[deckgrid]::before {
+    /* Specifies that the grid should have a maximum of 4 columns. Each column will have the classes 'column' and 'column-1-4' */
+    content: '4 .column.column-1-4';
+    font-size: 0; /* See https://github.com/akoenig/angular-deckgrid/issues/14#issuecomment-35728861 */
+    visibility: hidden;
+}
+
+#friendList .column {
+    float: left;
+}
+
+#friendList .column-1-4 {
+    width: 25%;
+}
+</style>
+
+<div class="container">
+  <div class="well">Search: <input type="search" ng-model="search.search" /></div>
+  <div style="background-color: white; overflow: scroll; height: 500px;">
+      <div id="friendList" style="margin: 10px 130px;" deckgrid source="friends">
+          <div>
+              <img style="margin-bottom: 10px; cursor: pointer;" ng-src="{{card.picture.data.url}}" alt="{{card.name}}" tooltip-placement="left" tooltip="{{card.name}}"></img>
+          </div>
+      </div>
+
+      <!-- for masonry -->
+      <!--<div id="friendList" style="display: none; margin: 10px 130px;" masonry masonry-options="{ gutter: 10 }" load-images="true">-->
+          <!--<div class="masonry-brick" ng-repeat="friend in friends | filter:search">-->
+              <!--<img style="margin-bottom: 10px; cursor: pointer;" ng-src="{{friend.picture.data.url}}" alt="{{friend.name}}" tooltip-placement="left" tooltip="{{friend.name}}"></img>-->
+          <!--</div>-->
+      <!--</div>-->
+  </div>
+
+  <p>
+    <button class="btn btn-success" ng-click="AIgame()">Create a AI game</button>
+    <button class="btn btn-success" ng-click="inviteNoop()">Or Create a PUBLIC game</button>
+  </p>
 </div>
-
-<p>
-  <button class="btn btn-success" ng-click="inviteNoop()">Or Create a PUBLIC game</button>
-</p>
-
-<p>
-  <button class="btn btn-success" ng-click="AIgame()">Create a AI game</button>
-</p>
