@@ -22,7 +22,7 @@
   <div style="background-color: white; overflow: scroll; height: 500px;">
       <div id="friendList" style="margin: 10px 130px;" deckgrid source="friends">
           <div>
-              <img style="margin-bottom: 10px; cursor: pointer;" ng-src="{{card.picture.data.url}}" alt="{{card.name}}" tooltip-placement="left" tooltip="{{card.name}}"></img>
+              <img style="margin-bottom: 10px; cursor: pointer;" ng-src="{{card.picture.data.url}}" ng-click="mother.inviteFriend(card)" alt="{{card.name}}" tooltip-placement="left" tooltip="{{card.name}}"></img>
           </div>
       </div>
 
@@ -35,7 +35,7 @@
   </div>
 
   <p>
-    <button class="btn btn-success" ng-click="AIgame()">Create a AI game</button>
+    <button class="btn btn-success" ng-click="AIgame()">Create an AI game</button>
     <button class="btn btn-success" ng-click="inviteNoop()">Or Create a PUBLIC game</button>
   </p>
 </div>

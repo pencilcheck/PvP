@@ -61,6 +61,26 @@ define(['angular', 'require', 'masonry-bridget', 'angular-masonry', 'services/in
           $scope.friends = $filter('filter')($scope.internalFriends, newVal);
         });
 
+        $scope.inviteFriend = function (friend) {
+          $modal.open({
+            backdrop: 'static',
+            keyboard: false,
+            templateUrl: 'views/game/modal/inviteFriendConfirm.html',
+            controller: function ($scope, $modalInstance) {
+              $scope.friend = friend
+
+              $scope.accept = function () {
+                game.$invite([friend]);
+                $modalInstance.close()
+              }
+
+              $scope.reject = function () {
+                $modalInstance.close()
+              }
+            }
+          });
+        };
+
         // For masonry
         //$scope.$watch(function () {
           //return $('#friendList .loaded').length > 0;
