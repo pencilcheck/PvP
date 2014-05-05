@@ -1,0 +1,15 @@
+<div class="modal-header">
+  <h1>Invitation</h1>
+</div>
+<div class="modal-body">
+  <div class="alert alert-warning">
+  <p class="bg-warning">No notifications nor emails will be sent during this process.</p>
+  <p class="bg-warning">This invitation only restricts access to only the person you invite to this game.</p>
+  </div>
+
+  <h3>Inviting <span class="label label-info">{{friend.name}}</span> to the game.</h3>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-lg btn-primary" ng-click="accept(friend)">Yes!</button>
+  <button class="btn btn-lg btn-danger" ng-click="reject()">Cancel.</button>
+</div>
