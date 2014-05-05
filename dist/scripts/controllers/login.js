@@ -6,7 +6,9 @@ define(['angular', 'services/index'], function (angular) {
       $scope.loggedIn = false;
 
       $scope.openLogin = function() {
-        UserSession.signIn().then($scope.greetUser);
+        UserSession.signIn().then($scope.greetUser, function (reason) {
+          console.log('login openLogin')
+        });
       }
 
       $scope.greetUser = function(user) {
