@@ -10,7 +10,7 @@ define(['angular'], function (angular) {
   }
 
   return angular.module('PvP.services.userSession', [])
-    .service('UserSession', function (FacebookBase, $timeout, $q, pvpSync) {
+    .service('UserSession', function (FacebookBase, $window, $rootScope, $timeout, $q, pvpSync) {
       var deferred,
           players = pvpSync('/players')
 
@@ -35,6 +35,7 @@ define(['angular'], function (angular) {
 
       var completeSignIn = function(user) {
         saveToStorage('user', user);
+        $rootScope.signedIn = user;
         _completeAuth(user);
         return user;
       };
@@ -46,14 +47,35 @@ define(['angular'], function (angular) {
           FacebookBase.openLogin().then(completeSignIn, _failAuth);
       };
 
-      var signIn = function() {
+      var signIn = function () {
         deferred = $q.defer();
         $timeout(_resolveOrPrompt, 10);
         return deferred.promise;
       };
 
+      $rootScope.$watch(function () {
+        return !!getFromStorage('user');
+      }, function () {
+        $rootScope.signedIn = getFromStorage('user');
+      });
+
+      var signOut = function () {
+        return FacebookBase.logout().then(function () {
+          saveToStorage('user', null);
+          console.log('logOut');
+          $rootScope.signedIn = null;
+        });
+      }
+
+      $rootScope.logout = function () {
+        signOut().then(function () {
+          $window.location.href = '/';
+        });
+      };
+
       return {
         signIn: signIn,
+        signOut: signOut,
         signedIn: function () {
           return !!getFromStorage('user');
         },

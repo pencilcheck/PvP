@@ -14,7 +14,8 @@ require.config({
             'angular'
         ],
         'angular-masonry': [
-            'angular'
+            'angular',
+            'imagesloaded'
         ],
         'angular-facebook': [
             'angular'
@@ -23,6 +24,9 @@ require.config({
             'angular'
         ],
         'angular-bootstrap': [
+            'angular'
+        ],
+        'angular-deckgrid': [
             'angular'
         ],
         jquery: {
@@ -76,7 +80,8 @@ require.config({
         imagesloaded: 'http://imagesloaded.desandro.com/imagesloaded.pkgd',
         masonry: 'http://masonry.desandro.com/masonry.pkgd',
         'todc-bootstrap': '../lib/todc-bootstrap/dist/js/todc-bootstrap',
-        bootstrap: '../lib/todc-bootstrap/dist/js/bootstrap'
+        bootstrap: '../lib/todc-bootstrap/dist/js/bootstrap',
+        'angular-deckgrid': '../lib/angular-deckgrid/angular-deckgrid'
     },
     priority: [
         'angular'

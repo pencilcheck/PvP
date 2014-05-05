@@ -112,7 +112,7 @@ define(['angular'], function (angular) {
         } else {
           if (!this._game.invitations && this._game.state < GameStates.started) {
             // Open game, accept everyone
-          } else if ((this._game.invitations && this._game.invitations.indexOf(user.uid) == -1) || this._game.state >= GameStates.started) {
+          } else if ((this._game.invitations && !this._game.invitations[user.uid]) || this._game.state >= GameStates.started) {
             return $q.reject('Not invited or Game started')
           }
         }
@@ -138,9 +138,9 @@ define(['angular'], function (angular) {
       }
 
       Game.prototype.$invite = function (users) {
-        this._game.invitations = this._game.invitations || []
+        this._game.invitations = this._game.invitations || {}
 
-        if (users.length + this._game.invitations.length > this._limit) {
+        if (users.length + Object.keys(this._game.invitations).length > this._limit) {
           return $q.reject("Can't invite over the limit (" + this._limit + ")")
         }
 
@@ -151,10 +151,10 @@ define(['angular'], function (angular) {
         var self = this
         users.forEach(function (user) {
           console.log('inviting', user)
-          if (self._game.invitations.indexOf(user.uid) == -1) {
-            self._game.invitations.push(user.uid)
+          if (!this._game.invitations[user.uid]) {
+            this._game.invitations[user.uid] = true;
           }
-        })
+        }, this)
 
         this._game.state = GameStates.invitesSent
 
