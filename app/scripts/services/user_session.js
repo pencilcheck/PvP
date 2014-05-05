@@ -29,8 +29,8 @@ define(['angular'], function (angular) {
         return user;
       };
 
-      var _failAuth = function () {
-        deferred.reject();
+      var _failAuth = function (reason) {
+        deferred.reject(reason);
       }
 
       var completeSignIn = function(user) {

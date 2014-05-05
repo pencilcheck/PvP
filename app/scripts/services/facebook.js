@@ -5,24 +5,22 @@ define(['angular'], function (angular) {
     .service('FacebookBase', function ($rootScope, $q) {
       return {
         openLogin: function() {
-          console.log('openLogin');
           var deferred = $q.defer();
           var gameRef = new Firebase('https://pvp.firebaseio.com');
           var auth = new FirebaseSimpleLogin(gameRef, function(error, user) {
             console.log('FirebaseSimpleLogin', error, user);
-            if (error) {
-              // an error occurred while attempting login
-              console.error(error);
-            } else if (user) {
-              // user authenticated with Firebase
-              console.log('User ID: ' + user.id + ', Provider: ' + user.provider);
-              $rootScope.safeApply(function() {
+            $rootScope.safeApply(function() {
+              if (error) {
+                // an error occurred while attempting login
+                deferred.reject(error);
+              } else if (user) {
+                // user authenticated with Firebase
                 deferred.resolve(user);
-                //$rootScope.$broadcast('loggedin');
-              });
-            } else {
-              // user is logged out
-            }
+              } else {
+                // user is logged out
+                deferred.reject('user logged out');
+              }
+            });
           });
 
           auth.login('facebook', {
