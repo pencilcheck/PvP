@@ -23,7 +23,8 @@ define(function(require, exports, module) {
           size: [undefined, 100],
           properties: {
             lineHeight: "100px",
-            textAlign: "center"
+            textAlign: "center",
+            color: "white"
           },
           content: 'CLICK ME TO TOGGLE AWESOMESAUCE',
         });
