@@ -52,10 +52,12 @@ define(['angular', 'require', 'masonry-bridget', 'angular-masonry', 'services/in
       }
 
       function setupInvitePlayers() {
-        Facebook.api('/me/friends', 'get', {
+        console.log(currentUser);
+        Facebook.api('/' + currentUser.id + '/friends', 'get', {
           fields: 'id, name, picture',
           access_token: currentUser.accessToken
         }, function (response) {
+          console.log('facebook api response', response);
           $scope.friends = response.data
         })
       }

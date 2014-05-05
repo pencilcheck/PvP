@@ -6,6 +6,14 @@ define(['angular', 'services/index'], function (angular) {
       $scope.games = Games.all()
       Rematch.listenAll()
 
+      $scope.facebookLogin = function() {
+        UserSession.signIn().then(function () {
+          $location.path('/');
+        }, function () {
+          alert('error');
+        });
+      }
+
       $scope.add = function() {
         UserSession.signIn().then(function (user) {
           Games.create({

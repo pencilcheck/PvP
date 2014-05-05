@@ -1,8 +1,9 @@
 <h1>Invite:</h1>
 
+<input type="search" ng-model="search" />
 <div style="overflow: scroll; height: 500px;">
     <div load-images="false" masonry masonry-options="{ gutter: 10 }">
-        <div style="width: 70px;" class="masonry-brick" ng-repeat="friend in friends">
+        <div style="width: 70px;" class="masonry-brick" ng-repeat="friend in friends | filter:search">
             <span>{{friend.name}}</span>
             <img ng-src="{{friend.picture.data.url}}"></img>
         </div>
