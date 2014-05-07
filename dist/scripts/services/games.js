@@ -1,36 +1,35 @@
-define(['angular'], function (angular) {
+define(['moment'], function (moment) {
   'user strict';
 
-  return angular.module('PvP.services.games', [])
-    .factory('Games', function ($rootScope, $q, pvpSync, Game) {
-      var syncHandle = pvpSync('/games')
+  return function ($rootScope, $q, pvpSync, Game) {
+    var syncHandle = pvpSync('/games')
 
-      return {
-        all: function () {
-          return syncHandle
-        },
+    return {
+      all: function () {
+        return syncHandle
+      },
 
-        get: function (id) {
-          return syncHandle.$child(id).$promise.then(function (child) {
-            return new Game(child)
-          })
-        },
+      get: function (id) {
+        return syncHandle.$child(id).$promise.then(function (child) {
+          return new Game(child)
+        })
+      },
 
-        construct: function (raw) {
-          return new Game(raw)
-        },
+      construct: function (raw) {
+        return new Game(raw)
+      },
 
-        create: function (options) {
-          options = _.extend(options, {
-            createdAt: moment().toISOString(),
-            rounds: [],
-            state: 0
-          })
+      create: function (options) {
+        options = _.extend(options, {
+          createdAt: moment().toISOString(),
+          rounds: [],
+          state: 0
+        })
 
-          return syncHandle.$push(options).then(function (game) {
-            return new Game(game)
-          })
-        }
-      };
-    });
+        return syncHandle.$push(options).then(function (game) {
+          return new Game(game)
+        })
+      }
+    };
+  };
 });

@@ -1,4 +1,4 @@
-define(['angular'], function (angular) {
+define(function () {
   'use strict';
 
   function saveToStorage(name, value) {
@@ -9,82 +9,81 @@ define(['angular'], function (angular) {
     return JSON.parse(localStorage.getItem(name));
   }
 
-  return angular.module('PvP.services.userSession', [])
-    .service('UserSession', function (FacebookBase, $window, $rootScope, $timeout, $q, pvpSync) {
-      var deferred,
-          players = pvpSync('/players')
+  return function (FacebookBase, $window, $rootScope, $timeout, $q, pvpSync) {
+    var deferred,
+        players = pvpSync('/players')
 
-      function updatePlayer(user) {
-        if (players[user.uid]) {
-          players[user.uid].profile = user
-          players.$save()
-        } else {
-          players.$child(user.uid).$child('profile').$set(user)
-        }
+    function updatePlayer(user) {
+      if (players[user.uid]) {
+        players[user.uid].profile = user
+        players.$save()
+      } else {
+        players.$child(user.uid).$child('profile').$set(user)
       }
+    }
 
-      var _completeAuth = function(user) {
-        updatePlayer(user)
-        deferred.resolve(user);
-        return user;
-      };
+    var _completeAuth = function(user) {
+      updatePlayer(user)
+      deferred.resolve(user);
+      return user;
+    };
 
-      var _failAuth = function (reason) {
-        deferred.reject(reason);
-      }
+    var _failAuth = function (reason) {
+      deferred.reject(reason);
+    }
 
-      var completeSignIn = function(user) {
-        saveToStorage('user', user);
-        $rootScope.signedIn = user;
-        _completeAuth(user);
-        return user;
-      };
+    var completeSignIn = function(user) {
+      saveToStorage('user', user);
+      $rootScope.signedIn = user;
+      _completeAuth(user);
+      return user;
+    };
 
-      var _resolveOrPrompt = function() {
-        if(getFromStorage('user'))
-          _completeAuth(getFromStorage('user'));
-        else
-          FacebookBase.openLogin().then(completeSignIn, _failAuth);
-      };
+    var _resolveOrPrompt = function() {
+      if(getFromStorage('user'))
+        _completeAuth(getFromStorage('user'));
+      else
+        FacebookBase.openLogin().then(completeSignIn, _failAuth);
+    };
 
-      var signIn = function () {
-        deferred = $q.defer();
-        $timeout(_resolveOrPrompt, 10);
-        return deferred.promise;
-      };
+    var signIn = function () {
+      deferred = $q.defer();
+      $timeout(_resolveOrPrompt, 10);
+      return deferred.promise;
+    };
 
-      $rootScope.$watch(function () {
-        return !!getFromStorage('user');
-      }, function () {
-        $rootScope.signedIn = getFromStorage('user');
-      });
-
-      var signOut = function () {
-        return FacebookBase.logout().then(function () {
-          saveToStorage('user', null);
-          console.log('logOut');
-          $rootScope.signedIn = null;
-        });
-      }
-
-      $rootScope.logout = function () {
-        signOut().then(function () {
-          $window.location.href = '/';
-        });
-      };
-
-      return {
-        signIn: signIn,
-        signOut: signOut,
-        signedIn: function () {
-          return !!getFromStorage('user');
-        },
-        currentUser: function () {
-          return getFromStorage('user');
-        },
-        completeSignIn: completeSignIn,
-        _resolveOrPrompt: _resolveOrPrompt,
-        _completeAuth: _completeAuth
-      }
+    $rootScope.$watch(function () {
+      return !!getFromStorage('user');
+    }, function () {
+      $rootScope.signedIn = getFromStorage('user');
     });
+
+    var signOut = function () {
+      return FacebookBase.logout().then(function () {
+        saveToStorage('user', null);
+        console.log('logOut');
+        $rootScope.signedIn = null;
+      });
+    }
+
+    $rootScope.logout = function () {
+      signOut().then(function () {
+        $window.location.href = '/';
+      });
+    };
+
+    return {
+      signIn: signIn,
+      signOut: signOut,
+      signedIn: function () {
+        return !!getFromStorage('user');
+      },
+      currentUser: function () {
+        return getFromStorage('user');
+      },
+      completeSignIn: completeSignIn,
+      _resolveOrPrompt: _resolveOrPrompt,
+      _completeAuth: _completeAuth
+    }
+  };
 });

@@ -1,5 +1,28 @@
 define([
   'angular',
+
+  'controllers/about',
+  'controllers/game',
+  'controllers/leaderboard',
+  'controllers/lobby',
+  'controllers/main',
+
+  'services/facebook',
+  'services/game_states',
+  'services/game',
+  'services/games',
+  'services/moves',
+  'services/rematch',
+  'services/user_session',
+  'services/pvp_sync',
+
+  'directives/arena',
+
+  'filters/calendar',
+  'filters/emptyOrInvited',
+
+  'routes',
+
   'angular-sanitize',
   'angular-route',
   'angular-resource',
@@ -9,12 +32,30 @@ define([
   'angular-deckgrid',
   'firebase',
   'firebase-simple-login',
-  'controllers/index',
-  'services/index',
-  'directives',
-  'filters'
 ], function (
-  angular
+  angular,
+
+  AboutCtrl,
+  GameCtrl,
+  LeaderboardCtrl,
+  LobbyCtrl,
+  MainCtrl,
+
+  FacebookBase,
+  GameStates,
+  Game,
+  Games,
+  Moves,
+  Rematch,
+  UserSession,
+  pvpSync,
+
+  arena,
+
+  calendar,
+  emptyOrInvited,
+
+  routes
 ) {
   'use strict';
 
@@ -27,15 +68,35 @@ define([
     'facebook',
     'akoenig.deckgrid',
     'wu.masonry',
-    'PvP.controllers',
-    'PvP.services',
-    'PvP.directives',
-    'PvP.filters'
   ])
+
+    .service('FacebookBase', FacebookBase)
+    .service('GameStates', GameStates)
+    .service('Game', Game)
+    .service('Games', Games)
+    .service('Moves', Moves)
+    .service('Rematch', Rematch)
+    .service('UserSession', UserSession)
+    .service('pvpSync', pvpSync)
+
+    .controller('AboutCtrl', AboutCtrl)
+    .controller('GameCtrl', GameCtrl)
+    .controller('LeaderboardCtrl', LeaderboardCtrl)
+    .controller('LobbyCtrl', LobbyCtrl)
+    .controller('MainCtrl', MainCtrl)
+
+    .directive('arena', arena)
+
+    .filter('calendar', calendar)
+    .filter('emptyOrInvited', emptyOrInvited)
+
+    .value('firebaseUrl', window.FirebaseUrl)
 
     .config(function(FacebookProvider) {
       FacebookProvider.init(window.FBAppId);
     })
+
+    .config(routes)
 
     .run(function ($rootScope, $location) {
       $rootScope.$on('$routeChangeError', function (e, currRoute, prevRoute) {
@@ -59,36 +120,5 @@ define([
         }
       };
     })
-    .config(function($routeProvider, $locationProvider) {
-      //$locationProvider.html5Mode(true); // TODO: later
-      $routeProvider
-        .when('/', {
-          templateUrl: '/views/main.html',
-          controller: 'MainCtrl'
-        })
-        .when('/lobby', {
-          templateUrl: '/views/lobby.html',
-          controller: 'LobbyCtrl'
-        })
-        .when('/game/:gameId', {
-          templateUrl: '/views/game.html',
-          controller: 'GameCtrl',
-          resolve: {
-            game: function ($q, $route, Games, UserSession) {
-              return Games.get($route.current.params.gameId).then(function (game) {
-                return UserSession.signIn().then(function (user) {
-                  return game.$redeem(UserSession.currentUser())
-                })
-              })
-            },
-            rematchRequests: function (pvpSync) {
-              return pvpSync('/rematchRequests').$promise
-            }
-          }
-        })
-        .otherwise({
-          redirectTo: '/'
-        });
-    });
 });
 

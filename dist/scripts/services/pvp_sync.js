@@ -1,12 +1,7 @@
-define(['angular', 'underscore', 'es6-shim', 'es5-shim'], function (angular, _) {
+define(['underscore', 'es6-shim', 'es5-shim'], function (_) {
   'user strict';
 
-  return angular.module('PvP.services.utils', [])
-
-  .value('firebaseUrl', window.FirebaseUrl)
-
-  .factory('pvpSync', function (firebaseUrl, $interval, $timeout, $q) {
-
+  return function (firebaseUrl, $interval, $timeout, $q) {
     function _handleUndefined(obj) {
       if (typeof obj == 'object' && obj != null) {
         _.keys(obj).forEach(function (key) {
@@ -160,5 +155,5 @@ define(['angular', 'underscore', 'es6-shim', 'es5-shim'], function (angular, _) 
     }
 
     return PvpSync
-  });
+  };
 });
