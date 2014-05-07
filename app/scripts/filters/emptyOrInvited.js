@@ -1,15 +1,7 @@
-define(['angular', 'moment', 'services/index'], function (angular, moment) {
+define(function () {
   'user strict';
 
-  return angular.module('PvP.filters', [])
-
-  .filter('calendar', function () {
-    return function (timestamp) {
-      return timestamp ? moment(timestamp).format('MMMM Do YYYY, h:mm:ss a') : ''
-    }
-  })
-
-  .filter('emptyOrInvited', function (GameStates, UserSession, Game) {
+  return function (GameStates, UserSession, Game) {
     return function (games) {
       var filtered = {}
 
@@ -34,5 +26,5 @@ define(['angular', 'moment', 'services/index'], function (angular, moment) {
 
       return filtered
     }
-  });
+  };
 });
