@@ -34,7 +34,6 @@ define(function () {
 
     var completeSignIn = function(user) {
       saveToStorage('user', user);
-      $rootScope.signedIn = user;
       _completeAuth(user);
       return user;
     };
@@ -52,12 +51,6 @@ define(function () {
       return deferred.promise;
     };
 
-    $rootScope.$watch(function () {
-      return !!getFromStorage('user');
-    }, function () {
-      $rootScope.signedIn = getFromStorage('user');
-    });
-
     var signOut = function () {
       return FacebookBase.logout().then(function () {
         saveToStorage('user', null);
@@ -65,6 +58,10 @@ define(function () {
         $rootScope.signedIn = null;
       });
     }
+
+    FacebookBase.initialize().then(function (user) {
+      $rootScope.signedIn = user;
+    })
 
     $rootScope.logout = function () {
       signOut().then(function () {
