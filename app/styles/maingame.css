@@ -109,8 +109,10 @@ margin-left: 120px;
 }
 
 .WinnerPlayerName {
-position: relative;
-left: 75%;
+position: absolute;
+left: 40%;
+color: white;
+font-size: 35px;
 }
 
 #rematchbutton {
