@@ -103,9 +103,10 @@ margin-left: 120px;
 }
 
 #winnerPlayer {
-    width: 300px;
-    margin-left: 70%;
-    position: relative;
+	width: 300px;
+	margin-left: 500px;
+	position: relative;
+	padding-top: 50px;
 }
 
 .WinnerPlayerName {
@@ -117,7 +118,7 @@ font-size: 35px;
 
 #rematchbutton {
     position: absolute;
-    right: 310px;
+    right: 10%;
     font-size: 25px;
     z-index:1000;
 }
@@ -925,6 +926,12 @@ font-size:30px;
 @keyframes explosion {
    from { background-position:    0px; }
      to { background-position: -24000px; }
+}
+
+a#back2lobbybutton {
+position: absolute;
+right: 10%;
+top:15%;
 }
 
 /** TABLE STUFF for leaderboard **/
