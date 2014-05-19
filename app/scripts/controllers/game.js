@@ -411,7 +411,7 @@ define(['masonry-bridget', 'angular-masonry'], function () {
         }
         if (player.loses) {
           Object.keys(player.loses).forEach(function (gameId) {
-            var opponentId = player.wins[gameId].against;
+            var opponentId = player.loses[gameId].against;
             $scope.leaderboard[opponentId] = $scope.leaderboard[opponentId] || {};
             $scope.leaderboard[opponentId].profile = $scope.leaderboard[opponentId].profile || player.profile
             $scope.leaderboard[opponentId].loses = $scope.leaderboard[opponentId].loses || 0;
