@@ -15,11 +15,11 @@ define(function () {
         players = pvpSync('/players')
 
     function updatePlayer(user) {
-      if (!players[user.uid]) {
-        players[user.uid] = players[user.uid] || {}
-        players[user.uid].profile = user
-        players.$save()
+      var profile = {}
+      profile[user.uid] = {
+        profile: user
       }
+      players.$update(profile)
     }
 
     var _completeAuth = function(user) {

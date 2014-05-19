@@ -223,19 +223,19 @@ define(['masonry-bridget', 'angular-masonry'], function () {
           var loser = pvpSync('/players/' + game.opponentOf(game.raw().winner).uid)
 
           winner.$promise.then(function () {
-            winner.wins = winner.wins || {}
-            winner.wins[game.raw().$id] = {
+            var wins = {}
+            wins[game.raw().$id] = {
               against: game.opponentOf(game.raw().winner).uid
             }
-            winner.$save()
+            winner.$update(wins)
           })
 
           loser.$promise.then(function () {
-            loser.loses = loser.loses || {}
-            loser.loses[game.raw().$id] = {
+            var loses = {}
+            loses[game.raw().$id] = {
               against: game.raw().winner
             }
-            loser.$save()
+            loser.$update(loses)
           })
         }
       }

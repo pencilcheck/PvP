@@ -76,6 +76,13 @@ define(['underscore', 'es6-shim', 'es5-shim'], function (_) {
           }.bind(this))
           return deferred.promise
         },
+        $update: function (obj) {
+          var deferred = $q.defer()
+          firebaseRef.update(_clean(obj), function () {
+            deferred.resolve(this)
+          }.bind(this))
+          return deferred.promise
+        }
         $index: [],
         $getIndex: function () {
           return this.$index
