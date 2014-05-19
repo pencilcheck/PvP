@@ -232,7 +232,7 @@ define(['masonry-bridget', 'angular-masonry'], function () {
 
           loser.$promise.then(function () {
             loser.loses = loser.loses || {}
-            lower.loses[game.raw().$id] = {
+            loser.loses[game.raw().$id] = {
               against: game.raw().winner
             }
             loser.$save()
@@ -400,20 +400,24 @@ define(['masonry-bridget', 'angular-masonry'], function () {
       $scope.leaderboard = {}
 
       pvpSync('/players/' + currentUser.uid).$promise.then(function (player) {
-        Object.keys(player.wins).forEach(function (gameId) {
-          var opponentId = player.wins[gameId].against;
-          $scope.leaderboard[opponentId] = $scope.leaderboard[opponentId] || {};
-          $scope.leaderboard[opponentId].profile = $scope.leaderboard[opponentId].profile || player.profile
-          $scope.leaderboard[opponentId].wins = $scope.leaderboard[opponentId].wins || 0;
-          $scope.leaderboard[opponentId].wins += 1
-        });
-        Object.keys(player.loses).forEach(function (gameId) {
-          var opponentId = player.wins[gameId].against;
-          $scope.leaderboard[opponentId] = $scope.leaderboard[opponentId] || {};
-          $scope.leaderboard[opponentId].profile = $scope.leaderboard[opponentId].profile || player.profile
-          $scope.leaderboard[opponentId].loses = $scope.leaderboard[opponentId].loses || 0;
-          $scope.leaderboard[opponentId].loses += 1
-        });
+        if (player.wins) {
+          Object.keys(player.wins).forEach(function (gameId) {
+            var opponentId = player.wins[gameId].against;
+            $scope.leaderboard[opponentId] = $scope.leaderboard[opponentId] || {};
+            $scope.leaderboard[opponentId].profile = $scope.leaderboard[opponentId].profile || player.profile
+            $scope.leaderboard[opponentId].wins = $scope.leaderboard[opponentId].wins || 0;
+            $scope.leaderboard[opponentId].wins += 1
+          });
+        }
+        if (player.loses) {
+          Object.keys(player.loses).forEach(function (gameId) {
+            var opponentId = player.wins[gameId].against;
+            $scope.leaderboard[opponentId] = $scope.leaderboard[opponentId] || {};
+            $scope.leaderboard[opponentId].profile = $scope.leaderboard[opponentId].profile || player.profile
+            $scope.leaderboard[opponentId].loses = $scope.leaderboard[opponentId].loses || 0;
+            $scope.leaderboard[opponentId].loses += 1
+          });
+        }
       })
 
       $scope.rematch = function () {
