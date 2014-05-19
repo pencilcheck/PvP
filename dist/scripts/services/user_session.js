@@ -11,6 +11,7 @@ define(function () {
 
   return function (FacebookBase, $window, $rootScope, $timeout, $q, pvpSync) {
     var deferred,
+        redirect = false,
         players = pvpSync('/players')
 
     function updatePlayer(user) {
@@ -24,7 +25,8 @@ define(function () {
 
     var _completeAuth = function(user) {
       updatePlayer(user)
-      deferred.resolve(user);
+      if (deferred)
+        deferred.resolve(user);
       return user;
     };
 
@@ -42,10 +44,11 @@ define(function () {
       if(getFromStorage('user'))
         _completeAuth(getFromStorage('user'));
       else
-        FacebookBase.openLogin().then(completeSignIn, _failAuth);
+        FacebookBase.openLogin(redirect).then(completeSignIn, _failAuth);
     };
 
-    var signIn = function () {
+    var signIn = function (prefer) {
+      redirect = prefer;
       deferred = $q.defer();
       $timeout(_resolveOrPrompt, 10);
       return deferred.promise;
@@ -60,6 +63,7 @@ define(function () {
     }
 
     FacebookBase.initialize().then(function (user) {
+      completeSignIn(user);
       $rootScope.signedIn = user;
     })
 
