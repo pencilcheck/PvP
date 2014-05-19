@@ -217,7 +217,6 @@ define(['masonry-bridget', 'angular-masonry'], function () {
 
           console.log('Someone died: to endGame')
           $scope.viewUrl = 'views/game/endGame.html'
-          setupEndGame()
 
           var winner = pvpSync('/players/' + game.raw().winner + '/wins')
           var loser = pvpSync('/players/' + game.opponentOf(game.raw().winner).uid + '/loses')
@@ -237,6 +236,10 @@ define(['masonry-bridget', 'angular-masonry'], function () {
             }
             wrapper.$update(tmp)
           })
+
+          $q.all([winner.$promise, loser.$promise]).then(function () {
+            setupEndGame()
+          });
         }
       }
     })
