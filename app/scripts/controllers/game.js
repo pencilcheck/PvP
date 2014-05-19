@@ -413,6 +413,7 @@ define(['masonry-bridget', 'angular-masonry'], function () {
               $scope.leaderboard[opponentId] = $scope.leaderboard[opponentId] || {};
               $scope.leaderboard[opponentId].profile = wrapper.$value;
               $scope.leaderboard[opponentId].wins = $scope.leaderboard[opponentId].wins || 0;
+              $scope.leaderboard[opponentId].loses = $scope.leaderboard[opponentId].loses || 0;
               $scope.leaderboard[opponentId].wins += 1
             });
           });
@@ -423,6 +424,7 @@ define(['masonry-bridget', 'angular-masonry'], function () {
             pvpSync('/players/' + opponentId + '/profile').$promise.then(function (wrapper) {
               $scope.leaderboard[opponentId] = $scope.leaderboard[opponentId] || {};
               $scope.leaderboard[opponentId].profile = wrapper.$value;
+              $scope.leaderboard[opponentId].wins = $scope.leaderboard[opponentId].wins || 0;
               $scope.leaderboard[opponentId].loses = $scope.leaderboard[opponentId].loses || 0;
               $scope.leaderboard[opponentId].loses += 1
             });
