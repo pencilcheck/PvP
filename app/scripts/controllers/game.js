@@ -227,7 +227,7 @@ define(['masonry-bridget', 'angular-masonry'], function () {
             tmp[game.raw().$id] = {
               against: game.opponentOf(game.raw().winner).uid
             }
-            wrapper.$value.$update(tmp)
+            wrapper.$update(tmp)
           })
 
           loser.$promise.then(function (wrapper) {
@@ -235,7 +235,7 @@ define(['masonry-bridget', 'angular-masonry'], function () {
             tmp[game.raw().$id] = {
               against: game.raw().winner
             }
-            wrapper.$value.$update(tmp)
+            wrapper.$update(tmp)
           })
         }
       }
