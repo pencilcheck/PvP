@@ -82,7 +82,7 @@ define(['underscore', 'es6-shim', 'es5-shim'], function (_) {
             deferred.resolve(this)
           }.bind(this))
           return deferred.promise
-        }
+        },
         $index: [],
         $getIndex: function () {
           return this.$index
