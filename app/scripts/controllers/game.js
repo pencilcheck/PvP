@@ -219,29 +219,23 @@ define(['masonry-bridget', 'angular-masonry'], function () {
           $scope.viewUrl = 'views/game/endGame.html'
           setupEndGame()
 
-          var winner = pvpSync('/players/' + game.raw().winner)
-          var loser = pvpSync('/players/' + game.opponentOf(game.raw().winner).uid)
+          var winner = pvpSync('/players/' + game.raw().winner + '/wins')
+          var loser = pvpSync('/players/' + game.opponentOf(game.raw().winner).uid + '/loses')
 
-          winner.$promise.then(function () {
+          winner.$promise.then(function (wrapper) {
             var tmp = {}
             tmp[game.raw().$id] = {
               against: game.opponentOf(game.raw().winner).uid
             }
-            var wins = {
-              wins: tmp
-            }
-            winner.$update(wins)
+            wrapper.$value.$update(tmp)
           })
 
-          loser.$promise.then(function () {
+          loser.$promise.then(function (wrapper) {
             var tmp = {}
             tmp[game.raw().$id] = {
               against: game.raw().winner
             }
-            var loses = {
-              loses: tmp
-            }
-            loser.$update(loses)
+            wrapper.$value.$update(tmp)
           })
         }
       }
