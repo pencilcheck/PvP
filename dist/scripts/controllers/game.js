@@ -1,7 +1,7 @@
 define(['masonry-bridget', 'angular-masonry'], function () {
   'use strict';
 
-  return function ($scope, $rootScope, $filter, $timeout, $location, $routeParams, $modal, Games, GameStates, game, Moves, Rematch, rematchRequests, pvpSync, UserSession, Facebook) {
+  return function ($scope, $rootScope, $filter, $timeout, $location, $routeParams, $q, $modal, Games, GameStates, game, Moves, Rematch, rematchRequests, pvpSync, UserSession, Facebook) {
     var currentUser = UserSession.currentUser()
 
     function stateHandler(state) {
@@ -217,25 +217,29 @@ define(['masonry-bridget', 'angular-masonry'], function () {
 
           console.log('Someone died: to endGame')
           $scope.viewUrl = 'views/game/endGame.html'
-          setupEndGame()
 
-          var winner = pvpSync('/players/' + game.raw().winner)
-          winner.$promise.then(function () {
-            winner.wins = winner.wins || []
-            if (winner.wins.indexOf(game.raw().$id)) {
-              winner.wins.push(game.raw().$id)
-              winner.$save()
+          var winner = pvpSync('/players/' + game.raw().winner + '/wins')
+          var loser = pvpSync('/players/' + game.opponentOf(game.raw().winner).uid + '/loses')
+
+          winner.$promise.then(function (wrapper) {
+            var tmp = {}
+            tmp[game.raw().$id] = {
+              against: game.opponentOf(game.raw().winner).uid
             }
+            wrapper.$update(tmp)
           })
 
-          var loser = pvpSync('/players/' + game.opponentOf(game.raw().winner).uid)
-          loser.$promise.then(function () {
-            loser.loses = loser.loses || []
-            if (loser.loses.indexOf(game.raw().$id)) {
-              loser.loses.push(game.raw().$id)
-              loser.$save()
+          loser.$promise.then(function (wrapper) {
+            var tmp = {}
+            tmp[game.raw().$id] = {
+              against: game.raw().winner
             }
+            wrapper.$update(tmp)
           })
+
+          $q.all([winner.$promise, loser.$promise]).then(function () {
+            setupEndGame()
+          });
         }
       }
     })
@@ -396,6 +400,35 @@ define(['masonry-bridget', 'angular-masonry'], function () {
       Rematch.listen(game)
 
       $scope.winner = game.player(game.raw().winner)
+      $scope.leaderboard = {}
+
+      pvpSync('/players/' + currentUser.uid).$promise.then(function (player) {
+        if (player.wins) {
+          Object.keys(player.wins).forEach(function (gameId) {
+            var opponentId = player.wins[gameId].against;
+            pvpSync('/players/' + opponentId + '/profile').$promise.then(function (wrapper) {
+              $scope.leaderboard[opponentId] = $scope.leaderboard[opponentId] || {};
+              $scope.leaderboard[opponentId].profile = wrapper.$value;
+              $scope.leaderboard[opponentId].wins = $scope.leaderboard[opponentId].wins || 0;
+              $scope.leaderboard[opponentId].loses = $scope.leaderboard[opponentId].loses || 0;
+              $scope.leaderboard[opponentId].wins += 1
+            });
+          });
+        }
+        if (player.loses) {
+          Object.keys(player.loses).forEach(function (gameId) {
+            var opponentId = player.loses[gameId].against;
+            pvpSync('/players/' + opponentId + '/profile').$promise.then(function (wrapper) {
+              $scope.leaderboard[opponentId] = $scope.leaderboard[opponentId] || {};
+              $scope.leaderboard[opponentId].profile = wrapper.$value;
+              $scope.leaderboard[opponentId].wins = $scope.leaderboard[opponentId].wins || 0;
+              $scope.leaderboard[opponentId].loses = $scope.leaderboard[opponentId].loses || 0;
+              $scope.leaderboard[opponentId].loses += 1
+            });
+          });
+        }
+      })
+
       $scope.rematch = function () {
         var requestObj = {
           from: currentUser.uid,
