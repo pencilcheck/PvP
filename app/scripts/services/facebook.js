@@ -28,11 +28,14 @@ define(['firebase', 'firebase-simple-login'], function (Firebase, FirebaseSimple
       initialize: function () {
         return dfds.loginDfd.promise;
       }, // Firebase will login automatically, so no need to call login again after it is already logged in
-      openLogin: function() {
+      openLogin: function(redirect) {
+        if (!redirect) {
+          redirect = false;
+        }
         dfds.loginDfd = $q.defer();
         auth.login('facebook', {
           rememberMe: true,
-          preferRedirect: true,
+          preferRedirect: redirect,
           scope: 'email,user_likes,public_profile,user_friends'
         });
         return dfds.loginDfd.promise;

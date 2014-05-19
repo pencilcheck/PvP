@@ -6,7 +6,7 @@ define(function () {
     Rematch.listenAll()
 
     $scope.facebookLogin = function() {
-      UserSession.signIn().then(function () {
+      UserSession.signIn(true).then(function () {
         $location.path('/');
       }, function () {
         alert('error');
