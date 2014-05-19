@@ -409,19 +409,23 @@ define(['masonry-bridget', 'angular-masonry'], function () {
         if (player.wins) {
           Object.keys(player.wins).forEach(function (gameId) {
             var opponentId = player.wins[gameId].against;
-            $scope.leaderboard[opponentId] = $scope.leaderboard[opponentId] || {};
-            $scope.leaderboard[opponentId].profile = $scope.leaderboard[opponentId].profile || player.profile
-            $scope.leaderboard[opponentId].wins = $scope.leaderboard[opponentId].wins || 0;
-            $scope.leaderboard[opponentId].wins += 1
+            pvpSync('/players/' + opponentId + '/profile').$promise.then(function (wrapper) {
+              $scope.leaderboard[opponentId] = $scope.leaderboard[opponentId] || {};
+              $scope.leaderboard[opponentId].profile = wrapper.$value;
+              $scope.leaderboard[opponentId].wins = $scope.leaderboard[opponentId].wins || 0;
+              $scope.leaderboard[opponentId].wins += 1
+            });
           });
         }
         if (player.loses) {
           Object.keys(player.loses).forEach(function (gameId) {
             var opponentId = player.loses[gameId].against;
-            $scope.leaderboard[opponentId] = $scope.leaderboard[opponentId] || {};
-            $scope.leaderboard[opponentId].profile = $scope.leaderboard[opponentId].profile || player.profile
-            $scope.leaderboard[opponentId].loses = $scope.leaderboard[opponentId].loses || 0;
-            $scope.leaderboard[opponentId].loses += 1
+            pvpSync('/players/' + opponentId + '/profile').$promise.then(function (wrapper) {
+              $scope.leaderboard[opponentId] = $scope.leaderboard[opponentId] || {};
+              $scope.leaderboard[opponentId].profile = wrapper.$value;
+              $scope.leaderboard[opponentId].loses = $scope.leaderboard[opponentId].loses || 0;
+              $scope.leaderboard[opponentId].loses += 1
+            });
           });
         }
       })
