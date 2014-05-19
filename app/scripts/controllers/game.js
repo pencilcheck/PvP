@@ -1,7 +1,7 @@
 define(['masonry-bridget', 'angular-masonry'], function () {
   'use strict';
 
-  return function ($scope, $rootScope, $filter, $timeout, $location, $routeParams, $modal, Games, GameStates, game, Moves, Rematch, rematchRequests, pvpSync, UserSession, Facebook) {
+  return function ($scope, $rootScope, $filter, $timeout, $location, $routeParams, $q, $modal, Games, GameStates, game, Moves, Rematch, rematchRequests, pvpSync, UserSession, Facebook) {
     var currentUser = UserSession.currentUser()
 
     function stateHandler(state) {
