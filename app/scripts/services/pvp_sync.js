@@ -100,7 +100,8 @@ define(['underscore', 'es6-shim', 'es5-shim'], function (_) {
         $onPoll: function (prop, cb) {
           polls[prop] = polls[prop] || []
           polls[prop].push(cb)
-        }
+        },
+        $value: {}
       })
 
       $interval(function () {
@@ -153,6 +154,7 @@ define(['underscore', 'es6-shim', 'es5-shim'], function (_) {
         $timeout(function () {
           //console.log('on value of', firebaseRef.toString(), snapshot.val())
           wrapper = _.extend(wrapper, snapshot.val())
+          wrapper.$value = snapshot.val()
           dfd.resolve(wrapper)
           _triggerCallbacks('$$itself', wrapper)
         })
