@@ -18,38 +18,26 @@
 </div>
 <div class="leaderboard">
   <table>
-  
-  <thead>
+    <thead>
+      <tr class="odd">
+        <th></th>
+          <th class="yourpic">YOUR PIC</th>
+          <th></th>
+      </tr>
 
-  <tr class="odd">
-    <th></th>
-      <th class="yourpic">YOUR PIC</th>
-      <th></th>
-
-  </tr>
-  <tr class="odd">
-    <td class="column1"></td>
-    <th scope="col">Wins against...</th>
-    <th scope="col">Loses against...</th>  
-  </tr> 
-  </thead>
+      <tr class="odd">
+        <td class="column1"></td>
+        <th scope="col">Wins against...</th>
+        <th scope="col">Loses against...</th>  
+      </tr> 
+    </thead>
     
-  <tbody>
-  <tr class="odd">
-    <th scope="row" class="column1">Betty White</th>
-    <td>1 win</td>
-    <td>250 losses</td>
-
-  </tr> 
-   <tr class="odd">
-    <th scope="row" class="column1">John Smith</th>
-    <td>2 wins</td>
-    <td>1 loss</td>
-
-  </tr> 
-
-
-    
-  </tbody>
+    <tbody>
+      <tr class="odd" ng-repeat="opponent in leaderboard">
+        <th scope="row" class="column1">{{opponent.profile.displayName}}</th>
+        <td>{{opponent.wins}} wins</td>
+        <td>{{opponent.loses}} losses</td>
+      </tr> 
+    </tbody>
   </table>
 </div>
