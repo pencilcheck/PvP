@@ -104,8 +104,8 @@ define(function (require) {
           })
 
           var skipAnimation = new Surface({
-            size: [170, true],
-            content: 'Skip animation',
+            size: [200, true],
+            content: 'Or click here to skip animation',
             properties: {
               lineHeight: "30px", // 25px is too small on safari to click on
               textAlign: "center",
@@ -193,18 +193,25 @@ define(function (require) {
             dialog.setContent(newVal)
           })
 
-          scope.$watch('notSeenAnimation', function (newVal) {
-            console.log('famous notSeenAniatmion watch', newVal)
+          scope.$on('takeDamage', function (event, result) {
+            playerPlanet.takeDamage(result[0])
+            opponentPlanet.takeDamage(result[1])
+          })
 
+          scope.$watch('notSeenAnimation', function (newVal) {
             if (newVal) {
               // Show start animation button
               animationOverlay.show()
+              playerPlanet.showDamage()
+              opponentPlanet.showDamage()
             } else {
               // Hide start animation button
               animationOverlay.hide()
 
               playerPlanet.setHealth(scope.health);
               opponentPlanet.setHealth(scope.opponentHealth);
+              playerPlanet.hideDamage()
+              opponentPlanet.hideDamage()
             }
           })
 

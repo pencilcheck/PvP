@@ -274,6 +274,8 @@ define(['masonry-bridget', 'angular-masonry'], function () {
           if (result[1] > 0)
             game.opponentOf(currentUser.uid).health -= result[1]
 
+          $scope.$broadcast('takeDamage', result)
+
           console.log('move damage results', result)
 
           currentRound.log = Moves.textualizeAttack(game.player(currentUser.uid).name, game.opponentOf(currentUser.uid).name, Moves.moves[currentRound[currentUser.uid].moveKey].name, Moves.moves[currentRound[game.opponentOf(currentUser.uid).uid].moveKey].name, result[0], result[1])

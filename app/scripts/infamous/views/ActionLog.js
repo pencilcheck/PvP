@@ -56,13 +56,27 @@ define(function(require, exports, module) {
         if (this._currentTarget && this._currentTarget.trigger) this._eventInput.pipe(this._currentTarget);
 
         this._currentTarget.on('click', function () {
-          this._state = this._state ? 0: 1;
-          if (this._state) {
-              this.show();
-          } else {
-              this.hide();
-          }
+          this.toggle()
         }.bind(this));
+    }
+
+    ActionLog.prototype.show = function show() {
+        this._state = 1;
+        this.show();
+    }
+
+    ActionLog.prototype.hide = function hide() {
+        this._state = 0;
+        this.hide();
+    }
+
+    ActionLog.prototype.toggle = function toggle() {
+        this._state = this._state ? 0: 1;
+        if (this._state) {
+            this.show();
+        } else {
+            this.hide();
+        }
     }
 
     ActionLog.prototype.setOptions = function setOptions(options) {
