@@ -1,7 +1,13 @@
 <div class="container">
 
   <div ng-include="'views/partials/header.html'"></div>
-
+<div class="MainMenu">
+	<ul>
+	  <li><a href="#" class="round green">New Game<span class="round">Click Here for New Game</span></a></li>
+	  <li><a href="#" class="round red">Leaderboard<span class="round">Find out your scores </span></a></li>
+	  <li><a href="#" class="round yellow">Lobby<span class="round">Check out the different games</span></a></li>
+	</ul> 
+</div>
   <p ng-hide="signedIn" class="login">
     <button class="btn btn-primary btn-lg btn-block" ng-click="facebookLogin()">Sign in with Facebook</button>
   </p>
