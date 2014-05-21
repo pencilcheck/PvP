@@ -1041,6 +1041,21 @@ main2 {
   transform-origin:center 3rem;
   transition:transform .3s;
 }
+main3 {
+  display:block;
+  position:relative;
+  width:30rem;
+  margin:3vh auto;
+  padding:1.5rem 0 0;
+  background: rgba(255, 2, 2, 0.15);
+  outline
+  border-radius:.25rem;
+  overflow:hidden;
+  transform:scale(.75);
+  transform-origin:center 3rem;
+  transition:transform .3s;
+}
+
 
 
 .redlives{
@@ -1057,6 +1072,16 @@ main2 {
   transform-origin:top left;
 }
 .card2 {
+  padding:1.5rem;
+  box-shadow:0 1px 2px #aaa;
+  background:white;
+  margin:0 1rem 1rem;
+  border-radius:3px;
+  user-select:none;
+  animation:fly-in-from-left .5s 1s ease both;
+  transform-origin:top left;
+}
+.card3 {
   padding:1.5rem;
   box-shadow:0 1px 2px #aaa;
   background:white;
@@ -1096,7 +1121,15 @@ h1 {
   }
  .NewGameText{
     font-weight:300;
-    color:#622DA5;;
+    color:#622DA5;
+  }
+ .CompletedGameText{
+    font-weight:300;
+    color:#FA0909;
+  }
+  .wonGame
+  {
+	color:#26920B;
   }
 
 h3{
@@ -1120,5 +1153,11 @@ h3{
   background-size: 335px;
   margin:.5rem 0 0 -1.5rem;
   width:28rem;
-
+}
+.map3 {
+  height:12rem;
+  background: url(../images/default3.png) no-repeat;
+  background-size: 305px;
+  margin:.5rem 0rem -0.5rem;
+  width:28rem;
 }
