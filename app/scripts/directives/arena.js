@@ -233,7 +233,7 @@ define(function (require) {
 
           fightScene.id['dialog'].add(dialog);
           fightScene.id['actionLog'].add(actionLog);
-          fightScene.id['animationArea'].add(explosion);
+          //fightScene.id['animationArea'].add(explosion);
           fightScene.id['animationOverlay'].add(animationOverlay);
           fightScene.id['player'].add(playerPlanet);
           fightScene.id['opponent'].add(opponentPlanet);

@@ -16,6 +16,17 @@ define(function(require, exports, module) {
         this._health = 10;
         this._prototype = {};
 
+        this._healthNumber = new Surface({
+          size: [100, true],
+          content: this._health,
+          properties: {
+              lineHeight: "100px",
+              fontSize: "5em",
+              textAlign: "center",
+              color: "white"
+          }
+        });
+
         this._planet = new ImageSurface({
             size: [300, 300],
         });
@@ -72,6 +83,8 @@ define(function(require, exports, module) {
           this._planet.setContent('images/planets/' + prefix + '-state3.png');
         }
 
+        this._healthNumber.setContent(this._health);
+
         this._ring.setContent(this.options.facing == 'right' ? 'images/misc/orbit-flip.png' : 'images/misc/orbit.png')
 
         return [
@@ -88,7 +101,11 @@ define(function(require, exports, module) {
                             target: this._planet.render(),
                         },
                         this._orbit.render(),
-                        this._ring.render()
+                        this._ring.render(),
+                        {
+                            transform: Transform.translate((this.options.facing == 'right' ? -1 : 1) * 150, 150, 100),
+                            target: this._healthNumber.render()
+                        },
                     ]
                 }
             },
