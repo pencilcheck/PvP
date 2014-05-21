@@ -29,7 +29,7 @@ define(['firebase', 'firebase-simple-login'], function (Firebase, FirebaseSimple
         return dfds.loginDfd.promise;
       }, // Firebase will login automatically, so no need to call login again after it is already logged in
       openLogin: function(redirect) {
-        if (!redirect) {
+        if (typeof redirect == 'undefined') {
           redirect = false;
         }
         dfds.loginDfd = $q.defer();
