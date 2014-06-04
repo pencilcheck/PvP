@@ -1160,7 +1160,7 @@ h3{
 .map {
   height:12rem;
   background: url(../images/default.png) no-repeat;
-  background-size: 335px;
+  background-size: 279px;
   margin:.5rem 0 0 -1.5rem;
   width:28rem;
 
@@ -1168,14 +1168,14 @@ h3{
 .map2 {
   height:12rem;
   background: url(../images/default2.png) no-repeat;
-  background-size: 335px;
+  background-size: 275px;
   margin:.5rem 0 0 -1.5rem;
   width:28rem;
 }
 .map3 {
   height:12rem;
   background: url(../images/default3.png) no-repeat;
-  background-size: 305px;
+  background-size: 250px;
   margin:.5rem 0rem -0.5rem;
   width:28rem;
 }
