@@ -13,8 +13,31 @@ define(function(require, exports, module) {
         this._optionsManager = new OptionsManager(this.options);
         if (options) this.setOptions(options);
 
+        this._currentTakenDamage = 0
         this._health = 10;
         this._prototype = {};
+
+        this._takeDamageNumber = new Surface({
+          size: [100, true],
+          content: '',
+          properties: {
+              lineHeight: "100px",
+              fontSize: "5em",
+              textAlign: "center",
+              color: "red"
+          }
+        });
+
+        this._healthNumber = new Surface({
+          size: [100, true],
+          content: this._health,
+          properties: {
+              lineHeight: "100px",
+              fontSize: "5em",
+              textAlign: "center",
+              color: "white"
+          }
+        });
 
         this._planet = new ImageSurface({
             size: [300, 300],
@@ -60,6 +83,18 @@ define(function(require, exports, module) {
         return this;
     }
 
+    Planet.prototype.takeDamage = function (damageTaken) {
+        this._currentTakenDamage = damageTaken
+    }
+
+    Planet.prototype.showDamage = function () {
+        this._takeDamageNumber.setContent('-' + this._currentTakenDamage)
+    }
+
+    Planet.prototype.hideDamage = function () {
+        this._takeDamageNumber.setContent('')
+    }
+
     Planet.prototype.render = function () {
         var prefix = this.options.facing == 'right' ? 'pink' : 'blue';
         var tilt = this.options.facing == 'right' ? -20 : -20;
@@ -71,6 +106,8 @@ define(function(require, exports, module) {
         } else if (this._health < 5) {
           this._planet.setContent('images/planets/' + prefix + '-state3.png');
         }
+
+        this._healthNumber.setContent(this._health);
 
         this._ring.setContent(this.options.facing == 'right' ? 'images/misc/orbit-flip.png' : 'images/misc/orbit.png')
 
@@ -88,7 +125,15 @@ define(function(require, exports, module) {
                             target: this._planet.render(),
                         },
                         this._orbit.render(),
-                        this._ring.render()
+                        this._ring.render(),
+                        {
+                            transform: Transform.translate((this.options.facing == 'right' ? -1 : 1) * 150, 150, 200),
+                            target: this._takeDamageNumber.render()
+                        },
+                        {
+                            transform: Transform.translate((this.options.facing == 'right' ? -1 : 1) * 150, 150, 100),
+                            target: this._healthNumber.render()
+                        },
                     ]
                 }
             },

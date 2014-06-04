@@ -1,7 +1,7 @@
 define(function () {
   'use strict';
 
-  return function ($scope, $window, $location, $filter, Games, Rematch, UserSession) {
+  return function ($scope, $log, $window, $location, $filter, Games, Rematch, UserSession) {
     $scope.games = Games.all()
     Rematch.listenAll()
 
